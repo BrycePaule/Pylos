@@ -114,23 +114,30 @@ public class MobGenerator : MonoBehaviour
 
 	private Vector2Int SelectRandomLocation(bool walkable, bool swimmable)
 	{
-		Vector2Int randomCell = Vector2Int.zero;
+		Vector2Int randomLoc = Vector2Int.zero;
 
-		while (true)
+		while (randomLoc == Vector2Int.zero)
 		{
-			randomCell = new Vector2Int(mapGenerator.RandomIntInBounds(), mapGenerator.RandomIntInBounds());
+			Vector2Int potentialLoc = new Vector2Int(mapGenerator.RandomIntInBounds(), mapGenerator.RandomIntInBounds());
 
 			if (walkable)
 			{
-				if (mapManager.GetTile(randomCell).IsWalkable) { break; }
+				if (mapManager.GetTile(potentialLoc).IsWalkable) 
+				{
+					randomLoc = potentialLoc;
+					break; 
+				}
 			}
 
 			if (swimmable)
 			{
-				if (mapManager.GetTile(randomCell).IsSwimmable) { break; }
+				if (mapManager.GetTile(potentialLoc).IsSwimmable) 
+				{
+					randomLoc = potentialLoc;
+					break;
+				}
 			}
 		}
-
-		return new Vector2Int(randomCell.x, randomCell.y);
+		return randomLoc;
 	}
 }

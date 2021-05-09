@@ -8,12 +8,14 @@ public class Node
     public int HCost;
 
 	public Node parent;
-	public Vector2Int Loc;
+	public Vector2Int GlobalLoc;
+	public Vector2Int LocalLoc;
 	public bool Walkable;
 
-	public Node(Vector2Int _loc, bool _walkable)
+	public Node(Vector2Int _global, Vector2Int _local, bool _walkable)
 	{
-		Loc = _loc;
+		GlobalLoc = _global;
+		LocalLoc = _local;
 		Walkable = _walkable;
 	}
 

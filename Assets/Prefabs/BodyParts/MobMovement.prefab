@@ -44,10 +44,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1aec55fb7207a784c8995e23c7f3ff67, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  targetPrefab: {fileID: 780779809152605257, guid: 12398b36c97aade459a35f7eec85f9e3, type: 3}
   MapManager: {fileID: 0}
   MapGenerator: {fileID: 0}
   TileLoc: {x: 0, y: 0}
-  MoveDelay: 1
+  MoveDelay: 1.5
   TilesPerStep: 1
   MeanderDistance: 10
 --- !u!114 &1610840821634216195
@@ -62,6 +63,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b73b6acefcc595645be4b10e623d8c0e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mapManager: {fileID: 0}
-  mapGenerator: {fileID: 0}
-  targetLoc: {x: 0, y: 0}
+  MapSize: 0
+  MapManager: {fileID: 0}

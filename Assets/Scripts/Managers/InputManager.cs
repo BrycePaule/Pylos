@@ -11,9 +11,11 @@ public class InputManager : MonoBehaviour
     [SerializeField] private GameObject player;
     [SerializeField] private GameObject defaultCamera;
     [SerializeField] private MapManager mapManager;
+    [SerializeField] private MapGenerator mapGenerator;
     [SerializeField] private Tilemap tilemap;
     [SerializeField] private Tooltip tooltip;
     [SerializeField] private GameObject selectionBox;
+    [SerializeField] private GameObject tileCursor;
 
     private InputAction _playerMovement;
     private InputAction _playerLeftClick;
@@ -60,11 +62,13 @@ public class InputManager : MonoBehaviour
 	private void Start() 
 	{
 		selectionBox.SetActive(false);
+		tileCursor.SetActive(false);
 	}
 
 	private void Update() 
 	{
         tooltip.Hover(Mouse.current.position.ReadValue());
+		MouseHover();
 
 		if (holdingMouseDown == true) 
 		{ 
@@ -114,13 +118,13 @@ public class InputManager : MonoBehaviour
 
 	private void OnLeftClick(InputAction.CallbackContext context)
 	{
-		print("clicked");
+		// print("clicked");
 		pointLastClicked = Mouse.current.position.ReadValue();
 	}
 
 	private void OnLeftClickHold(InputAction.CallbackContext context)
 	{
-		print("held");
+		// print("held");
 		holdingMouseDown = true;
 		selectionBox.transform.position = pointLastClicked;
 		selectionBox.SetActive(true);
@@ -128,15 +132,31 @@ public class InputManager : MonoBehaviour
 
 	private void OnHoldRelease()
 	{
-		print("released");
+		// print("released");
 
 		selectionBox.SetActive(false);
-		holdingMouseDown = false;;
+		holdingMouseDown = false;
 	}
 
 	private void UpdateSelectionBoxSize()
 	{
 		Vector2 currPos = Mouse.current.position.ReadValue();
 		selectionBox.GetComponentInChildren<Image>().rectTransform.sizeDelta = new Vector2(currPos.x - pointLastClicked.x , currPos.y - pointLastClicked.y);
+	}
+
+	private void MouseHover()
+	{
+		Ray ray = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
+        Vector3 worldPoint = ray.GetPoint(0);
+        Vector2Int mposInWorld = TileConversion.WorldToTile(worldPoint);
+
+		if (mposInWorld.x < 0 && mposInWorld.x >= mapGenerator.MapSize || mposInWorld.y < 0 && mposInWorld.y >= mapGenerator.MapSize)  
+		{ 
+			tileCursor.SetActive(false);
+			return; 
+		}
+
+		tileCursor.transform.position = TileConversion.TileToWorld3D(mposInWorld);
+		tileCursor.SetActive(true);
 	}
 }

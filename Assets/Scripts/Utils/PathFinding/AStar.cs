@@ -4,25 +4,22 @@ using UnityEngine;
 
 public class AStar : MonoBehaviour
 {
-	[SerializeField] private MapManager mapManager;
-	[SerializeField] private MapGenerator mapGenerator;
+	public int MapSize;
+	public MapManager MapManager;
 
-	public Vector2Int targetLoc;
-
-	private Vector2Int currLoc;
 	private Node[,] nodes;
+	private int searchGridSize;
 
-	private void Start() 
+	public List<Node> FindPath(Vector2Int startLocGlobal, Vector2Int targetLocGlobal, int halfSize)
 	{
-		mapGenerator = transform.GetComponent<MobMovement>().MapGenerator;	
-		mapManager = transform.GetComponent<MobMovement>().MapManager;	
-	}
+		searchGridSize = (halfSize * 2) + 1;
+		BuildNodeGrid(startLocGlobal, halfSize);
 
-	private List<Node> FindPath()
-	{
-		BuildNodeGrid();
-		Node startNode = nodes[currLoc.x, currLoc.y];
-		Node targetNode = nodes[targetLoc.x, targetLoc.y];
+		Vector2Int startLocLocal = new Vector2Int(halfSize, halfSize);
+		Vector2Int targetLocLocal = new Vector2Int(targetLocGlobal.x - startLocGlobal.x + halfSize, targetLocGlobal.y - startLocGlobal.y + halfSize);
+
+		Node startNode = nodes[startLocLocal.x, startLocLocal.y];
+		Node targetNode = nodes[targetLocLocal.x, targetLocLocal.y];
 
 		List<Node> openSet = new List<Node>();
 		List<Node> closedSet = new List<Node>();
@@ -85,44 +82,60 @@ public class AStar : MonoBehaviour
 	{
 		List<Node> neighbours = new List<Node>();
 
-		for (int x = 1; x <= 1; x++)
+		for (int x = -1; x <= 1; x++)
 		{
-			for (int y = 1; y <= 1; y++)
+			for (int y = -1; y <= 1; y++)
 			{
 				if (x == 0 && y == 0) { continue; }
 
-				int checkX = node.Loc.x + x;
-				int checkY = node.Loc.y + y;
+				Vector2Int checkGlobal = new Vector2Int(node.GlobalLoc.x + x, node.GlobalLoc.y + y);
+				Vector2Int checkLocal = new Vector2Int(node.LocalLoc.x + x, node.LocalLoc.y + y);
 
-				if (checkX >= 0 && checkX <= mapGenerator.MapSize && checkY >= 0 && checkY <= mapGenerator.MapSize)
-				{
-					neighbours.Add(nodes[checkX, checkY]);
-				}
+				if (!InsideGlobalBounds(checkGlobal)) { continue; }
+				if (!InsideLocalBounds(checkLocal)) { continue; }
+
+				neighbours.Add(nodes[checkLocal.x, checkLocal.y]);
 			}
 		}
 		
 		return neighbours;
 	}
 
-	private void BuildNodeGrid()
+	private void BuildNodeGrid(Vector2Int startLoc, int halfSize)
 	{
-		nodes = new Node[mapGenerator.MapSize, mapGenerator.MapSize];
-
-		for (int x = 0; x < mapGenerator.MapSize; x++)
+		nodes = new Node[searchGridSize, searchGridSize];
+		for (int localX = 0; localX < searchGridSize; localX++)
 		{
-			for (int y = 0; y < mapGenerator.MapSize; y++)
+			for (int localY = 0; localY < searchGridSize; localY++)
 			{
-				Vector2Int loc = new Vector2Int(x, y);
-				nodes[x, y] = new Node(loc, mapManager.IsWalkable(loc));
+				Vector2Int globalLoc = new Vector2Int(startLoc.x + localX - halfSize, startLoc.y + localY - halfSize);
+
+				if (!InsideGlobalBounds(globalLoc)) { continue; }
+
+				nodes[localX, localY] = new Node(globalLoc, new Vector2Int(localX, localY), MapManager.IsWalkable(globalLoc));
 			}
 		}
 	}
 
-	private int DistanceScore(Node nodeA, Node nodeB)
+	private static int DistanceScore(Node nodeA, Node nodeB)
 	{
-		int distX = Mathf.Abs(nodeA.Loc.x - nodeB.Loc.x);
-		int distY = Mathf.Abs(nodeA.Loc.y - nodeB.Loc.y);
+		int distX = Mathf.Abs(nodeA.GlobalLoc.x - nodeB.GlobalLoc.x);
+		int distY = Mathf.Abs(nodeA.GlobalLoc.y - nodeB.GlobalLoc.y);
 
 		return 14 * Mathf.Min(distX, distY) + 10 * (Mathf.Max(distX, distX) - Mathf.Min(distX, distY));
+	}
+
+	public bool InsideGlobalBounds(Vector2Int loc)
+	{
+		if (loc.x < 0 || loc.x >= MapSize) { return false; }
+		if (loc.y < 0 || loc.y >= MapSize) { return false; }
+		return true;
+	}
+
+	private bool InsideLocalBounds(Vector2Int loc)
+	{
+		if (loc.x < 0 || loc.x >= searchGridSize) { return false; }
+		if (loc.y < 0 || loc.y >= searchGridSize) { return false; }
+		return true;
 	}
 }

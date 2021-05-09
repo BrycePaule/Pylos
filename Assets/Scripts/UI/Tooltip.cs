@@ -70,7 +70,9 @@ public bool IsActive;
 		Ray ray = Camera.main.ScreenPointToRay(mpos);
 		RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction, 100f);
 
-		if (hit.collider) 
+		if (!hit.collider) { return; }
+
+		if (hit.collider.gameObject.GetComponentInChildren<SelectableObject>()) 
 		{
 		   	UpdateHoveredObject(hit.collider.gameObject);
 		}

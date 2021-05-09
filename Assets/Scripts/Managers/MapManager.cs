@@ -21,34 +21,11 @@ public class MapManager : MonoBehaviour
 		SelectPlayerSpawn();	
 	}
 
-    public bool IsWalkable(Vector2Int loc)
-    {
-        if (Tiles[loc.x, loc.y].IsWalkable)
-        {
-            return true;
-        } 
-        else 
-        {
-            return false;
-        }
-    }
+    public bool IsWalkable(Vector2Int loc) => (Tiles[loc.x, loc.y].IsWalkable) ? true : false;
 
-	public bool IsSwimmable(Vector2Int loc)
-    {
-        if (Tiles[loc.x, loc.y].IsSwimmable)
-        {
-            return true;
-        } 
-        else 
-        {
-            return false;
-        }
-    }
+    public bool IsSwimmable(Vector2Int loc) => (Tiles[loc.x, loc.y].IsSwimmable) ? true : false;
 
-    public GroundTileData GetTile(Vector2Int loc)
-    {
-        return Tiles[loc.x, loc.y];
-    }
+	public GroundTileData GetTile(Vector2Int loc) => Tiles[loc.x, loc.y];
 
 	private void SelectPlayerSpawn()
 	{
