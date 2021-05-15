@@ -17,20 +17,20 @@ TagManager:
   - 
   - Objects
   - 
-  - Entities
-  - Mobs
-  - Player
   - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - DetectionRadius
+  - NPC
+  - NPCComponent
   - AttackRadius
+  - DetectionRadius
   - 
   - 
   - 
+  - 
+  - 
+  - 
+  - 
+  - Player
+  - PlayerComponent
   - 
   - 
   - 

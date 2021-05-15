@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7544237968560078952}
   - component: {fileID: 6529634942034911409}
   - component: {fileID: 8231797031254106516}
-  m_Layer: 21
+  m_Layer: 16
   m_Name: DetectionRadius
   m_TagString: Untagged
   m_Icon: {fileID: 0}

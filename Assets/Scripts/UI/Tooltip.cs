@@ -5,7 +5,7 @@ using TMPro;
 
 public class Tooltip : MonoBehaviour
 {
-public bool IsActive;
+	public bool IsActive;
 
 	[SerializeField] private GameObject tooltipContainer;
 	[SerializeField] private TMP_Text heading;
@@ -63,22 +63,42 @@ public bool IsActive;
 		tooltipContainer.SetActive(false);
 	}
 
-	public void Hover(Vector3 mpos)
+	public void Hover(GameObject obj)
 	{
 		if (_selectedObject != null) { return; }
 
-		Ray ray = Camera.main.ScreenPointToRay(mpos);
-		RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction, 100f);
+		UpdateHoveredObject(obj);
+		if (obj == null) { return; }
 
-		if (!hit.collider) { return; }
 
-		if (hit.collider.gameObject.GetComponentInChildren<SelectableObject>()) 
+		int hitLayer = obj.layer;
+		if (hitLayer == Layer.NPC.GetHashCode() || hitLayer == Layer.Objects.GetHashCode() || hitLayer == Layer.Player.GetHashCode())
 		{
-		   	UpdateHoveredObject(hit.collider.gameObject);
+			UpdateHoveredObject(obj);
+			return;
 		}
 		else
 		{
 			UpdateHoveredObject(null);
+		}
+	}
+
+	public void Select(GameObject obj)
+	{
+		if (obj == null) 
+		{
+			UpdateSelectedObject(null);
+			return;
+		}
+
+		int hitLayer = obj.layer;
+		if (hitLayer == Layer.NPC.GetHashCode() || hitLayer == Layer.Objects.GetHashCode() || hitLayer == Layer.Player.GetHashCode())
+		{
+			UpdateSelectedObject(obj);
+		}
+		else
+		{
+			UpdateSelectedObject(null);
 		}
 	}
 }

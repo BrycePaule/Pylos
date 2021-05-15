@@ -10,7 +10,7 @@ public class DetectionRadius : MonoBehaviour
 
 	private void Awake()
 	{
-		faction = GetComponentInParent<MobBase>().Faction;
+		faction = GetComponentInParent<NPCBase>().Faction;
 		GetComponent<CircleCollider2D>().radius = detectionRadius;
 	}
 

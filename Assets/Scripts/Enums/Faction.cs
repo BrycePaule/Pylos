@@ -10,4 +10,5 @@ public enum Faction
 	Critter,
     Ocean,
 	Goblin,
+	Pylos,
 }

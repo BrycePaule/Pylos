@@ -21,9 +21,19 @@ public class MapManager : MonoBehaviour
 		SelectPlayerSpawn();	
 	}
 
-    public bool IsWalkable(Vector2Int loc) => (Tiles[loc.x, loc.y].IsWalkable) ? true : false;
+    public bool IsWalkable(Vector2Int loc)
+	{
+		if (!IsWithinBounds(loc)) { return false; }
 
-    public bool IsSwimmable(Vector2Int loc) => (Tiles[loc.x, loc.y].IsSwimmable) ? true : false;
+		return Tiles[loc.x, loc.y].IsWalkable ? true : false;
+	}
+	
+	public bool IsSwimmable(Vector2Int loc)
+	{
+		if (!IsWithinBounds(loc)) { return false; }
+
+		return Tiles[loc.x, loc.y].IsSwimmable ? true : false;
+	}
 
 	public GroundTileData GetTile(Vector2Int loc) => Tiles[loc.x, loc.y];
 
@@ -38,5 +48,12 @@ public class MapManager : MonoBehaviour
 				return;
 			}
 		}
+	}
+
+	private bool IsWithinBounds(Vector2Int loc)
+	{
+		if (loc.x < 0 || loc.x >= mapGenerator.MapSize) { return false; }
+		if (loc.y < 0 || loc.y >= mapGenerator.MapSize) { return false; }
+		return true;
 	}
 }

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MobMovement : MonoBehaviour
+public class NPCMovement : MonoBehaviour
 {
 	[SerializeField] private GameObject targetPrefab;
 
@@ -16,7 +16,7 @@ public class MobMovement : MonoBehaviour
 
 	private Vector2Int _targetLoc;
 	private Rigidbody2D _mobRB;
-	private MobBase _mobBase;
+	private NPCBase _mobBase;
 	private float _moveTimer;
 	private AStar _aStar;
 
@@ -25,7 +25,7 @@ public class MobMovement : MonoBehaviour
 	private void Awake() 
 	{
 		_mobRB = GetComponentInParent<Rigidbody2D>();
-		_mobBase = GetComponentInParent<MobBase>();
+		_mobBase = GetComponentInParent<NPCBase>();
 		_aStar = GetComponent<AStar>();
 	}
 
@@ -39,53 +39,10 @@ public class MobMovement : MonoBehaviour
 
 	private void FixedUpdate() 
 	{
-		Move2();
+		Move();
 	}
 
 	private void Move()
-	{
-		_moveTimer += Time.deltaTime;
-
-		if (TileLoc == _targetLoc || _targetLoc == Vector2.zero) { _targetLoc = SelectNewTargetLocation(); }
-
-		if (_moveTimer >= MoveDelay)
-		{
-			int dx = (int) Mathf.Clamp(_targetLoc.x - TileLoc.x, -1, 1);
-			int dy = (int) Mathf.Clamp(_targetLoc.y - TileLoc.y, -1, 1);
-
-			Vector2Int dest = TileLoc + new Vector2Int(dx, dy);
-			GroundTileData destTile = MapManager.GetTile(dest);
-
-			if (_mobBase.CanWalk)
-			{
-				if (destTile.IsWalkable)
-				{
-					_mobRB.MovePosition(TileConversion.TileToWorld2D(dest));
-					TileLoc = dest;
-					_moveTimer = 0;
-					return;
-				}
-			}
-
-			if (_mobBase.CanSwim)
-			{
-				if (destTile.IsSwimmable)
-				{
-					_mobRB.MovePosition(TileConversion.TileToWorld2D(dest));
-					TileLoc = dest;
-					_moveTimer = 0;
-					return;
-				}
-			}
-		}
-	}
-
-	/*
-		TODO:  
-			check if can find a path, if not expand pathfinding search (will allow for most cases needing a small scale search, but as units
-			struggle to find a path they will actually look for better ones)
-	*/
-	private void Move2()
 	{
 		_moveTimer += Time.deltaTime;
 

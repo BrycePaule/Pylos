@@ -47,13 +47,13 @@ public class InputManager : MonoBehaviour
         _playerMovement = _playerControls.Player.Movement;
 
         _playerLeftClick = _playerControls.Player.LeftClick;
-        _playerLeftClick.performed += OnLeftClick;
+        _playerLeftClick.performed += ctx => OnLeftClick(Mouse.current.position.ReadValue(), ctx);
 
         _playerLeftClickHold = _playerControls.Player.LeftClickHold;
-        _playerLeftClickHold.performed += OnLeftClickHold;
+        _playerLeftClickHold.performed += ctx => OnLeftClickHold(Mouse.current.position.ReadValue(), ctx);
 
         _playerRightClick = _playerControls.Player.RightClick;
-        _playerRightClick.performed += OnRightClick;
+        _playerRightClick.performed += ctx => OnRightClick(Mouse.current.position.ReadValue(), ctx);
 
         _cameraZoom = _playerControls.Camera.Zoom;
         _cameraZoom.performed += OnCameraZoom;
@@ -67,8 +67,9 @@ public class InputManager : MonoBehaviour
 
 	private void Update() 
 	{
-        tooltip.Hover(Mouse.current.position.ReadValue());
-		MouseHover();
+		Vector3 mpos = Mouse.current.position.ReadValue();
+		tooltip.Hover(ColliderUnderCursor(mpos));	
+		UpdateTileCursor();
 
 		if (holdingMouseDown == true) 
 		{ 
@@ -100,11 +101,12 @@ public class InputManager : MonoBehaviour
         }
     }
 
-    private void OnRightClick(InputAction.CallbackContext context)
+    private void OnRightClick(Vector3 mpos, InputAction.CallbackContext context)
     {
         Ray ray = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
         Vector3 worldPoint = ray.GetPoint(0);
         Vector2Int cellLocation = TileConversion.WorldToTile(worldPoint);
+		tooltip.Select(null);
 
         print(
             mapManager.GetTile(cellLocation).GroundType 
@@ -116,15 +118,14 @@ public class InputManager : MonoBehaviour
 		selectionBox.SetActive(false);
     }
 
-	private void OnLeftClick(InputAction.CallbackContext context)
+	private void OnLeftClick(Vector3 mpos, InputAction.CallbackContext context)
 	{
-		// print("clicked");
-		pointLastClicked = Mouse.current.position.ReadValue();
+		pointLastClicked = mpos;
+		tooltip.Select(ColliderUnderCursor(mpos)); 
 	}
 
-	private void OnLeftClickHold(InputAction.CallbackContext context)
+	private void OnLeftClickHold(Vector3 mpos, InputAction.CallbackContext context)
 	{
-		// print("held");
 		holdingMouseDown = true;
 		selectionBox.transform.position = pointLastClicked;
 		selectionBox.SetActive(true);
@@ -132,8 +133,6 @@ public class InputManager : MonoBehaviour
 
 	private void OnHoldRelease()
 	{
-		// print("released");
-
 		selectionBox.SetActive(false);
 		holdingMouseDown = false;
 	}
@@ -144,13 +143,13 @@ public class InputManager : MonoBehaviour
 		selectionBox.GetComponentInChildren<Image>().rectTransform.sizeDelta = new Vector2(currPos.x - pointLastClicked.x , currPos.y - pointLastClicked.y);
 	}
 
-	private void MouseHover()
+	private void UpdateTileCursor()
 	{
 		Ray ray = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
         Vector3 worldPoint = ray.GetPoint(0);
         Vector2Int mposInWorld = TileConversion.WorldToTile(worldPoint);
 
-		if (mposInWorld.x < 0 && mposInWorld.x >= mapGenerator.MapSize || mposInWorld.y < 0 && mposInWorld.y >= mapGenerator.MapSize)  
+		if (mposInWorld.x < 0 || mposInWorld.x >= mapGenerator.MapSize || mposInWorld.y < 0 || mposInWorld.y >= mapGenerator.MapSize)  
 		{ 
 			tileCursor.SetActive(false);
 			return; 
@@ -159,4 +158,15 @@ public class InputManager : MonoBehaviour
 		tileCursor.transform.position = TileConversion.TileToWorld3D(mposInWorld);
 		tileCursor.SetActive(true);
 	}
+
+	private GameObject ColliderUnderCursor(Vector3 mpos)
+	{
+		Ray ray = Camera.main.ScreenPointToRay(mpos);
+		RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction, 100f);
+
+		if (hit.collider) { return hit.collider.gameObject; }
+
+		return null;
+	}
+
 }

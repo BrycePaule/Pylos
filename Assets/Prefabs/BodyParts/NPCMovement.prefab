@@ -11,8 +11,8 @@ GameObject:
   - component: {fileID: 8332606288332731567}
   - component: {fileID: 8332606288332731564}
   - component: {fileID: 1610840821634216195}
-  m_Layer: 12
-  m_Name: MobMovement
+  m_Layer: 14
+  m_Name: NPCMovement
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -41,7 +41,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 8332606288332731566}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1aec55fb7207a784c8995e23c7f3ff67, type: 3}
+  m_Script: {fileID: 11500000, guid: b9a2f34c3ee37de4499f13a5ffbd5a25, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   targetPrefab: {fileID: 780779809152605257, guid: 12398b36c97aade459a35f7eec85f9e3, type: 3}

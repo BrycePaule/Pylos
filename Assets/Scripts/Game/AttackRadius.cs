@@ -11,7 +11,7 @@ public class AttackRadius : MonoBehaviour
 
 	private void Awake()
 	{
-		faction = GetComponentInParent<MobBase>().Faction;
+		faction = GetComponentInParent<NPCBase>().Faction;
 		GetComponent<CircleCollider2D>().radius = attackRadius;
 	}
 
@@ -19,8 +19,8 @@ public class AttackRadius : MonoBehaviour
 	{
 		GameObject otherObject = other.transform.parent.gameObject;
 
-		if (otherObject.layer != Layer.Mobs.GetHashCode()) { return; }
-		if (otherObject.GetComponentInChildren<MobBase>().Faction == faction) { return; }
+		if (otherObject.layer != Layer.NPC.GetHashCode()) { return; }
+		if (otherObject.GetComponentInChildren<NPCBase>().Faction == faction) { return; }
 
 		IDamageable<float> target = otherObject.GetComponentInChildren<IDamageable<float>>();
 		if (target != null)

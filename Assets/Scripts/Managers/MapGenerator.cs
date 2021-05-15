@@ -38,7 +38,7 @@ public class MapGenerator : MonoBehaviour
     [SerializeField] private Tilemap tilemap;
     [SerializeField] private GameObject treeContainer;
     [SerializeField] private MapManager mapManager;
-    [SerializeField] private MobGenerator mobSpawner;
+    [SerializeField] private NPCGenerator mobSpawner;
 
     [Header("Prefabs")]
     [SerializeField] private GameObject treePrefab;
