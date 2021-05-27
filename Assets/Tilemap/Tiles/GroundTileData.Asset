@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ebd69e160132f64e937705735ab54de, type: 3}
   m_Name: GroundTileData
   m_EditorClassIdentifier: 
-  Tile: {fileID: 11400000, guid: 6995174a2622adc49be9f6f2be224bf3, type: 2}
+  Tile: {fileID: 11400000, guid: 2f14ec6332844c24fb5beff1f2710ccc, type: 2}
   IsWalkable: 1
+  IsSwimmable: 0
   ContainedObjects: []
+  GroundType: 0

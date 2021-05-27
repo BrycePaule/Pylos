@@ -12,6 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67c9b08ed224553489d15e1aea80b275, type: 3}
   m_Name: Goblin
   m_EditorClassIdentifier: 
-  NPCType: 2
   Prefab: {fileID: 8747744546245116162, guid: 9bb0cfc63f9886f408901d262c9650a7, type: 3}
   SpawnCount: 10
+  NPCType: 2
+  Faction: 5
+  MoveDelay: 2
+  TilesPerStep: 1
+  MeanderRange: 10
+  SearchRange: 10
+  MaxHealth: 150
+  Damage: 5
+  AttackSpeed: 1
+  AttackRange: 1

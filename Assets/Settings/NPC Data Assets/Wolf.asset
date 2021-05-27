@@ -12,6 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67c9b08ed224553489d15e1aea80b275, type: 3}
   m_Name: Wolf
   m_EditorClassIdentifier: 
-  NPCType: 1
   Prefab: {fileID: 8493416389090671196, guid: f2f56cff4e1c8964fb701fb2d67bb175, type: 3}
   SpawnCount: 25
+  NPCType: 1
+  Faction: 2
+  MoveDelay: 1
+  TilesPerStep: 1
+  MeanderRange: 20
+  SearchRange: 15
+  MaxHealth: 100
+  Damage: 3
+  AttackSpeed: 2
+  AttackRange: 1

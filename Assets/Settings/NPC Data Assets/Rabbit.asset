@@ -12,6 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67c9b08ed224553489d15e1aea80b275, type: 3}
   m_Name: Rabbit
   m_EditorClassIdentifier: 
-  Name: Rabbit
   Prefab: {fileID: 5329338898667464239, guid: 216692309f24da94a8a31a3d8e2f4b7c, type: 3}
   SpawnCount: 50
+  NPCType: 0
+  Faction: 3
+  MoveDelay: 1.5
+  TilesPerStep: 1
+  MeanderRange: 10
+  SearchRange: 5
+  MaxHealth: 20
+  Damage: 1
+  AttackSpeed: 2
+  AttackRange: 1

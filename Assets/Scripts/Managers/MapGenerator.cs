@@ -131,7 +131,7 @@ public class MapGenerator : MonoBehaviour
                     tilemap.SetTile(pos, GroundTileData.Tile);
 
                     int roll = Random.Range(0, 100);
-                    if (roll < 10)
+                    if (roll < 5)
                     {
                         GameObject tree = Instantiate(treePrefab, new Vector3(x + 0.5f, y + 0.5f, 0), Quaternion.identity, treeContainer.transform);
                         GroundTileData.IsWalkable = false;

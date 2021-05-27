@@ -12,6 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67c9b08ed224553489d15e1aea80b275, type: 3}
   m_Name: Hero
   m_EditorClassIdentifier: 
-  NPCType: 3
   Prefab: {fileID: 4793766673727784411, guid: 72ba750caa9978f4fbc86e9174a11315, type: 3}
   SpawnCount: 1
+  NPCType: 3
+  Faction: 6
+  MoveDelay: 1
+  TilesPerStep: 1
+  MeanderRange: 20
+  SearchRange: 10
+  MaxHealth: 200
+  Damage: 5
+  AttackSpeed: 1
+  AttackRange: 1

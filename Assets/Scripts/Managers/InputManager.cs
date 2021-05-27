@@ -14,13 +14,16 @@ public class InputManager : MonoBehaviour
     [SerializeField] private MapGenerator mapGenerator;
     [SerializeField] private Tilemap tilemap;
     [SerializeField] private Tooltip tooltip;
+    [SerializeField] private Menu menu;
     [SerializeField] private GameObject selectionBox;
     [SerializeField] private GameObject tileCursor;
+    [SerializeField] private LayerMask selectable;
 
     private InputAction _playerMovement;
     private InputAction _playerLeftClick;
     private InputAction _playerLeftClickHold;
     private InputAction _playerRightClick;
+    private InputAction _toggleMenu;
     private InputAction _cameraZoom;
 
     private Rigidbody2D _playerRB;
@@ -34,6 +37,7 @@ public class InputManager : MonoBehaviour
         _playerLeftClick.Enable();
         _playerLeftClickHold.Enable();
         _playerRightClick.Enable();
+        _toggleMenu.Enable();
         _cameraZoom.Enable();
     }
 
@@ -55,6 +59,9 @@ public class InputManager : MonoBehaviour
         _playerRightClick = _playerControls.Player.RightClick;
         _playerRightClick.performed += ctx => OnRightClick(Mouse.current.position.ReadValue(), ctx);
 
+        _toggleMenu = _playerControls.Player.ToggleMenu;
+        _toggleMenu.performed += ctx => OnToggleMenu();
+
         _cameraZoom = _playerControls.Camera.Zoom;
         _cameraZoom.performed += OnCameraZoom;
     }
@@ -68,8 +75,8 @@ public class InputManager : MonoBehaviour
 	private void Update() 
 	{
 		Vector3 mpos = Mouse.current.position.ReadValue();
-		tooltip.Hover(ColliderUnderCursor(mpos));	
-		UpdateTileCursor();
+		tooltip.Hover(GetSelectableUnderCursor(mpos));	
+		// UpdateTileCursor();
 
 		if (holdingMouseDown == true) 
 		{ 
@@ -105,23 +112,18 @@ public class InputManager : MonoBehaviour
     {
         Ray ray = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
         Vector3 worldPoint = ray.GetPoint(0);
-        Vector2Int cellLocation = TileConversion.WorldToTile(worldPoint);
+        Vector2Int tileLoc = TileConversion.WorldToTile(worldPoint);
+
 		tooltip.Select(null);
-
-        print(
-            mapManager.GetTile(cellLocation).GroundType 
-            + " | " + cellLocation 
-            + " | Walkable: " 
-            + mapManager.IsWalkable(cellLocation)
-        );
-
 		selectionBox.SetActive(false);
+
+		print(tilemap.GetTile(new Vector3Int(tileLoc.x, tileLoc.y, 0)));
     }
 
 	private void OnLeftClick(Vector3 mpos, InputAction.CallbackContext context)
 	{
 		pointLastClicked = mpos;
-		tooltip.Select(ColliderUnderCursor(mpos)); 
+		tooltip.Select(GetSelectableUnderCursor(mpos)); 
 	}
 
 	private void OnLeftClickHold(Vector3 mpos, InputAction.CallbackContext context)
@@ -159,14 +161,24 @@ public class InputManager : MonoBehaviour
 		tileCursor.SetActive(true);
 	}
 
-	private GameObject ColliderUnderCursor(Vector3 mpos)
+	private GameObject GetSelectableUnderCursor(Vector3 mpos)
 	{
 		Ray ray = Camera.main.ScreenPointToRay(mpos);
-		RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction, 100f);
+		RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction, 100f, selectable);
 
-		if (hit.collider) { return hit.collider.gameObject; }
+		if (hit) 
+		{
+			return hit.transform.gameObject;
+		}
+		else
+		{
+			return null;
+		}
+	}
 
-		return null;
+	private void OnToggleMenu()
+	{
+		menu.ToggleMenu();
 	}
 
 }

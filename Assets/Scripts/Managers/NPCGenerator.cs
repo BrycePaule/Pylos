@@ -6,8 +6,12 @@ using UnityEngine.Tilemaps;
 
 public class NPCGenerator : MonoBehaviour
 {
-
-    [SerializeField] private bool SPAWN_MOBS;
+	[Header("DEV STUFF")]
+    [SerializeField] private bool OVERRIDE_SPAWN_COUNTS;
+    [SerializeField] private NPCType NPCTYPE_OVERRIDE;
+    [SerializeField] private int SPAWN_CAP_OVERRIDE;
+    [SerializeField] private bool OVERRIDE_SPEED;
+    [SerializeField] private int MOVE_DELAY_OVERRIDE;
 	[Space(20)]
 
     [SerializeField] private List<ScriptableObject> npcDataAssets;
@@ -29,6 +33,18 @@ public class NPCGenerator : MonoBehaviour
 
 	private void Start() 
 	{
+		if (OVERRIDE_SPAWN_COUNTS)
+		{
+			NPCType npc = NPCTYPE_OVERRIDE;
+
+			Transform container = new GameObject(npc.ToString() + "Container").transform;
+			container.SetParent(npcContainer.transform);
+			Spawn(npc, SPAWN_CAP_OVERRIDE, container);
+
+			return;
+		}
+
+
 		foreach (NPCType npc in System.Enum.GetValues(typeof(NPCType)))
 		{
 			Transform container = new GameObject(npc.ToString() + "Container").transform;
@@ -39,6 +55,8 @@ public class NPCGenerator : MonoBehaviour
 
 	private void FixedUpdate() 
 	{
+		if (OVERRIDE_SPAWN_COUNTS) { return;}
+
 		_spawnCheckTimer += Time.deltaTime;
 		if (_spawnCheckTimer > spawnCheckDelay)
 		{
@@ -65,24 +83,44 @@ public class NPCGenerator : MonoBehaviour
 
 	private void Spawn(NPCType npc, int count, Transform container)
 	{
-		if (!SPAWN_MOBS) { return; }
-
 		print("Spawning " + count + " " + npc.ToString() + "(s)");
 		for (int i = 0; i < count; i++)
 		{
-            GameObject newNPC = Instantiate(npcData[npc].Prefab, Vector3.zero, Quaternion.identity, container);
-			NPCMovement npcMovement = newNPC.GetComponentInChildren<NPCMovement>();
-			NPCBase npcBase = newNPC.GetComponentInChildren<NPCBase>();
-
-			newNPC.name = npc.ToString();
-			Vector2Int loc = SelectRandomLocation(walkable: npcBase.CanWalk, swimmable: npcBase.CanSwim);
-            npcMovement.MapGenerator = mapGenerator;
-            npcMovement.MapManager = mapManager;
-			newNPC.transform.position = TileConversion.TileToWorld3D(loc);
-			npcMovement.TileLoc = loc;
-			npcMovement.RandomiseMovementTick();
-			npcMovement.SelectNewTargetLocation();
+			GameObject newNPC = Instantiate(npcData[npc].Prefab, Vector3.zero, Quaternion.identity, container);
+			BuildNPC(newNPC, npc);
 		}
+	}
+
+	private void BuildNPC(GameObject npcObj, NPCType npcType)
+	{
+		NPCData _data = npcData[npcType];
+		NPCBase _base = npcObj.GetComponentInChildren<NPCBase>();
+		NPCMovement _movement = npcObj.GetComponentInChildren<NPCMovement>();
+		Health _health = npcObj.GetComponentInChildren<Health>();
+
+		npcObj.name = npcType.ToString();
+
+		Vector2Int loc = SelectRandomLocation(walkable: _base.CanWalk, swimmable: _base.CanSwim);
+		npcObj.transform.position = TileConversion.TileToWorld3D(loc);
+		_movement.TileLoc = loc;
+
+		_base.Faction = _data.Faction;
+
+        _movement.MapGenerator = mapGenerator;
+        _movement.MapManager = mapManager;
+		_movement.MoveDelay = _data.MoveDelay;
+		_movement.TilesPerStep = _data.TilesPerStep;
+		_movement.MeanderRange = _data.MeanderRange;
+		_movement.SearchRange = _data.SearchRange;
+		_movement.RandomiseMovementTick();
+		_movement.RandomTargetLocation(_movement.TileLoc);
+
+		_movement.Damage = _data.Damage;
+		_movement.AttackSpeed = _data.AttackSpeed;
+		_movement.AttackRange = _data.AttackRange;
+		_health.MaxHealth = _data.MaxHealth;
+
+		if (OVERRIDE_SPEED) { _movement.MoveDelay = MOVE_DELAY_OVERRIDE; }
 	}
 
 	private void BuildNPCDictionary()

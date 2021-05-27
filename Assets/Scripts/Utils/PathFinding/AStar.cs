@@ -10,13 +10,13 @@ public class AStar : MonoBehaviour
 	private Node[,] nodes;
 	private int searchGridSize;
 
-	public List<Node> FindPath(Vector2Int startLocGlobal, Vector2Int targetLocGlobal, int halfSize)
+	public List<Node> FindPath(Vector2Int startLocGlobal, Vector2Int targetLocGlobal, int searchRadius, List<TileTravelType> travelTypes)
 	{
-		searchGridSize = (halfSize * 2) + 1;
-		BuildNodeGrid(startLocGlobal, halfSize);
+		searchGridSize = (searchRadius * 2) + 1;
+		BuildNodeGrid(startLocGlobal, searchRadius, travelTypes);
 
-		Vector2Int startLocLocal = new Vector2Int(halfSize, halfSize);
-		Vector2Int targetLocLocal = new Vector2Int(targetLocGlobal.x - startLocGlobal.x + halfSize, targetLocGlobal.y - startLocGlobal.y + halfSize);
+		Vector2Int startLocLocal = new Vector2Int(searchRadius, searchRadius);
+		Vector2Int targetLocLocal = new Vector2Int(targetLocGlobal.x - startLocGlobal.x + searchRadius, targetLocGlobal.y - startLocGlobal.y + searchRadius);
 
 		Node startNode = nodes[startLocLocal.x, startLocLocal.y];
 		Node targetNode = nodes[targetLocLocal.x, targetLocLocal.y];
@@ -60,10 +60,44 @@ public class AStar : MonoBehaviour
 			}
 		}
 		return new List<Node>();
+		// print("---");
+		// print(startLocGlobal);
+		// print(targetLocGlobal);
+		// print("couldn't find path there, pathing next to it");
+
+		// Node nextToTarget = null;
+		// foreach (Node neighbour in GetNeighbours(targetNode))
+		// {
+		// 	if (nextToTarget == null) 
+		// 	{ 
+		// 		if (neighbour.Walkable) { nextToTarget = neighbour; } 
+		// 	}
+		// 	else
+		// 	{
+		// 		if (neighbour.GCost < nextToTarget.GCost)
+		// 		{
+		// 		if (neighbour.Walkable) { nextToTarget = neighbour; } 
+		// 		}
+		// 	}
+		// }
+		// print(nextToTarget);
+		// if (nextToTarget != null) 
+		// {
+		// 	print(nextToTarget.GlobalLoc);
+		// 	print(nextToTarget.GCost);
+		// 	print(nextToTarget.parent);
+		// 	return RetracePath(startNode, nextToTarget);
+		// }
+		// else
+		// {
+		// 	return new List<Node>();
+		// }
 	}
 
 	private List<Node> RetracePath(Node startNode, Node endNode)
 	{
+		// if (startNode == endNode) { print("im on top of the target"); }
+
 		List<Node> path = new List<Node>();
 
 		Node currentNode = endNode;
@@ -97,11 +131,10 @@ public class AStar : MonoBehaviour
 				neighbours.Add(nodes[checkLocal.x, checkLocal.y]);
 			}
 		}
-		
 		return neighbours;
 	}
 
-	private void BuildNodeGrid(Vector2Int startLoc, int halfSize)
+	private void BuildNodeGrid(Vector2Int startLoc, int halfSize, List<TileTravelType> travelTypes)
 	{
 		nodes = new Node[searchGridSize, searchGridSize];
 		for (int localX = 0; localX < searchGridSize; localX++)
@@ -112,7 +145,7 @@ public class AStar : MonoBehaviour
 
 				if (!InsideGlobalBounds(globalLoc)) { continue; }
 
-				nodes[localX, localY] = new Node(globalLoc, new Vector2Int(localX, localY), MapManager.IsWalkable(globalLoc));
+				nodes[localX, localY] = new Node(globalLoc, new Vector2Int(localX, localY), MapManager.IsPathable(globalLoc, travelTypes));
 			}
 		}
 	}
@@ -122,7 +155,7 @@ public class AStar : MonoBehaviour
 		int distX = Mathf.Abs(nodeA.GlobalLoc.x - nodeB.GlobalLoc.x);
 		int distY = Mathf.Abs(nodeA.GlobalLoc.y - nodeB.GlobalLoc.y);
 
-		return 14 * Mathf.Min(distX, distY) + 10 * (Mathf.Max(distX, distX) - Mathf.Min(distX, distY));
+		return (14 * Mathf.Min(distX, distY)) + (10 * (Mathf.Max(distX, distY) - Mathf.Min(distX, distY)));
 	}
 
 	public bool InsideGlobalBounds(Vector2Int loc)

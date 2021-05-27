@@ -11,6 +11,7 @@ public class GroundTileData : TileBase
     public bool IsSwimmable;
     public List<GameObject> ContainedObjects;
     public GroundType GroundType;
+	public TileTravelType TravelType;
 
     public override void RefreshTile(Vector3Int position, ITilemap tilemap)
     {

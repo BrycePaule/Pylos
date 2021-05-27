@@ -57,6 +57,14 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""ToggleMenu"",
+                    ""type"": ""Button"",
+                    ""id"": ""04e80a41-b856-410f-9f38-6422f9c3a332"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -156,6 +164,17 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""LeftClick"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1a4b0cee-315c-40c9-b4fe-b5e8ee37e197"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ToggleMenu"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -288,6 +307,7 @@ public class @PlayerControls : IInputActionCollection, IDisposable
         m_Player_LeftClick = m_Player.FindAction("LeftClick", throwIfNotFound: true);
         m_Player_LeftClickHold = m_Player.FindAction("LeftClickHold", throwIfNotFound: true);
         m_Player_RightClick = m_Player.FindAction("RightClick", throwIfNotFound: true);
+        m_Player_ToggleMenu = m_Player.FindAction("ToggleMenu", throwIfNotFound: true);
         // Camera
         m_Camera = asset.FindActionMap("Camera", throwIfNotFound: true);
         m_Camera_Movement = m_Camera.FindAction("Movement", throwIfNotFound: true);
@@ -349,6 +369,7 @@ public class @PlayerControls : IInputActionCollection, IDisposable
     private readonly InputAction m_Player_LeftClick;
     private readonly InputAction m_Player_LeftClickHold;
     private readonly InputAction m_Player_RightClick;
+    private readonly InputAction m_Player_ToggleMenu;
     public struct PlayerActions
     {
         private @PlayerControls m_Wrapper;
@@ -358,6 +379,7 @@ public class @PlayerControls : IInputActionCollection, IDisposable
         public InputAction @LeftClick => m_Wrapper.m_Player_LeftClick;
         public InputAction @LeftClickHold => m_Wrapper.m_Player_LeftClickHold;
         public InputAction @RightClick => m_Wrapper.m_Player_RightClick;
+        public InputAction @ToggleMenu => m_Wrapper.m_Player_ToggleMenu;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -382,6 +404,9 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                 @RightClick.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnRightClick;
                 @RightClick.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnRightClick;
                 @RightClick.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnRightClick;
+                @ToggleMenu.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnToggleMenu;
+                @ToggleMenu.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnToggleMenu;
+                @ToggleMenu.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnToggleMenu;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -401,6 +426,9 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                 @RightClick.started += instance.OnRightClick;
                 @RightClick.performed += instance.OnRightClick;
                 @RightClick.canceled += instance.OnRightClick;
+                @ToggleMenu.started += instance.OnToggleMenu;
+                @ToggleMenu.performed += instance.OnToggleMenu;
+                @ToggleMenu.canceled += instance.OnToggleMenu;
             }
         }
     }
@@ -486,6 +514,7 @@ public class @PlayerControls : IInputActionCollection, IDisposable
         void OnLeftClick(InputAction.CallbackContext context);
         void OnLeftClickHold(InputAction.CallbackContext context);
         void OnRightClick(InputAction.CallbackContext context);
+        void OnToggleMenu(InputAction.CallbackContext context);
     }
     public interface ICameraActions
     {

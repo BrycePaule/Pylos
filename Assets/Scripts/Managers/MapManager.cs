@@ -35,6 +35,24 @@ public class MapManager : MonoBehaviour
 		return Tiles[loc.x, loc.y].IsSwimmable ? true : false;
 	}
 
+	public bool IsPathable(Vector2Int loc,  List<TileTravelType> types)
+	{
+		foreach (TileTravelType type in types)
+		{
+			if (type == TileTravelType.Walkable)
+			{
+				if (IsWalkable(loc)) { return true; }
+			}
+
+			if (type == TileTravelType.Swimmable)
+			{
+				if (IsSwimmable(loc)) { return true; }
+			}
+		}
+
+		return false;
+	}
+
 	public GroundTileData GetTile(Vector2Int loc) => Tiles[loc.x, loc.y];
 
 	private void SelectPlayerSpawn()
@@ -50,10 +68,16 @@ public class MapManager : MonoBehaviour
 		}
 	}
 
-	private bool IsWithinBounds(Vector2Int loc)
+	public bool IsWithinBounds(Vector2Int loc)
 	{
 		if (loc.x < 0 || loc.x >= mapGenerator.MapSize) { return false; }
 		if (loc.y < 0 || loc.y >= mapGenerator.MapSize) { return false; }
+		return true;
+	}
+
+	public bool IsWithinBounds(int val)
+	{
+		if (val < 0 || val >= mapGenerator.MapSize) { return false; }
 		return true;
 	}
 }
