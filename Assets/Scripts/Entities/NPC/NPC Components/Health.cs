@@ -12,10 +12,12 @@ public class Health : MonoBehaviour, IDamageable<float>
 	[SerializeField] private GameObject HealthBar;
 
 	private Slider slider;
+	private NPCMovement npcMovement;
 
 	private void Awake() 
 	{
 		slider = HealthBar.GetComponentInChildren<Slider>();
+		npcMovement = transform.parent.GetComponentInChildren<NPCMovement>();
 	}
 
 	private void Start() 
@@ -37,11 +39,13 @@ public class Health : MonoBehaviour, IDamageable<float>
 		}
 	}
 
-	public void Damage(float value)
+	public void Damage(float value, GameObject damagedBy)
 	{
 		CurrentHealth -= value;
 		UpdateHealthBarSlider();
 		if (CurrentHealth <= 0) { Kill(); }
+
+		if (!npcMovement.Aggro && damagedBy != null) { npcMovement.AggroOnTo(damagedBy); }
 	}
 	
 	public void Heal(float value)

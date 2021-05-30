@@ -5,7 +5,7 @@ using UnityEngine;
 public class NPCMovement : MonoBehaviour
 {
 	[SerializeField] private GameObject targetPrefab;
-	[SerializeField] private GameObject searchingFor;
+	[SerializeField] private Item searchingFor;
 
 	public MapManager MapManager;
 	public MapGenerator MapGenerator;
@@ -18,6 +18,7 @@ public class NPCMovement : MonoBehaviour
 	public float TilesPerStep; 
 	public int MeanderRange;
 	public int SearchRange;
+	public float SearchDelay;
 
 	public float Damage;
 	public float AttackSpeed;
@@ -35,6 +36,7 @@ public class NPCMovement : MonoBehaviour
 	private AStar _aStar;
 
 	private float attackTimer;
+	private float searchTimer;
 
 	private void Awake() 
 	{
@@ -55,7 +57,7 @@ public class NPCMovement : MonoBehaviour
 		switch (NPCMovementType)
 		{
 			case MovementType.Search:
-				FindSearchObjectLocation();
+				FindSearchObject();
 				break;
 			default:
 				RandomTargetLocation(TileLoc);
@@ -76,6 +78,7 @@ public class NPCMovement : MonoBehaviour
 
 		Move();
 		attackTimer += Time.deltaTime;
+		searchTimer += Time.deltaTime;
 	}
 
 	private void Move()
@@ -129,7 +132,7 @@ public class NPCMovement : MonoBehaviour
 	// MOVEMENT TYPES
 	private void Meander()
 	{
-		if (IsAtTargetLocation()) { RandomTargetLocation(TileLoc); }
+		if (GridHelpers.IsAtLocation(TileLoc, _targetLoc)) { RandomTargetLocation(TileLoc); }
 
 		if (_moveTimer >= MoveDelay)
 		{
@@ -145,13 +148,18 @@ public class NPCMovement : MonoBehaviour
 
 		if (FoundObject == null) 
 		{
-			print("no object found");
-			FoundObject = FindSearchObjectLocation();
-			if (IsAtTargetLocation()) { print("arrived bitch"); RandomTargetLocation(TileLoc); }
+			print("nothing");
+			if (GridHelpers.IsAtLocation(TileLoc, _targetLoc)) { RandomTargetLocation(TileLoc); }
+			if (searchTimer >= SearchDelay)
+			{
+				searchTimer = 0f;
+				print("no object found");
+				FoundObject = FindSearchObject();
+			}
 		}
 		else
 		{
-			if (IsNextToTargetLocation())
+			if (GridHelpers.IsWithinDistance(TileLoc, _targetLoc, 1))
 			{
 				print("wood +1");
 				_npcBase.Wood +=1;
@@ -182,10 +190,13 @@ public class NPCMovement : MonoBehaviour
 
 		_targetLoc = AggroOn.GetComponentInChildren<NPCMovement>().TileLoc;
 
-		if (IsWithinDistance(AttackRange) && attackTimer >= AttackSpeed) 
+		if (GridHelpers.IsWithinDistance(TileLoc, _targetLoc, AttackRange) && attackTimer >= AttackSpeed) 
 		{
-			AggroOn.GetComponentInChildren<Health>().Damage(1);
+			AggroOn.GetComponentInChildren<Health>().Damage(Damage, AggroOn);
 			attackTimer = 0f;
+			return;
+		} else if (GridHelpers.IsWithinDistance(TileLoc, _targetLoc, AttackRange))
+		{
 			return;
 		}
 
@@ -198,27 +209,16 @@ public class NPCMovement : MonoBehaviour
 
 	// LOCATION GETTERS
 
-	private GameObject FindSearchObjectLocation()
+	private GameObject FindSearchObject()
 	{
-		// atm this will always find the top-left-most thing first, needs to be fixed
-		for (int y = TileLoc.y - SearchRange; y <= TileLoc.y + SearchRange; y++)
-		{
-			for (int x = TileLoc.x - SearchRange; x <= TileLoc.x + SearchRange; x++)
-			{
-				Vector2Int searchLoc = new Vector2Int(x, y);
-				if (!MapManager.IsWithinBounds(searchLoc)) { continue; }
-
-				foreach (GameObject obj in MapManager.GetTile(searchLoc).ContainedObjects)
-				{
-					if (obj.GetType() == searchingFor.GetType())
-					{
-						print("found a tree");
-						_targetLoc = searchLoc;
-						return obj;
-					}
-				}
-			}
+		ObjectLocationPair objLocPair = GridHelpers.SearchFor(searchingFor, TileLoc, SearchRange, MapManager.Tiles);
+		
+		if (objLocPair.obj != null) {
+			print("found!");
+			_targetLoc = objLocPair.loc;
+			return objLocPair.obj;
 		}
+
 		return null;
 	}
 
@@ -251,7 +251,6 @@ public class NPCMovement : MonoBehaviour
 				}
 			}
 		}
-		// UpdateTargetMarker();
 		return;
 	}
 
@@ -260,25 +259,6 @@ public class NPCMovement : MonoBehaviour
 	public void RandomiseMovementTick()
 	{
 		_moveTimer += Random.Range(0, MoveDelay);
-	}
-
-	private bool IsAtTargetLocation()
-	{
-		return (TileLoc == _targetLoc) ? true : false;
-	}
-	
-	private bool IsNextToTargetLocation()
-	{
-		if (Mathf.Abs(TileLoc.x - _targetLoc.x) > 1) { return false; }
-		if (Mathf.Abs(TileLoc.y - _targetLoc.y) > 1) { return false; }
-		return true;
-	}
-
-	private bool IsWithinDistance(int distance)
-	{
-		if (Mathf.Abs(TileLoc.x - _targetLoc.x) > distance) { return false; }
-		if (Mathf.Abs(TileLoc.y - _targetLoc.y) > distance) { return false; }
-		return true;
 	}
 
 	private void DrawPathLine(List<Node> path)

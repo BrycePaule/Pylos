@@ -8,63 +8,57 @@ using UnityEngine.UI;
 public class InputManager : MonoBehaviour
 {
 
-    [SerializeField] private GameObject player;
-    [SerializeField] private GameObject defaultCamera;
-    [SerializeField] private MapManager mapManager;
-    [SerializeField] private MapGenerator mapGenerator;
-    [SerializeField] private Tilemap tilemap;
-    [SerializeField] private Tooltip tooltip;
-    [SerializeField] private Menu menu;
-    [SerializeField] private GameObject selectionBox;
-    [SerializeField] private GameObject tileCursor;
-    [SerializeField] private LayerMask selectable;
+	[SerializeField] private CameraController cameraController;
+	[SerializeField] private MapManager mapManager;
+	[SerializeField] private MapGenerator mapGenerator;
+	[SerializeField] private Tilemap tilemap;
+	[SerializeField] private Tooltip tooltip;
+	[SerializeField] private Menu menu;
+	[SerializeField] private GameObject selectionBox;
+	[SerializeField] private GameObject tileCursor;
+	[SerializeField] private LayerMask selectable;
 
-    private InputAction _playerMovement;
-    private InputAction _playerLeftClick;
-    private InputAction _playerLeftClickHold;
-    private InputAction _playerRightClick;
-    private InputAction _toggleMenu;
-    private InputAction _cameraZoom;
+	private InputAction _playerMovement;
+	private InputAction _playerLeftClick;
+	private InputAction _playerLeftClickHold;
+	private InputAction _playerRightClick;
+	private InputAction _toggleMenu;
+	private InputAction _cameraZoom;
 
-    private Rigidbody2D _playerRB;
-    private PlayerMovement playerMovement;
-    private Vector2 pointLastClicked;
-    private bool holdingMouseDown;
+	private Vector2 pointLastClicked;
+	private bool holdingMouseDown;
 
-    private void OnEnable()
-    {
-        _playerMovement.Enable();
-        _playerLeftClick.Enable();
-        _playerLeftClickHold.Enable();
-        _playerRightClick.Enable();
-        _toggleMenu.Enable();
-        _cameraZoom.Enable();
-    }
+	private void OnEnable()
+	{
+		_playerMovement.Enable();
+		_playerLeftClick.Enable();
+		_playerLeftClickHold.Enable();
+		_playerRightClick.Enable();
+		_toggleMenu.Enable();
+		_cameraZoom.Enable();
+	}
 
-    private void Awake()
-    {
-        playerMovement = player.GetComponentInChildren<PlayerMovement>(); 
-        _playerRB = player.GetComponent<Rigidbody2D>();
+	private void Awake()
+	{
+		PlayerControls _playerControls = new PlayerControls();
 
-        PlayerControls _playerControls = new PlayerControls();
+		_playerMovement = _playerControls.Player.Movement;
 
-        _playerMovement = _playerControls.Player.Movement;
+		_playerLeftClick = _playerControls.Player.LeftClick;
+		_playerLeftClick.performed += ctx => OnLeftClick(Mouse.current.position.ReadValue(), ctx);
 
-        _playerLeftClick = _playerControls.Player.LeftClick;
-        _playerLeftClick.performed += ctx => OnLeftClick(Mouse.current.position.ReadValue(), ctx);
+		_playerLeftClickHold = _playerControls.Player.LeftClickHold;
+		_playerLeftClickHold.performed += ctx => OnLeftClickHold(Mouse.current.position.ReadValue(), ctx);
 
-        _playerLeftClickHold = _playerControls.Player.LeftClickHold;
-        _playerLeftClickHold.performed += ctx => OnLeftClickHold(Mouse.current.position.ReadValue(), ctx);
+		_playerRightClick = _playerControls.Player.RightClick;
+		_playerRightClick.performed += ctx => OnRightClick(Mouse.current.position.ReadValue(), ctx);
 
-        _playerRightClick = _playerControls.Player.RightClick;
-        _playerRightClick.performed += ctx => OnRightClick(Mouse.current.position.ReadValue(), ctx);
+		_toggleMenu = _playerControls.Player.ToggleMenu;
+		_toggleMenu.performed += ctx => OnToggleMenu();
 
-        _toggleMenu = _playerControls.Player.ToggleMenu;
-        _toggleMenu.performed += ctx => OnToggleMenu();
-
-        _cameraZoom = _playerControls.Camera.Zoom;
-        _cameraZoom.performed += OnCameraZoom;
-    }
+		_cameraZoom = _playerControls.Camera.Zoom;
+		_cameraZoom.performed += OnCameraZoom;
+	}
 
 	private void Start() 
 	{
@@ -85,40 +79,30 @@ public class InputManager : MonoBehaviour
 		}
 	}
 
-    private void FixedUpdate() 
-    {
-        Vector2 moveDir = _playerMovement.ReadValue<Vector2>();
-        if (moveDir == Vector2.zero) { return; }
+	private void FixedUpdate() 
+	{
+		Vector2 moveDir = _playerMovement.ReadValue<Vector2>();
+		if (moveDir == Vector2.zero) { return; }
 
-        playerMovement.Move(moveDir);
-    }
+		cameraController.Move(moveDir);
+	}
 
-    private void OnCameraZoom(InputAction.CallbackContext context)
-    {
-        Cinemachine.CinemachineVirtualCamera cvcam = defaultCamera.GetComponent<Cinemachine.CinemachineVirtualCamera>();
-        float scroll = context.ReadValue<Vector2>().y;
-        if (scroll < 0) 
-        {
-            if (cvcam.m_Lens.OrthographicSize >= 50) { return; }
-            cvcam.m_Lens.OrthographicSize += 1;
-        } else if (scroll > 0)
-        {
-            if (cvcam.m_Lens.OrthographicSize <= 10) { return; }
-            cvcam.m_Lens.OrthographicSize -= 1;
-        }
-    }
+	private void OnCameraZoom(InputAction.CallbackContext context)
+	{
+		cameraController.Zoom(context.ReadValue<Vector2>().y);
+	}
 
-    private void OnRightClick(Vector3 mpos, InputAction.CallbackContext context)
-    {
-        Ray ray = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
-        Vector3 worldPoint = ray.GetPoint(0);
-        Vector2Int tileLoc = TileConversion.WorldToTile(worldPoint);
+	private void OnRightClick(Vector3 mpos, InputAction.CallbackContext context)
+	{
+		Ray ray = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
+		Vector3 worldPoint = ray.GetPoint(0);
+		Vector2Int tileLoc = TileConversion.WorldToTile(worldPoint);
 
 		tooltip.Select(null);
 		selectionBox.SetActive(false);
 
 		print(tilemap.GetTile(new Vector3Int(tileLoc.x, tileLoc.y, 0)));
-    }
+	}
 
 	private void OnLeftClick(Vector3 mpos, InputAction.CallbackContext context)
 	{
@@ -148,8 +132,8 @@ public class InputManager : MonoBehaviour
 	private void UpdateTileCursor()
 	{
 		Ray ray = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
-        Vector3 worldPoint = ray.GetPoint(0);
-        Vector2Int mposInWorld = TileConversion.WorldToTile(worldPoint);
+		Vector3 worldPoint = ray.GetPoint(0);
+		Vector2Int mposInWorld = TileConversion.WorldToTile(worldPoint);
 
 		if (mposInWorld.x < 0 || mposInWorld.x >= mapGenerator.MapSize || mposInWorld.y < 0 || mposInWorld.y >= mapGenerator.MapSize)  
 		{ 

@@ -9,12 +9,12 @@ public class Menu : MonoBehaviour
 
     private void Start() 
 	{
-		DisableMenu();	
+		// DisableMenu();	
 	}
 
 	public void ToggleMenu()
 	{
-		gameObject.SetActive(!gameObject.active);
+		gameObject.SetActive(!gameObject.activeInHierarchy);
 	}
 
 	private void EnableMenu()
@@ -39,7 +39,7 @@ public class Menu : MonoBehaviour
 	{
 		foreach (Health health in npcContainer.GetComponentsInChildren<Health>())
 		{
-			health.Damage(1);
+			health.Damage(1, null);
 		}
 	}
 

@@ -46,7 +46,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetPrefab: {fileID: 780779809152605257, guid: 12398b36c97aade459a35f7eec85f9e3, type: 3}
   searchingFor: {fileID: 0}
-  attackSpeed: 1
   MapManager: {fileID: 0}
   MapGenerator: {fileID: 0}
   Path: {fileID: 0}
@@ -57,6 +56,10 @@ MonoBehaviour:
   TilesPerStep: 1
   MeanderRange: 0
   SearchRange: 0
+  SearchDelay: 3
+  Damage: 0
+  AttackSpeed: 0
+  AttackRange: 0
   Aggro: 0
   AggroOn: {fileID: 0}
   FoundObject: {fileID: 0}
