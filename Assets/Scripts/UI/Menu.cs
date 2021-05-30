@@ -7,10 +7,12 @@ public class Menu : MonoBehaviour
 
 	[SerializeField] private GameObject npcContainer;
 
-    private void Start() 
-	{
-		// DisableMenu();	
-	}
+	[SerializeField] private GameObject CameraController;
+	[SerializeField] private Cinemachine.CinemachineVirtualCamera DefaultCamera;
+	[SerializeField] private Tooltip Tooltip;
+
+	private bool cameraObjectFollow;
+	private GameObject following;
 
 	public void ToggleMenu()
 	{
@@ -48,6 +50,36 @@ public class Menu : MonoBehaviour
 		foreach (Health health in npcContainer.GetComponentsInChildren<Health>())
 		{
 			health.Heal(1);
+		}
+	}
+
+	public void ToggleCameraFollow()
+	{
+		if (cameraObjectFollow)
+		{
+			CameraController.transform.position = following.transform.position;
+			following = null;
+		}
+
+		cameraObjectFollow = !cameraObjectFollow;
+		UpdateCameraFollow();
+	}
+	
+	private void UpdateCameraFollow()
+	{
+		if (Tooltip.SelectedObject == null)
+		{
+			cameraObjectFollow = false;
+		}
+
+		if (cameraObjectFollow)
+		{
+			following = Tooltip.SelectedObject;
+			DefaultCamera.m_Follow = following.transform;
+		}
+		else
+		{
+			DefaultCamera.m_Follow = CameraController.transform;
 		}
 	}
 

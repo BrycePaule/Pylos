@@ -10,7 +10,7 @@ public class AStar : MonoBehaviour
 	private Node[,] nodes;
 	private int searchGridSize;
 
-	public List<Node> FindPath(Vector2Int startLocGlobal, Vector2Int targetLocGlobal, int searchRadius, List<TileTravelType> travelTypes)
+	public List<Node> FindPath(Vector2Int startLocGlobal, Vector2Int targetLocGlobal, int searchRadius, List<TileTravelType> travelTypes, bool acceptNearest = false)
 	{
 		searchGridSize = (searchRadius * 2) + 1;
 		BuildNodeGrid(startLocGlobal, searchRadius, travelTypes);
@@ -46,65 +46,57 @@ public class AStar : MonoBehaviour
 
 			foreach (Node neighbour in GetNeighbours(currentNode))
 			{
-				if (!neighbour.Walkable || closedSet.Contains(neighbour)) { continue; }
+				if (!neighbour.IsTravellable || closedSet.Contains(neighbour)) { continue; }
 
 				int newGCost = currentNode.GCost + DistanceScore(currentNode, neighbour);
 				if (newGCost < neighbour.GCost || !openSet.Contains(neighbour))
 				{
 					neighbour.GCost = newGCost;
 					neighbour.HCost = DistanceScore(neighbour, targetNode);
-					neighbour.parent = currentNode;
+					neighbour.Parent = currentNode;
 
 					if (!openSet.Contains(neighbour)) { openSet.Add(neighbour); }
 				}
 			}
 		}
-		return new List<Node>();
-		// print("---");
-		// print(startLocGlobal);
-		// print(targetLocGlobal);
-		// print("couldn't find path there, pathing next to it");
 
-		// Node nextToTarget = null;
-		// foreach (Node neighbour in GetNeighbours(targetNode))
-		// {
-		// 	if (nextToTarget == null) 
-		// 	{ 
-		// 		if (neighbour.Walkable) { nextToTarget = neighbour; } 
-		// 	}
-		// 	else
-		// 	{
-		// 		if (neighbour.GCost < nextToTarget.GCost)
-		// 		{
-		// 		if (neighbour.Walkable) { nextToTarget = neighbour; } 
-		// 		}
-		// 	}
-		// }
-		// print(nextToTarget);
-		// if (nextToTarget != null) 
-		// {
-		// 	print(nextToTarget.GlobalLoc);
-		// 	print(nextToTarget.GCost);
-		// 	print(nextToTarget.parent);
-		// 	return RetracePath(startNode, nextToTarget);
-		// }
-		// else
-		// {
-		// 	return new List<Node>();
-		// }
+		if (acceptNearest)
+		{
+			Node nearTarget = null;
+			foreach (Node neighbour in GetNeighbours(targetNode))
+			{
+				if (nearTarget == null) 
+				{ 
+					if (neighbour.IsTravellable) { nearTarget = neighbour; } 
+				}
+				else
+				{
+					if (neighbour.GCost < nearTarget.GCost)
+					{
+					if (neighbour.IsTravellable) { nearTarget = neighbour; } 
+					}
+				}
+			}
+
+			if (nearTarget != null) 
+			{
+				return RetracePath(startNode, nearTarget);
+			}
+		}
+
+		return new List<Node>();
 	}
 
 	private List<Node> RetracePath(Node startNode, Node endNode)
 	{
-		// if (startNode == endNode) { print("im on top of the target"); }
-
 		List<Node> path = new List<Node>();
+		if (startNode == endNode) { return path; }
 
 		Node currentNode = endNode;
 		while (currentNode != startNode)
 		{
 			path.Add(currentNode);
-			currentNode = currentNode.parent;
+			currentNode = currentNode.Parent;
 		}
 
 		path.Reverse();

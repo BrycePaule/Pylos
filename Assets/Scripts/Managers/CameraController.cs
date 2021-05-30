@@ -16,6 +16,7 @@ public class CameraController : MonoBehaviour
 	public int ZoomLevel;
 	[SerializeField] private int MinZoomLevel;
 	[SerializeField] private int MaxZoomLevel;
+	[SerializeField] private int ZoomStep;
 
 	private float _moveTimer;
 
@@ -40,7 +41,7 @@ public class CameraController : MonoBehaviour
 
 	public void Zoom(float value)
 	{
-		ZoomLevel = (int) Mathf.Clamp(ZoomLevel + (-Mathf.Sign(value) * TilesPerStep), MinZoomLevel, MaxZoomLevel);
+		ZoomLevel = (int) Mathf.Clamp(ZoomLevel + (-Mathf.Sign(value) * ZoomStep), MinZoomLevel, MaxZoomLevel);
 		CVCamera.m_Lens.OrthographicSize = ZoomLevel;
 	}
 }

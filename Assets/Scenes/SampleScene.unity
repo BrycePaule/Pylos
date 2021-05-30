@@ -1479,7 +1479,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 98688cf90c5ba6b40acf1fdcfd7c13ca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  OVERRIDE_SPAWN_COUNTS: 1
+  OVERRIDE_SPAWN_COUNTS: 0
   NPCTYPE_OVERRIDE: 3
   SPAWN_CAP_OVERRIDE: 1
   OVERRIDE_SPEED: 0
@@ -3165,7 +3165,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 02430633830db554f8ad408c778698b7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MapSize: 50
+  MapSize: 256
   Scale: 5
   OffsetX: 2.22
   OffsetY: 17.3
@@ -4219,6 +4219,7 @@ MonoBehaviour:
   ZoomLevel: 10
   MinZoomLevel: 10
   MaxZoomLevel: 50
+  ZoomStep: 1
 --- !u!212 &1685348468
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -4226,7 +4227,7 @@ SpriteRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1685348465}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1

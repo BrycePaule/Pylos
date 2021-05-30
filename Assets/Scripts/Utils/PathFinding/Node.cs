@@ -7,16 +7,16 @@ public class Node
     public int GCost;
     public int HCost;
 
-	public Node parent;
+	public Node Parent;
 	public Vector2Int GlobalLoc;
 	public Vector2Int LocalLoc;
-	public bool Walkable;
+	public bool IsTravellable;
 
-	public Node(Vector2Int _global, Vector2Int _local, bool _walkable)
+	public Node(Vector2Int _global, Vector2Int _local, bool _travellable)
 	{
 		GlobalLoc = _global;
 		LocalLoc = _local;
-		Walkable = _walkable;
+		IsTravellable = _travellable;
 	}
 
 	public int FCost

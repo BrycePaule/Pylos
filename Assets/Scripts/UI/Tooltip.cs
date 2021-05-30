@@ -13,7 +13,7 @@ public class Tooltip : MonoBehaviour
 
 	private Slider slider;
 
-	private GameObject _selectedObject;
+	public GameObject SelectedObject;
 	private GameObject _hoveredObject;
 
 	private void Awake() 
@@ -28,9 +28,9 @@ public class Tooltip : MonoBehaviour
 
 	public void FixedUpdate()
 	{
-		if (_selectedObject != null)
+		if (SelectedObject != null)
 		{
-			UpdateTooltip(_selectedObject);
+			UpdateTooltip(SelectedObject);
 		}
 		else if ( _hoveredObject != null)
 		{
@@ -60,7 +60,7 @@ public class Tooltip : MonoBehaviour
 
 	public void UpdateSelectedObject(GameObject newObject)
 	{
-		_selectedObject = newObject;
+		SelectedObject = newObject;
 		if (newObject == null)
 		{
 			DisableTooltip();
@@ -98,7 +98,7 @@ public class Tooltip : MonoBehaviour
 
 	public void Hover(GameObject obj)
 	{
-		if (_selectedObject != null) { return; }
+		if (SelectedObject != null) { return; }
 		UpdateHoveredObject(obj);
 	}
 

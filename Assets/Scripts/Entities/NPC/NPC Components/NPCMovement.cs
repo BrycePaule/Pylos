@@ -11,7 +11,6 @@ public class NPCMovement : MonoBehaviour
 	public MapGenerator MapGenerator;
 	public GameObject Path;
 	public Vector2Int TileLoc;
-	public bool ShowPath;
 
 	public MovementType NPCMovementType;
 	public float MoveDelay;
@@ -19,14 +18,14 @@ public class NPCMovement : MonoBehaviour
 	public int MeanderRange;
 	public int SearchRange;
 	public float SearchDelay;
+	public GameObject FoundObject;
+	public bool ShowPath;
 
 	public float Damage;
 	public float AttackSpeed;
 	public int AttackRange;
 	public bool Aggro;
 	public GameObject AggroOn;
-
-	public GameObject FoundObject;
 
 	public Vector2Int _targetLoc;
 	private Rigidbody2D _npcRB;
@@ -36,7 +35,7 @@ public class NPCMovement : MonoBehaviour
 	private AStar _aStar;
 
 	private float attackTimer;
-	private float searchTimer;
+	public float searchTimer;
 
 	private void Awake() 
 	{
@@ -52,8 +51,8 @@ public class NPCMovement : MonoBehaviour
 	{
 		_aStar.MapSize = MapGenerator.MapSize;
 		_aStar.MapManager = MapManager;
-		_targetLoc = new Vector2Int(-1, -1);
-		
+		RandomTargetLocation(TileLoc);
+
 		switch (NPCMovementType)
 		{
 			case MovementType.Search:
@@ -99,7 +98,7 @@ public class NPCMovement : MonoBehaviour
 		}
 	}
 
-	private List<Node> FindPathToTarget(int maxAttempts)
+	private List<Node> FindPathToTarget(int maxAttempts, bool acceptNearest = false)
 	{
 		int attempts = 0;
 		int searchDistance = (int) Mathf.Max(Mathf.Abs(_targetLoc.x - TileLoc.x), Mathf.Abs(_targetLoc.y - TileLoc.y));
@@ -108,7 +107,7 @@ public class NPCMovement : MonoBehaviour
 		while (path.Count == 0)
 		{
 			attempts++;
-			path = _aStar.FindPath(TileLoc, _targetLoc, searchDistance * attempts, _npcBase.TravelTypes);
+			path = _aStar.FindPath(TileLoc, _targetLoc, searchDistance * attempts, _npcBase.TravelTypes, acceptNearest);
 
 			if (attempts >= maxAttempts) 
 			{ 
@@ -137,8 +136,14 @@ public class NPCMovement : MonoBehaviour
 		if (_moveTimer >= MoveDelay)
 		{
 			List<Node> path = FindPathToTarget(maxAttempts: 5);
-			if (path.Count == 0) { RandomTargetLocation(TileLoc); }
-			TakeStepAlongPath(path);
+			if (path.Count == 0) 
+			{
+				RandomTargetLocation(TileLoc); 
+			}
+			else
+			{
+				TakeStepAlongPath(path);
+			}
 		}
 	}
 
@@ -146,35 +151,30 @@ public class NPCMovement : MonoBehaviour
 	{
 		if (searchingFor == null) { NPCMovementType = MovementType.Meander; }
 
-		if (FoundObject == null) 
+		if (searchTimer >= SearchDelay && FoundObject == null)
 		{
-			print("nothing");
-			if (GridHelpers.IsAtLocation(TileLoc, _targetLoc)) { RandomTargetLocation(TileLoc); }
-			if (searchTimer >= SearchDelay)
-			{
-				searchTimer = 0f;
-				print("no object found");
-				FoundObject = FindSearchObject();
-			}
+			FoundObject = FindSearchObject();
+			searchTimer = 0f;
 		}
-		else
-		{
-			if (GridHelpers.IsWithinDistance(TileLoc, _targetLoc, 1))
-			{
-				print("wood +1");
-				_npcBase.Wood +=1;
 
+		if (GridHelpers.IsWithinDistance(TileLoc, _targetLoc, 1))
+		{
+			if (FoundObject != null)
+			{
 				MapManager.GetTile(_targetLoc).ContainedObjects.Remove(FoundObject);
 				Destroy(FoundObject);
-
 				FoundObject = null;
-				_moveTimer = 0;
+				searchTimer += SearchDelay;
+			}
+			else
+			{
+				RandomTargetLocation(TileLoc);
 			}
 		}
 
 		if (_moveTimer >= MoveDelay)
 		{
-			List<Node> path = FindPathToTarget(maxAttempts: 5);
+			List<Node> path = FindPathToTarget(maxAttempts: 5, acceptNearest: true);
 			TakeStepAlongPath(path);
 		}
 	}
@@ -211,10 +211,9 @@ public class NPCMovement : MonoBehaviour
 
 	private GameObject FindSearchObject()
 	{
-		ObjectLocationPair objLocPair = GridHelpers.SearchFor(searchingFor, TileLoc, SearchRange, MapManager.Tiles);
+		ObjectLocationPair objLocPair = GridHelpers.SpiralSearch(searchingFor, TileLoc, SearchRange, MapManager.Tiles);
 		
 		if (objLocPair.obj != null) {
-			print("found!");
 			_targetLoc = objLocPair.loc;
 			return objLocPair.obj;
 		}

@@ -16,7 +16,7 @@ public class GridHelpers : MonoBehaviour
 		return loc1 == loc2;
 	}
 
-	public static ObjectLocationPair SearchFor(Item searchItem, Vector2Int currentLoc, int searchDistance, GroundTileData[,] Tiles)
+	public static ObjectLocationPair SpiralSearch(Item searchItem, Vector2Int currentLoc, int searchDistance, GroundTileData[,] Tiles)
 	{
 		// searches a searchDistance x searchDistance square around the location for something of type obj
 		// does this by expanding rings around the currentLoc - starting with the smallest 3x3 ring around the location, out to searchDistance range
@@ -32,10 +32,10 @@ public class GridHelpers : MonoBehaviour
 					{
 						Vector2Int searchLoc = new Vector2Int(x, y);
 						if (!IsWithinBounds(searchLoc)) { continue; }
+						if (searchLoc == currentLoc) { continue; }
 
 						foreach (GameObject obj in Tiles[x, y].ContainedObjects)
 						{
-							print(obj.name);
 							Item item = obj.GetComponentInChildren<Item>();
 							if (item != null) 
 							{

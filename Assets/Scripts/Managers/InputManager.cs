@@ -4,11 +4,13 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Tilemaps;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 public class InputManager : MonoBehaviour
 {
 
 	[SerializeField] private CameraController cameraController;
+	[SerializeField] private EventSystem eventSystem;
 	[SerializeField] private MapManager mapManager;
 	[SerializeField] private MapGenerator mapGenerator;
 	[SerializeField] private Tilemap tilemap;
@@ -107,7 +109,10 @@ public class InputManager : MonoBehaviour
 	private void OnLeftClick(Vector3 mpos, InputAction.CallbackContext context)
 	{
 		pointLastClicked = mpos;
-		tooltip.Select(GetSelectableUnderCursor(mpos)); 
+		if (!ClickedUI(mpos))
+		{
+			tooltip.Select(GetSelectableUnderCursor(mpos)); 
+		}
 	}
 
 	private void OnLeftClickHold(Vector3 mpos, InputAction.CallbackContext context)
@@ -158,6 +163,27 @@ public class InputManager : MonoBehaviour
 		{
 			return null;
 		}
+	}
+
+	private bool ClickedUI(Vector3 mpos)
+	{ 
+		PointerEventData PointerEventData = new PointerEventData(eventSystem);
+		PointerEventData.position = mpos;
+
+		List<RaycastResult> hits = new List<RaycastResult>();
+		EventSystem.current.RaycastAll(PointerEventData, hits);
+
+		if(hits.Count > 0)
+		{
+    		foreach(var result in hits)
+    		{
+				if (result.gameObject.layer == Layer.UI.GetHashCode())
+				{
+					return true;
+				}
+    		}
+		}
+		return false;
 	}
 
 	private void OnToggleMenu()
