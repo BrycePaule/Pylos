@@ -47,8 +47,6 @@ public class MapGenerator : MonoBehaviour
 	[Header("Tiles")]
 	[SerializeField] private Tile baseTile;
 	[SerializeField] private GroundTileData groundTileDataAsset;
-	[SerializeField] private Tile[] tilesTypes;
-
 
 	private void Awake()
 	{
@@ -59,11 +57,6 @@ public class MapGenerator : MonoBehaviour
 
 		SetTileMap(GenerateTexture(seed));
 		print("Seed: " + seed);
-	}
-
-	private void Start() 
-	{
-		// mobSpawner.SpawnMobs(10);
 	}
 
 	public Texture2D GenerateTexture(float seed)
@@ -95,103 +88,63 @@ public class MapGenerator : MonoBehaviour
 			for (int x = 0; x < MapSize; x++)
 			{
 				Vector3Int pos = new Vector3Int(x, y, 0);
-				float value = noiseMap.GetPixel(x, y).r;
+				float height = noiseMap.GetPixel(x, y).r;
 
-				GroundTileData GroundTileData = Instantiate(groundTileDataAsset);
-				mapManager.Tiles[x, y] = GroundTileData;
+				GroundTileData tileData = Instantiate(groundTileDataAsset);
+				mapManager.Tiles[x, y] = tileData;
 
-				if (value <= WaterMaxHeight)
+				if (height <= WaterMaxHeight)
 				{
-					GroundTileData.GroundType = GroundType.Water;
-					GroundTileData.Tile.color = WaterColour;
-					GroundTileData.Tile.color = AlterColour(GroundTileData.Tile.color, ScaleValue(0, WaterMaxHeight, -1, 0, value));
-					GroundTileData.IsWalkable = false;
-					GroundTileData.IsSwimmable = true;
-					tilemap.SetTile(pos, GroundTileData.Tile);
+					tileData = SetTileData(tileData, height, walkable: false, swimmable: true);
+					tilemap.SetTile(pos, tileData.Tile);
 				}
-				else if (value > WaterMaxHeight && value <= SandMaxHeight )
+				else if (height > WaterMaxHeight && height <= SandMaxHeight )
 				{
-					GroundTileData.GroundType = GroundType.Sand;
-					GroundTileData.Tile.color = SandColour;
-					GroundTileData.Tile.color = AlterColour(GroundTileData.Tile.color, ScaleValue(WaterMaxHeight, SandMaxHeight, -1, 0, value));
-					tilemap.SetTile(pos, GroundTileData.Tile);
+					tileData = SetTileData(tileData, height);
+					tilemap.SetTile(pos, tileData.Tile);
 				}
-				else if (value > SandMaxHeight && value <=  DirtMaxHeight)
+				else if (height > SandMaxHeight && height <=  DirtMaxHeight)
 				{
-					GroundTileData.GroundType = GroundType.Dirt;
-					GroundTileData.Tile.color = DirtColour;
-					GroundTileData.Tile.color = AlterColour(GroundTileData.Tile.color, ScaleValue(SandMaxHeight, DirtMaxHeight, -1, 0, value), invert: true);
-					tilemap.SetTile(pos, GroundTileData.Tile);
+					tileData = SetTileData(tileData, height);
+					tilemap.SetTile(pos, tileData.Tile);
 				}
-				else if (value > DirtMaxHeight && value <= GrassMaxHeight)
+				else if (height > DirtMaxHeight && height <= GrassMaxHeight)
 				{
-					GroundTileData.GroundType = GroundType.Grass;
-					GroundTileData.Tile.color = GrassColour;
-					GroundTileData.Tile.color = AlterColour(GroundTileData.Tile.color, ScaleValue(DirtMaxHeight, 1, -1, 0, value));
-					tilemap.SetTile(pos, GroundTileData.Tile);
+					tileData = SetTileData(tileData, height);
+					tilemap.SetTile(pos, tileData.Tile);
 
 					if (RandomChance.Roll(5))
 					{
 						GameObject tree = Instantiate(treePrefab, new Vector3(x + 0.5f, y + 0.5f, 0), Quaternion.identity, treeContainer.transform);
 						tree.name = treePrefab.name;
-						GroundTileData.IsWalkable = false;
-						GroundTileData.ContainedObjects.Add(tree);
+						tileData.IsWalkable = false;
+						tileData.ContainedObjects.Add(tree);
 					}
 				}
-				else if (value > GrassMaxHeight)
+				else if (height > GrassMaxHeight)
 				{
-					GroundTileData.GroundType = GroundType.Stone;
-					GroundTileData.Tile.color = StoneColour;
-					GroundTileData.Tile.color = AlterColour(GroundTileData.Tile.color, ScaleValue(GrassMaxHeight, 1, -1, 0, value));
-					tilemap.SetTile(pos, GroundTileData.Tile);
+					tileData = SetTileData(tileData, height);
+					tilemap.SetTile(pos, tileData.Tile);
 
 					if (RandomChance.Roll(10))
 					{
 						GameObject stone = Instantiate(stonePrefab, new Vector3(x + 0.5f, y + 0.5f, 0), Quaternion.identity, treeContainer.transform);
 						stone.name = stonePrefab.name;
-						GroundTileData.ContainedObjects.Add(stone);
+						tileData.ContainedObjects.Add(stone);
 					}
 				}
 			}
 		}
 	}
 
-	private Color RandomiseColour(Color colour)
+	private GroundTileData SetTileData(GroundTileData tileData, float height, bool walkable = true, bool swimmable = false)
 	{
-		float h, s, v;
-		Color.RGBToHSV(colour, out h, out s, out v);
-		return Color.HSVToRGB(
-			h + Random.Range(h * -TileHueChangeStrength, h * TileHueChangeStrength), 
-			s + Random.Range(s * -TileSaturationChangeStrength, s * TileSaturationChangeStrength),
-			v + Random.Range(v * -TileVibranceChangeStrength, v * TileVibranceChangeStrength)
-		);
-	}
+		tileData.GroundType = GetTileByHeight(height);
+		tileData.Tile.color = Colors.AlterColour(tileData.ColorLookup(tileData.GroundType), satChange: TileSaturationChangeStrength);
+		tileData.IsWalkable = walkable;
+		tileData.IsSwimmable = swimmable;
 
-	private Color AlterColour(Color colour, float heightOffset, bool invert = false)
-	{
-		float h, s, v;
-		Color.RGBToHSV(colour, out h, out s, out v);
-
-		int inversion = (invert == true) ? -1 : 1;
-
-		float Hdheight = TileHueChangeStrength * heightOffset;
-		float Sdheight = TileSaturationChangeStrength * heightOffset;
-		float Vdheight = TileVibranceChangeStrength * heightOffset;
-
-		float Hdrandom = h * Random.Range(-0.02f, 0.02f);
-		float Sdrandom = s * Random.Range(-0.02f, 0.02f);
-		float Vdrandom = v * Random.Range(-0.02f, 0.02f);
-
-		return Color.HSVToRGB(
-			h + ((Hdheight) * inversion),
-			s + ((Sdheight + Sdrandom) * inversion),
-			v + ((Vdheight + Vdrandom) * inversion)
-		);
-	}
-
-	private Tile SelectRandomTile()
-	{
-		return tilesTypes[Random.Range(0, tilesTypes.Length)];
+		return tileData;
 	}
 
 	public float ScaleValue(float OldMin, float OldMax, float NewMin, float NewMax, float OldValue)
@@ -204,5 +157,29 @@ public class MapGenerator : MonoBehaviour
 	public int RandomIntInBounds()
 	{
 		return (int) Random.Range(0, MapSize);
+	}
+
+	private GroundType GetTileByHeight(float height)
+	{
+		if (height <= WaterMaxHeight)
+		{
+			return GroundType.Water;
+		}
+		else if (height > WaterMaxHeight && height <= SandMaxHeight)
+		{
+			return GroundType.Sand;
+		}
+		else if (height > SandMaxHeight && height <=  DirtMaxHeight)
+		{
+			return GroundType.Dirt;
+		}
+		else if (height > DirtMaxHeight && height <= GrassMaxHeight)
+		{
+			return GroundType.Grass;
+		}
+		else
+		{
+			return GroundType.Stone;
+		}
 	}
 }

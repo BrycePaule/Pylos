@@ -5,27 +5,66 @@ using UnityEngine;
 public class Menu : MonoBehaviour
 {
 
-	[SerializeField] private GameObject npcContainer;
+	[SerializeField] private Canvas UICanvas;
 
+	[SerializeField] private GameObject npcContainer;
 	[SerializeField] private GameObject CameraController;
 	[SerializeField] private Cinemachine.CinemachineVirtualCamera DefaultCamera;
 	[SerializeField] private Tooltip Tooltip;
 
+	private bool menuEnabled;
 	private bool cameraObjectFollow;
 	private GameObject following;
 
+	public int yUp;
+	public int yDown;
+	public float easeDuration;
+	public LeanTweenType easeType;
+
+	private bool tweening;
+
+	private void Awake() 
+	{
+		menuEnabled = false;
+	}
+
 	public void ToggleMenu()
 	{
-		gameObject.SetActive(!gameObject.activeInHierarchy);
+		if (tweening) { return; }
+
+		if (menuEnabled)
+		{
+			TweenUpMenu();
+		}
+		else
+		{
+			TweenDownMenu();
+		}
 	}
 
-	private void EnableMenu()
+	private void TweenDownMenu()
 	{
+		tweening = true;
+		menuEnabled = true;
 		gameObject.SetActive(true);
+		LeanTween.moveLocalY(gameObject, yDown, easeDuration).setEase(easeType).setOnComplete(FinishDownTween);
 	}
 
-	private void DisableMenu()
+	private void TweenUpMenu()
 	{
+		tweening = true;
+		LeanTween.moveLocalY(gameObject, yUp, easeDuration).setEase(easeType).setOnComplete(FinishUpTween);
+		menuEnabled = false;
+	}
+
+	private void FinishDownTween()
+	{
+		tweening = false;
+	}
+
+	private void FinishUpTween()
+	{
+		tweening = false;
 		gameObject.SetActive(false);
 	}
 
