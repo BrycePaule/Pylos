@@ -28,6 +28,8 @@ public class Menu : MonoBehaviour
 		menuEnabled = false;
 	}
 
+	// MENU ANIMATION
+
 	public void ToggleMenu()
 	{
 		if (tweening) { return; }
@@ -68,6 +70,8 @@ public class Menu : MonoBehaviour
 		gameObject.SetActive(false);
 	}
 
+	// BUTTON CALLBACKS
+
 	public void TogglePaths()
 	{
 		foreach (NPCMovement npcMovement in npcContainer.GetComponentsInChildren<NPCMovement>())
@@ -104,6 +108,8 @@ public class Menu : MonoBehaviour
 		UpdateCameraFollow();
 	}
 	
+	// CAMERA
+
 	private void UpdateCameraFollow()
 	{
 		if (Tooltip.SelectedObject == null)

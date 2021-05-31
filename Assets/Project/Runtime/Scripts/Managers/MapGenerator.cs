@@ -119,6 +119,8 @@ public class MapGenerator : MonoBehaviour
 						tree.name = treePrefab.name;
 						tileData.IsWalkable = false;
 						tileData.ContainedObjects.Add(tree);
+
+						tree.GetComponent<ExhaustableContainer>().Put(ItemID.Wood, 10);
 					}
 				}
 				else if (height > GrassMaxHeight)

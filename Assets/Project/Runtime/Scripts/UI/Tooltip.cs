@@ -13,8 +13,8 @@ public class Tooltip : MonoBehaviour
 
 	private Slider slider;
 
-	public GameObject SelectedObject;
-	private GameObject _hoveredObject;
+	public GameObject SelectedObject = null;
+	private GameObject _hoveredObject = null;
 
 	private void Awake() 
 	{
@@ -107,5 +107,3 @@ public class Tooltip : MonoBehaviour
 		UpdateSelectedObject(obj);
 	}
 }
-
-
