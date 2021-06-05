@@ -7,8 +7,6 @@ using UnityEditor;
 public class GroundTileData : TileBase
 {
     public Tile Tile;
-    public bool IsWalkable;
-    public bool IsSwimmable;
     public List<GameObject> ContainedObjects;
     public GroundType GroundType;
 	public List<TileTravelType> TravelType;

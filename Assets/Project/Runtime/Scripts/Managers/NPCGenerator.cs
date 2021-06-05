@@ -11,7 +11,7 @@ public class NPCGenerator : MonoBehaviour
     [SerializeField] private NPCType NPCTYPE_OVERRIDE;
     [SerializeField] private int SPAWN_CAP_OVERRIDE;
     [SerializeField] private bool OVERRIDE_SPEED;
-    [SerializeField] private int MOVE_DELAY_OVERRIDE;
+    [SerializeField] private float MOVE_DELAY_OVERRIDE;
 	[Space(20)]
 
     [SerializeField] private List<ScriptableObject> npcDataAssets;
@@ -100,7 +100,7 @@ public class NPCGenerator : MonoBehaviour
 
 		npcObj.name = npcType.ToString();
 
-		Vector2Int loc = SelectRandomLocation(walkable: _base.CanWalk, swimmable: _base.CanSwim);
+		Vector2Int loc = SelectRandomLocation(_base.TravelTypes);
 		npcObj.transform.position = TileConversion.TileToWorld3D(loc);
 		_movement.TileLoc = loc;
 
@@ -131,7 +131,7 @@ public class NPCGenerator : MonoBehaviour
 		}
 	}
 
-	private Vector2Int SelectRandomLocation(bool walkable, bool swimmable)
+	private Vector2Int SelectRandomLocation(List<TileTravelType> travelTypes)
 	{
 		Vector2Int randomLoc = Vector2Int.zero;
 
@@ -139,21 +139,12 @@ public class NPCGenerator : MonoBehaviour
 		{
 			Vector2Int potentialLoc = new Vector2Int(mapGenerator.RandomIntInBounds(), mapGenerator.RandomIntInBounds());
 
-			if (walkable)
+			foreach (TileTravelType type in travelTypes)
 			{
-				if (mapManager.GetTile(potentialLoc).IsWalkable) 
+				if (mapManager.GetTile(potentialLoc).TravelType.Contains(type))
 				{
 					randomLoc = potentialLoc;
 					break; 
-				}
-			}
-
-			if (swimmable)
-			{
-				if (mapManager.GetTile(potentialLoc).IsSwimmable) 
-				{
-					randomLoc = potentialLoc;
-					break;
 				}
 			}
 		}

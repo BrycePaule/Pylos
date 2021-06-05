@@ -117,7 +117,7 @@ public class MapGenerator : MonoBehaviour
 					{
 						GameObject tree = Instantiate(treePrefab, new Vector3(x + 0.5f, y + 0.5f, 0), Quaternion.identity, treeContainer.transform);
 						tree.name = treePrefab.name;
-						tileData.IsWalkable = false;
+						tileData.TravelType.Remove(TileTravelType.Walkable);
 						tileData.ContainedObjects.Add(tree);
 
 						tree.GetComponent<ExhaustableContainer>().Put(ItemID.Wood, 10);
@@ -133,6 +133,8 @@ public class MapGenerator : MonoBehaviour
 						GameObject stone = Instantiate(stonePrefab, new Vector3(x + 0.5f, y + 0.5f, 0), Quaternion.identity, treeContainer.transform);
 						stone.name = stonePrefab.name;
 						tileData.ContainedObjects.Add(stone);
+
+						stone.GetComponent<ExhaustableContainer>().Put(ItemID.Stone, 10);
 					}
 				}
 			}
@@ -143,8 +145,9 @@ public class MapGenerator : MonoBehaviour
 	{
 		tileData.GroundType = GetTileByHeight(height);
 		tileData.Tile.color = Colors.AlterColour(tileData.ColorLookup(tileData.GroundType), satChange: TileSaturationChangeStrength);
-		tileData.IsWalkable = walkable;
-		tileData.IsSwimmable = swimmable;
+		
+		if (walkable) { tileData.TravelType.Add(TileTravelType.Walkable); } 
+		if (swimmable) { tileData.TravelType.Add(TileTravelType.Swimmable); } 
 
 		return tileData;
 	}

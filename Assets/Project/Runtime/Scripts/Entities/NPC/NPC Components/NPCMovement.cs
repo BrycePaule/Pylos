@@ -5,7 +5,6 @@ using UnityEngine;
 public class NPCMovement : MonoBehaviour
 {
 	[SerializeField] private GameObject targetPrefab;
-	[SerializeField] private Item searchingFor;
 
 	public MapManager MapManager;
 	public MapGenerator MapGenerator;
@@ -18,7 +17,6 @@ public class NPCMovement : MonoBehaviour
 	public int MeanderRange;
 	public int SearchRange;
 	public float SearchDelay;
-	public GameObject FoundObject;
 	public bool ShowPath;
 
 	public float Damage;
@@ -36,6 +34,9 @@ public class NPCMovement : MonoBehaviour
 
 	private float attackTimer;
 	public float searchTimer;
+
+	public GameObject FoundObject;
+	public ItemID searchingFor;
 
 	private void Awake() 
 	{
@@ -87,13 +88,13 @@ public class NPCMovement : MonoBehaviour
 		switch (NPCMovementType)
 		{
 			case MovementType.Search:
-				Search();
+				MoveSearch();
 				break;
 			case MovementType.Chase:
-				Chase();
+				MoveChase();
 				break;
 			default:
-				Meander();
+				MoveMeander();
 				break;
 		}
 	}
@@ -129,7 +130,7 @@ public class NPCMovement : MonoBehaviour
 	}
 
 	// MOVEMENT TYPES
-	private void Meander()
+	private void MoveMeander()
 	{
 		if (GridHelpers.IsAtLocation(TileLoc, _targetLoc)) { RandomTargetLocation(TileLoc); }
 
@@ -147,9 +148,9 @@ public class NPCMovement : MonoBehaviour
 		}
 	}
 
-	private void Search()
+	private void MoveSearch()
 	{
-		if (searchingFor == null) { NPCMovementType = MovementType.Meander; }
+		if (searchingFor == ItemID.Item) { NPCMovementType = MovementType.Meander; }
 
 		if (searchTimer >= SearchDelay && FoundObject == null)
 		{
@@ -161,10 +162,14 @@ public class NPCMovement : MonoBehaviour
 		{
 			if (FoundObject != null)
 			{
-				MapManager.GetTile(_targetLoc).ContainedObjects.Remove(FoundObject);
-				Destroy(FoundObject);
-				FoundObject = null;
-				searchTimer += SearchDelay;
+				int taken = FoundObject.GetComponent<Container>().Take(searchingFor, 1);
+
+				if (FoundObject == null) 
+				{
+					FoundObject = null;
+					MapManager.GetTile(_targetLoc).ContainedObjects.Remove(FoundObject);
+					searchTimer += SearchDelay;
+				}
 			}
 			else
 			{
@@ -179,7 +184,7 @@ public class NPCMovement : MonoBehaviour
 		}
 	}
 
-	private void Chase()
+	private void MoveChase()
 	{
 		if (AggroOn == null) 
 		{ 
@@ -232,22 +237,10 @@ public class NPCMovement : MonoBehaviour
 
 			if (potentialTarget == currentLocation) { continue; }
 
-			if (_npcBase.CanWalk)
+			if (MapManager.IsPathable(potentialTarget, _npcBase.TravelTypes))
 			{
-				if (MapManager.GetTile(potentialTarget).IsWalkable) 
-				{
-					_targetLoc = potentialTarget;
-					break;
-				}
-			}
-
-			if (_npcBase.CanSwim)
-			{
-				if (MapManager.GetTile(potentialTarget).IsSwimmable) 
-				{
-					_targetLoc = potentialTarget;
-					break;
-				}
+				_targetLoc = potentialTarget;
+				break;
 			}
 		}
 		return;

@@ -21,32 +21,15 @@ public class MapManager : MonoBehaviour
 		SelectPlayerSpawn();	
 	}
 
-    public bool IsWalkable(Vector2Int loc)
-	{
-		if (!IsWithinBounds(loc)) { return false; }
-
-		return Tiles[loc.x, loc.y].IsWalkable ? true : false;
-	}
-	
-	public bool IsSwimmable(Vector2Int loc)
-	{
-		if (!IsWithinBounds(loc)) { return false; }
-
-		return Tiles[loc.x, loc.y].IsSwimmable ? true : false;
-	}
-
 	public bool IsPathable(Vector2Int loc,  List<TileTravelType> types)
 	{
+		if (!IsWithinBounds(loc)) { return false; }
+
 		foreach (TileTravelType type in types)
 		{
-			if (type == TileTravelType.Walkable)
+			if (Tiles[loc.x, loc.y].TravelType.Contains(type))
 			{
-				if (IsWalkable(loc)) { return true; }
-			}
-
-			if (type == TileTravelType.Swimmable)
-			{
-				if (IsSwimmable(loc)) { return true; }
+				return true;
 			}
 		}
 
@@ -60,7 +43,7 @@ public class MapManager : MonoBehaviour
 		while (PlayerSpawn == Vector2Int.zero)
 		{
 			Vector2Int spawnCell = new Vector2Int(mapGenerator.RandomIntInBounds(), mapGenerator.RandomIntInBounds());
-			if (Tiles[spawnCell.x, spawnCell.y].IsWalkable)
+			if (Tiles[spawnCell.x, spawnCell.y].TravelType.Contains(TileTravelType.Walkable))
 			{
 				PlayerSpawn = spawnCell;
 				return;

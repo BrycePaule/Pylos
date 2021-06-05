@@ -85,7 +85,6 @@ public class InputManager : MonoBehaviour
 	{
 		Vector2 moveDir = _playerMovement.ReadValue<Vector2>();
 		if (moveDir == Vector2.zero) { return; }
-
 		cameraController.Move(moveDir);
 	}
 

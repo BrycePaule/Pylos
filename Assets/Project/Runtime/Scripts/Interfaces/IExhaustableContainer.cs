@@ -4,7 +4,7 @@ using UnityEngine;
 
 public interface IExhaustableContainer : IContainer
 {
-	bool CheckEmpty();
+	bool IsEmpty();
 	void Exhaust();
 }
 

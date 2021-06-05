@@ -100,6 +100,12 @@ public class Menu : MonoBehaviour
 	{
 		if (cameraObjectFollow)
 		{
+			if (following == null) 
+			{ 
+				following = null;
+				return; 
+			}
+
 			CameraController.transform.position = following.transform.position;
 			following = null;
 		}
@@ -108,6 +114,19 @@ public class Menu : MonoBehaviour
 		UpdateCameraFollow();
 	}
 	
+	private void SearchFor(ItemID id)
+	{
+		if (!Tooltip.SelectedObject) { return; }
+		if (Tooltip.SelectedObject.layer != Layer.NPC.GetHashCode()) { return; }
+		NPCMovement npcMovement = Tooltip.SelectedObject.GetComponentInChildren<NPCMovement>();
+		npcMovement.searchingFor = ItemID.Wood;
+		npcMovement.NPCMovementType = MovementType.Search;
+	}
+
+	public void SearchForWood() => SearchFor(ItemID.Wood); 
+	public void SearchForStone() => SearchFor(ItemID.Stone); 
+
+
 	// CAMERA
 
 	private void UpdateCameraFollow()

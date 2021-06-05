@@ -18,6 +18,7 @@ public class DetectionRadius : MonoBehaviour
 
 	private void OnTriggerEnter2D(Collider2D other) 
 	{
+		if (npcMovement.NPCMovementType == MovementType.Search) { return; }
 		if (other.gameObject.layer == Layer.NPC.GetHashCode() && other.GetComponentInChildren<NPCBase>().Faction != faction)
 		{
 			if (!npcMovement.Aggro)
