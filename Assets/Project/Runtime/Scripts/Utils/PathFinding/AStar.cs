@@ -4,8 +4,7 @@ using UnityEngine;
 
 public class AStar : MonoBehaviour
 {
-	public int MapSize;
-	public MapManager MapManager;
+	public MapSettings MapSettings;
 
 	private Node[,] nodes;
 	private int searchGridSize;
@@ -137,7 +136,7 @@ public class AStar : MonoBehaviour
 
 				if (!InsideGlobalBounds(globalLoc)) { continue; }
 
-				nodes[localX, localY] = new Node(globalLoc, new Vector2Int(localX, localY), MapManager.IsPathable(globalLoc, travelTypes));
+				nodes[localX, localY] = new Node(globalLoc, new Vector2Int(localX, localY), MapSettings.IsPathable(globalLoc, travelTypes));
 			}
 		}
 	}
@@ -152,8 +151,8 @@ public class AStar : MonoBehaviour
 
 	public bool InsideGlobalBounds(Vector2Int loc)
 	{
-		if (loc.x < 0 || loc.x >= MapSize) { return false; }
-		if (loc.y < 0 || loc.y >= MapSize) { return false; }
+		if (loc.x < 0 || loc.x >= MapSettings.MapSize) { return false; }
+		if (loc.y < 0 || loc.y >= MapSettings.MapSize) { return false; }
 		return true;
 	}
 

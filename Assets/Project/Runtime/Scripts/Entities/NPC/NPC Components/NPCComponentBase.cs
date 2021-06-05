@@ -2,11 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NPCComponent : MonoBehaviour
+public class NPCComponentBase : MonoBehaviour
 {
-	private NPCBase npcBase;
+	protected NPCBase npcBase;
 
-	private void Awake() 
+	protected virtual void Awake() 
 	{
 		npcBase = GetComponentInParent<NPCBase>();
 	}

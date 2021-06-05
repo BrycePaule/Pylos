@@ -1,21 +1,26 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
-public class Health : MonoBehaviour, IDamageable<float>
+public class Health : NPCComponentBase, IDamageable<float>
 {
-
 	[SerializeField] public float MaxHealth;
 	[SerializeField] public float CurrentHealth;
 	[SerializeField] private Canvas HealthBarCanvas;
 	[SerializeField] private GameObject HealthBar;
 
+	public UnityEvent OnDeathEvent;
+
 	private Slider slider;
 	private NPCMovement npcMovement;
 
-	private void Awake() 
+	protected override void Awake() 
 	{
+		base.Awake();
+		npcBase.SubscribeComponent(NPCComponentType.Health, this);
+
 		slider = HealthBar.GetComponentInChildren<Slider>();
 		npcMovement = transform.parent.GetComponentInChildren<NPCMovement>();
 	}
@@ -43,11 +48,12 @@ public class Health : MonoBehaviour, IDamageable<float>
 	{
 		CurrentHealth -= value;
 		UpdateHealthBarSlider();
+
 		if (CurrentHealth <= 0) { Kill(); }
 
 		if (!npcMovement.Aggro && damagedBy != null) { npcMovement.AggroOnTo(damagedBy); }
 	}
-	
+
 	public void Heal(float value)
 	{
 		CurrentHealth = Mathf.Clamp(CurrentHealth + value, 0, MaxHealth);
@@ -69,6 +75,10 @@ public class Health : MonoBehaviour, IDamageable<float>
 		slider.value = CurrentHealth / MaxHealth;
 	}
 
-	public void Kill() => Destroy(transform.parent.gameObject);
+	public void Kill() 
+	{
+		OnDeathEvent.Invoke();
+		Destroy(transform.parent.gameObject);
+	}
 
 }

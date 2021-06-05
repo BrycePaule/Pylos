@@ -8,10 +8,10 @@ using UnityEngine.EventSystems;
 
 public class InputManager : MonoBehaviour
 {
+	public MapSettings MapSettings;
 
 	[SerializeField] private CameraController cameraController;
 	[SerializeField] private EventSystem eventSystem;
-	[SerializeField] private MapManager mapManager;
 	[SerializeField] private MapGenerator mapGenerator;
 	[SerializeField] private Tilemap tilemap;
 	[SerializeField] private Tooltip tooltip;
@@ -139,7 +139,7 @@ public class InputManager : MonoBehaviour
 		Vector3 worldPoint = ray.GetPoint(0);
 		Vector2Int mposInWorld = TileConversion.WorldToTile(worldPoint);
 
-		if (mposInWorld.x < 0 || mposInWorld.x >= mapGenerator.MapSize || mposInWorld.y < 0 || mposInWorld.y >= mapGenerator.MapSize)  
+		if (mposInWorld.x < 0 || mposInWorld.x >= MapSettings.MapSize || mposInWorld.y < 0 || mposInWorld.y >= MapSettings.MapSize)  
 		{ 
 			tileCursor.SetActive(false);
 			return; 

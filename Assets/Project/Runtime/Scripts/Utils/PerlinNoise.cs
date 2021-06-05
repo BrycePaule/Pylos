@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PerlinNoise : MonoBehaviour
 {
-	[SerializeField] private MapGenerator mapGenerator;
+	public MapSettings MapSettings;
 
     [Range(0, 1f)]
     public float heightCutoff = 0.5f;
@@ -17,12 +17,12 @@ public class PerlinNoise : MonoBehaviour
 
     private Texture2D GenerateTexture()
     {
-        Texture2D texture = new Texture2D(mapGenerator.MapSize, mapGenerator.MapSize);
+        Texture2D texture = new Texture2D(MapSettings.MapSize, MapSettings.MapSize);
 
         // generate noise
-        for (int x = 0; x < mapGenerator.MapSize; x++)
+        for (int x = 0; x < MapSettings.MapSize; x++)
         {
-            for (int y = 0; y < mapGenerator.MapSize; y++)
+            for (int y = 0; y < MapSettings.MapSize; y++)
             {
                 Color colour = CalculateColour(x, y);
                 texture.SetPixel(x, y, colour);    
@@ -35,8 +35,8 @@ public class PerlinNoise : MonoBehaviour
 
     private Color CalculateColour(int x, int y)
     {
-        float xCoord = (float) x / mapGenerator.MapSize * mapGenerator.Scale + mapGenerator.OffsetX;
-        float yCoord = (float) y / mapGenerator.MapSize * mapGenerator.Scale + mapGenerator.OffsetY;
+        float xCoord = (float) x / MapSettings.MapSize * MapSettings.Scale + MapSettings.OffsetX;
+        float yCoord = (float) y / MapSettings.MapSize * MapSettings.Scale + MapSettings.OffsetY;
 
         float sample = Mathf.PerlinNoise(xCoord, yCoord);
         if (sample < heightCutoff) { sample = 0; }

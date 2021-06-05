@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AttackRadius : MonoBehaviour
+public class AttackRadius : NPCComponentBase
 {
 	[SerializeField] private int attackRadius;
 	// [SerializeField] private int damage;
@@ -11,11 +11,14 @@ public class AttackRadius : MonoBehaviour
 	private Faction faction;
 
 
-	private void Awake()
+	protected override void Awake() 
 	{
-		faction = GetComponentInParent<NPCBase>().Faction;
-		npcMovement = transform.parent.GetComponentInChildren<NPCMovement>();
-		GetComponent<CircleCollider2D>().radius = attackRadius;
+		base.Awake();
+		npcBase.SubscribeComponent(NPCComponentType.AttackRadius, this);
+
+		// faction = GetComponentInParent<NPCBase>().Faction;
+		// npcMovement = transform.parent.GetComponentInChildren<NPCMovement>();
+		// GetComponent<CircleCollider2D>().radius = attackRadius;
 	}
 
 	// private void OnTriggerEnter2D(Collider2D other) 

@@ -1218,7 +1218,7 @@ MonoBehaviour:
   m_Follow: {fileID: 1685348466}
   m_Lens:
     FieldOfView: 60
-    OrthographicSize: 10
+    OrthographicSize: 50
     NearClipPlane: 0.3
     FarClipPlane: 1000
     Dutch: 0
@@ -1301,7 +1301,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 10
+  orthographic size: 50
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -1440,18 +1440,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 98688cf90c5ba6b40acf1fdcfd7c13ca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  OVERRIDE_SPAWN_COUNTS: 0
+  MapSettings: {fileID: 11400000, guid: 8166e00235c27e447bcddb538b46923f, type: 2}
+  OVERRIDE_SPAWN_COUNTS: 1
   NPCTYPE_OVERRIDE: 3
   SPAWN_CAP_OVERRIDE: 5
   OVERRIDE_SPEED: 0
-  MOVE_DELAY_OVERRIDE: 0
+  MOVE_DELAY_OVERRIDE: 0.1
   npcDataAssets:
   - {fileID: 11400000, guid: 943d1f383f506ac429a33d367e8fe515, type: 2}
   - {fileID: 11400000, guid: f972c37ef7f332d4586d6b3ef3ce37b9, type: 2}
   - {fileID: 11400000, guid: c0610d3886569ca41ac8b56168ea5ed6, type: 2}
   - {fileID: 11400000, guid: 00193ffd478870848903c8d6fcd6900e, type: 2}
   mapGenerator: {fileID: 1251181798}
-  mapManager: {fileID: 1077351782}
   npcContainer: {fileID: 836852476}
   spawnCheckDelay: 30
 --- !u!1 &685865325
@@ -2025,52 +2025,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 7
---- !u!1 &1077351780
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1077351781}
-  - component: {fileID: 1077351782}
-  m_Layer: 0
-  m_Name: MapManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1077351781
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1077351780}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 1554235247}
-  m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1077351782
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1077351780}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 56cf56a7a18c403438d767fce8bac033, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  mapGenerator: {fileID: 1251181798}
-  tilemap: {fileID: 242793898}
-  PlayerSpawn: {x: 0, y: 0}
 --- !u!1 &1078816451
 GameObject:
   m_ObjectHideFlags: 0
@@ -2503,10 +2457,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 02430633830db554f8ad408c778698b7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MapSize: 256
-  Scale: 5
-  OffsetX: 2.22
-  OffsetY: 17.3
+  MapSettings: {fileID: 11400000, guid: 8166e00235c27e447bcddb538b46923f, type: 2}
   WaterMaxHeight: 0.2
   SandMaxHeight: 0.28
   DirtMaxHeight: 0.37
@@ -2521,7 +2472,6 @@ MonoBehaviour:
   TileVibranceChangeStrength: 0
   tilemap: {fileID: 242793898}
   treeContainer: {fileID: 739906434}
-  mapManager: {fileID: 1077351782}
   mobSpawner: {fileID: 0}
   treePrefab: {fileID: 373411443701163141, guid: 5fc3c2ad2e1f1c34cad9ac2db476ff5e, type: 3}
   stonePrefab: {fileID: 8301435052962182363, guid: 18c389528357b83418e31605400960ab, type: 3}
@@ -2590,6 +2540,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e0d176064c148fc43a78c4486c098c94, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  MapSettings: {fileID: 11400000, guid: 8166e00235c27e447bcddb538b46923f, type: 2}
   topBorder: {fileID: 1865292466}
   botBorder: {fileID: 685865325}
   leftBorder: {fileID: 1088477338}
@@ -2955,9 +2906,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8aa13ef940c031c48b7475707b42120c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  MapSettings: {fileID: 11400000, guid: 8166e00235c27e447bcddb538b46923f, type: 2}
   cameraController: {fileID: 1685348467}
   eventSystem: {fileID: 0}
-  mapManager: {fileID: 1077351782}
   mapGenerator: {fileID: 1251181798}
   tilemap: {fileID: 242793898}
   tooltip: {fileID: 1273974883}
@@ -3371,7 +3322,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1392745998}
-  - {fileID: 1077351781}
   m_Father: {fileID: 1373381077}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -4015,7 +3965,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bde0f395487a8614bad97e9c29c01d65, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MapGenerator: {fileID: 1251181798}
+  MapSettings: {fileID: 11400000, guid: 8166e00235c27e447bcddb538b46923f, type: 2}
   CVCamera: {fileID: 428167016}
   MoveDelay: 0.06
   TilesPerStep: 1

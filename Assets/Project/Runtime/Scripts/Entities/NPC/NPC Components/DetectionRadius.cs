@@ -2,15 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DetectionRadius : MonoBehaviour
+public class DetectionRadius : NPCComponentBase
 {
 	[SerializeField] int detectionRadius;
 
 	private Faction faction;
 	private NPCMovement npcMovement;
 
-	private void Awake()
+	protected override void Awake() 
 	{
+		base.Awake();
+		npcBase.SubscribeComponent(NPCComponentType.DetectionRadius, this);
+
 		npcMovement = transform.parent.GetComponentInChildren<NPCMovement>();
 		faction = GetComponentInParent<NPCBase>().Faction;
 		GetComponent<CircleCollider2D>().radius = detectionRadius;

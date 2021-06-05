@@ -6,6 +6,8 @@ using UnityEngine.Tilemaps;
 
 public class NPCGenerator : MonoBehaviour
 {
+	public MapSettings MapSettings;
+
 	[Header("DEV STUFF")]
     [SerializeField] private bool OVERRIDE_SPAWN_COUNTS;
     [SerializeField] private NPCType NPCTYPE_OVERRIDE;
@@ -17,7 +19,6 @@ public class NPCGenerator : MonoBehaviour
     [SerializeField] private List<ScriptableObject> npcDataAssets;
 
     [SerializeField] private MapGenerator mapGenerator;
-    [SerializeField] private MapManager mapManager;
     [SerializeField] private GameObject npcContainer;
 
     [SerializeField] private int spawnCheckDelay;
@@ -43,7 +44,6 @@ public class NPCGenerator : MonoBehaviour
 
 			return;
 		}
-
 
 		foreach (NPCType npc in System.Enum.GetValues(typeof(NPCType)))
 		{
@@ -100,19 +100,17 @@ public class NPCGenerator : MonoBehaviour
 
 		npcObj.name = npcType.ToString();
 
-		Vector2Int loc = SelectRandomLocation(_base.TravelTypes);
+		Vector2Int loc = MapSettings.SelectRandomLocation(_base.TravelTypes);
 		npcObj.transform.position = TileConversion.TileToWorld3D(loc);
 		_movement.TileLoc = loc;
 
 		_base.Faction = _data.Faction;
 
-        _movement.MapGenerator = mapGenerator;
-        _movement.MapManager = mapManager;
 		_movement.MoveDelay = _data.MoveDelay;
 		_movement.TilesPerStep = _data.TilesPerStep;
 		_movement.MeanderRange = _data.MeanderRange;
 		_movement.SearchRange = _data.SearchRange;
-		_movement.RandomiseMovementTick();
+		_movement.RandomiseTimers();
 		_movement.RandomTargetLocation(_movement.TileLoc);
 
 		_movement.Damage = _data.Damage;
@@ -131,23 +129,5 @@ public class NPCGenerator : MonoBehaviour
 		}
 	}
 
-	private Vector2Int SelectRandomLocation(List<TileTravelType> travelTypes)
-	{
-		Vector2Int randomLoc = Vector2Int.zero;
-
-		while (randomLoc == Vector2Int.zero)
-		{
-			Vector2Int potentialLoc = new Vector2Int(mapGenerator.RandomIntInBounds(), mapGenerator.RandomIntInBounds());
-
-			foreach (TileTravelType type in travelTypes)
-			{
-				if (mapManager.GetTile(potentialLoc).TravelType.Contains(type))
-				{
-					randomLoc = potentialLoc;
-					break; 
-				}
-			}
-		}
-		return randomLoc;
-	}
+	
 }

@@ -5,9 +5,21 @@ using UnityEngine;
 public class NPCBase : MonoBehaviour
 {
 	public NPCType NPCType;
-	// public bool CanWalk;
-	// public bool CanSwim;
 	public Faction Faction;
-	public int Wood;
+
 	public List<TileTravelType> TravelTypes;
+	public Dictionary<NPCComponentType, NPCComponentBase> Components = new Dictionary<NPCComponentType, NPCComponentBase>();
+
+	public void SubscribeComponent(NPCComponentType componentType, NPCComponentBase component)
+	{
+		if (Components.ContainsKey(componentType))
+		{
+			print("NPC already has " + componentType);
+			return;
+		}
+		else
+		{
+			Components.Add(componentType, component);
+		}
+	}
 }

@@ -5,13 +5,9 @@ using UnityEngine.Tilemaps;
 
 public class MapGenerator : MonoBehaviour
 {
-	[Header("Settings")]
-	public int MapSize;
+	public MapSettings MapSettings;
 
-	[Header("Perlin Noise Generation")]
-	public float Scale;
-	public float OffsetX;
-	public float OffsetY;
+	[Header("Terrain Heights")]
 	[Range(0, 1f)]
 	public float WaterMaxHeight;
 	[Range(0, 1f)]
@@ -21,7 +17,7 @@ public class MapGenerator : MonoBehaviour
 	[Range(0, 1f)]
 	public float GrassMaxHeight;
 
-	[Header("Tile Settings")]
+	[Header("Tile Colour Settings")]
 	public Color WaterColour;
 	public Color SandColour;
 	public Color DirtColour;
@@ -37,7 +33,6 @@ public class MapGenerator : MonoBehaviour
 	[Header("Objects")]
 	[SerializeField] private Tilemap tilemap;
 	[SerializeField] private GameObject treeContainer;
-	[SerializeField] private MapManager mapManager;
 	[SerializeField] private NPCGenerator mobSpawner;
 
 	[Header("Prefabs")]
@@ -50,6 +45,7 @@ public class MapGenerator : MonoBehaviour
 
 	private void Awake()
 	{
+		MapSettings.Tiles = new GroundTileData[MapSettings.MapSize, MapSettings.MapSize];
 		float seed = Random.Range(0, 1f);
 
 		Renderer renderer = GetComponent<Renderer>();
@@ -61,16 +57,16 @@ public class MapGenerator : MonoBehaviour
 
 	public Texture2D GenerateTexture(float seed)
 	{
-		Texture2D texture = new Texture2D(MapSize, MapSize);
+		Texture2D texture = new Texture2D(MapSettings.MapSize, MapSettings.MapSize);
 
-		for (int y = 0; y < MapSize; y++)
+		for (int y = 0; y < MapSettings.MapSize; y++)
 		{
-			for (int x = 0; x < MapSize; x++)
+			for (int x = 0; x < MapSettings.MapSize; x++)
 			{
-				float xCoord = (float) x / MapSize * Scale + OffsetX;
-				float yCoord = (float) y / MapSize * Scale + OffsetY;
+				float xCoord = (float) x / MapSettings.MapSize * MapSettings.Scale + MapSettings.OffsetX;
+				float yCoord = (float) y / MapSettings.MapSize * MapSettings.Scale + MapSettings.OffsetY;
 				
-				float sample = Mathf.PerlinNoise(xCoord + MapSize * seed, yCoord + MapSize * seed);
+				float sample = Mathf.PerlinNoise(xCoord + MapSettings.MapSize * seed, yCoord + MapSettings.MapSize * seed);
 				
 				Color colour = new Color(sample, sample, sample);
 				texture.SetPixel(x, y, colour);    
@@ -83,15 +79,15 @@ public class MapGenerator : MonoBehaviour
 
 	private void SetTileMap(Texture2D noiseMap)
 	{
-		for (int y = 0; y < MapSize; y++)
+		for (int y = 0; y < MapSettings.MapSize; y++)
 		{
-			for (int x = 0; x < MapSize; x++)
+			for (int x = 0; x < MapSettings.MapSize; x++)
 			{
 				Vector3Int pos = new Vector3Int(x, y, 0);
 				float height = noiseMap.GetPixel(x, y).r;
 
 				GroundTileData tileData = Instantiate(groundTileDataAsset);
-				mapManager.Tiles[x, y] = tileData;
+				MapSettings.Tiles[x, y] = tileData;
 
 				if (height <= WaterMaxHeight)
 				{
@@ -159,32 +155,18 @@ public class MapGenerator : MonoBehaviour
 		return (((OldValue - OldMin) * NewRange) / OldRange) + NewMin;
 	}
 
-	public int RandomIntInBounds()
-	{
-		return (int) Random.Range(0, MapSize);
-	}
-
+	
 	private GroundType GetTileByHeight(float height)
 	{
 		if (height <= WaterMaxHeight)
-		{
 			return GroundType.Water;
-		}
 		else if (height > WaterMaxHeight && height <= SandMaxHeight)
-		{
 			return GroundType.Sand;
-		}
 		else if (height > SandMaxHeight && height <=  DirtMaxHeight)
-		{
 			return GroundType.Dirt;
-		}
 		else if (height > DirtMaxHeight && height <= GrassMaxHeight)
-		{
 			return GroundType.Grass;
-		}
 		else
-		{
 			return GroundType.Stone;
-		}
 	}
 }

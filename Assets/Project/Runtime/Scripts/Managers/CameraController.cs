@@ -4,8 +4,7 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
-
-	[SerializeField] private MapGenerator MapGenerator;
+	public MapSettings MapSettings;
 	[SerializeField] private Cinemachine.CinemachineVirtualCamera CVCamera;
 
 	[Header("Movement")]
@@ -22,7 +21,7 @@ public class CameraController : MonoBehaviour
 
 	private void Start()
 	{
-		transform.position = TileConversion.TileToWorld3D(new Vector2Int(MapGenerator.MapSize / 2, MapGenerator.MapSize / 2));
+		transform.position = TileConversion.TileToWorld3D(new Vector2Int(MapSettings.MapSize / 2, MapSettings.MapSize / 2));
 		Zoom(0);
 	}
 
