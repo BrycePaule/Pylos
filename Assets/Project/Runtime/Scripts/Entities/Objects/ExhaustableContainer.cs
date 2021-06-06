@@ -4,10 +4,7 @@ using UnityEngine;
 
 public class ExhaustableContainer : Container, IExhaustableContainer
 {
-	public ExhaustableContainer(Dictionary<ItemID, int> _items) : base(_items)
-	{
-
-	}
+	public MapSettings MapSettings;
 
 	public bool IsEmpty()
 	{
@@ -16,6 +13,7 @@ public class ExhaustableContainer : Container, IExhaustableContainer
 
 	public void Exhaust()
 	{
+		MapSettings.GetTile(TileLoc).ContainedObjects.Remove(gameObject);
 		Destroy(gameObject);
 	}
 	

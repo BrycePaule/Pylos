@@ -4,12 +4,8 @@ using UnityEngine;
 
 public class Container : MonoBehaviour, IContainer
 {
+	public Vector2Int TileLoc;
 	public Dictionary<ItemID, int> items;
-
-	public Container(Dictionary<ItemID, int> _items)
-	{
-		items = _items;
-	}
 	
 	private void Awake() 
 	{

@@ -116,6 +116,7 @@ public class MapGenerator : MonoBehaviour
 						tileData.TravelType.Remove(TileTravelType.Walkable);
 						tileData.ContainedObjects.Add(tree);
 
+						tree.GetComponent<Container>().TileLoc = new Vector2Int(pos.x, pos.y);
 						tree.GetComponent<ExhaustableContainer>().Put(ItemID.Wood, 10);
 					}
 				}
@@ -130,6 +131,7 @@ public class MapGenerator : MonoBehaviour
 						stone.name = stonePrefab.name;
 						tileData.ContainedObjects.Add(stone);
 
+						stone.GetComponent<Container>().TileLoc = new Vector2Int(pos.x, pos.y);
 						stone.GetComponent<ExhaustableContainer>().Put(ItemID.Stone, 10);
 					}
 				}

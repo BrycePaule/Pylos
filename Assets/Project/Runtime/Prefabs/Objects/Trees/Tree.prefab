@@ -144,3 +144,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 48a5a7d60f4250243941a38f10c503b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  TileLoc: {x: 0, y: 0}
+  MapSettings: {fileID: 11400000, guid: 8166e00235c27e447bcddb538b46923f, type: 2}
