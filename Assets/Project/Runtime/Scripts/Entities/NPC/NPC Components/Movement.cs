@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class NPCMovement : NPCComponentBase
+public class Movement : NPCComponentBase
 {
 	public MapSettings MapSettings;
 	[SerializeField] private GameObject targetPrefab;
@@ -19,23 +19,19 @@ public class NPCMovement : NPCComponentBase
 	public float SearchDelay;
 	public bool ShowPath;
 
-	public float Damage;
-	public float AttackSpeed;
-	public int AttackRange;
-	public bool Aggro;
-	public GameObject AggroOn;
-
-	private Vector2Int TargetLoc;
+	public Vector2Int TargetLoc;
 	private Rigidbody2D npcRB;
 	private LineRenderer lineRenderer;
 	private float moveTimer;
 	private AStar aStar;
 
-	private float attackTimer;
 	public float searchTimer;
 
 	public GameObject FoundObject;
 	public ItemID searchingFor;
+
+	public Aggro npcAggro;
+	public Combat npcCombat;
 
 	protected override void Awake() 
 	{
@@ -51,6 +47,9 @@ public class NPCMovement : NPCComponentBase
 
 	private void Start() 
 	{
+		npcAggro = (Aggro) npcBase.GetNPCComponent(NPCComponentType.Aggro);
+		npcCombat = (Combat) npcBase.GetNPCComponent(NPCComponentType.Combat);
+
 		RandomTargetLocation(TileLoc);
 
 		switch (NPCMovementType)
@@ -76,7 +75,6 @@ public class NPCMovement : NPCComponentBase
 		}
 
 		Move();
-		attackTimer += Time.deltaTime;
 		searchTimer += Time.deltaTime;
 	}
 
@@ -185,25 +183,17 @@ public class NPCMovement : NPCComponentBase
 
 	private void MoveChase()
 	{
-		if (AggroOn == null) 
+		if (npcAggro.AggroList.Highest == null) 
 		{ 
-			ResetAggro(); 
+			npcAggro.StopAggro(); 
 			RandomTargetLocation(TileLoc);
 			return;
 		}
 
-		TargetLoc = AggroOn.GetComponentInChildren<NPCMovement>().TileLoc;
+		TargetLoc = npcAggro.AggroList.Highest.GetComponentInChildren<Movement>().TileLoc;
 
-		if (GridHelpers.IsWithinDistance(TileLoc, TargetLoc, AttackRange) && attackTimer >= AttackSpeed) 
-		{
-			AggroOn.GetComponentInChildren<Health>().Damage(Damage, AggroOn);
-			attackTimer = 0f;
-			return;
-		} else if (GridHelpers.IsWithinDistance(TileLoc, TargetLoc, AttackRange))
-		{
-			return;
-		}
-
+		npcCombat.Attack(npcAggro.AggroList.Highest);
+		
 		if (moveTimer >= MoveDelay)
 		{
 			List<Node> path = FindPathToTarget(maxAttempts: 5);
@@ -261,6 +251,8 @@ public class NPCMovement : NPCComponentBase
 			pathArray[i] = TileConversion.TileToWorld3D(path[i].GlobalLoc);
 		}
 
+		lineRenderer.startColor = (npcAggro.IsAggro) ? Color.red : Color.cyan;
+		lineRenderer.endColor = (npcAggro.IsAggro) ? Color.red : Color.cyan;
 		lineRenderer.positionCount = path.Count;
 		lineRenderer.SetPositions(pathArray);
 	}
@@ -269,25 +261,4 @@ public class NPCMovement : NPCComponentBase
 	{
 		return npcBase.TravelTypes.Count > 0;
 	}
-
-	public void AggroOnTo(GameObject npc)
-	{
-		Aggro = true;
-		AggroOn = npc;
-		TargetLoc = npc.GetComponentInChildren<NPCMovement>().TileLoc;
-		NPCMovementType = MovementType.Chase;
-	}
-
-	private void ResetAggro()
-	{
-		Aggro = false;
-		AggroOn = null;
-		NPCMovementType = MovementType.Meander;
-	}
-
-	public void OnDeathRealised()
-	{
-		print("omfg he died");
-	}
-
 }

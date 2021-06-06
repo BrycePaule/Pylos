@@ -6,28 +6,38 @@ public class DetectionRadius : NPCComponentBase
 {
 	[SerializeField] int detectionRadius;
 
-	private Faction faction;
-	private NPCMovement npcMovement;
+	public Movement npcMovement;
+	public Aggro npcAggro;
 
 	protected override void Awake() 
 	{
 		base.Awake();
 		npcBase.SubscribeComponent(NPCComponentType.DetectionRadius, this);
 
-		npcMovement = transform.parent.GetComponentInChildren<NPCMovement>();
-		faction = GetComponentInParent<NPCBase>().Faction;
 		GetComponent<CircleCollider2D>().radius = detectionRadius;
+	}
+
+	private void Start()
+	{
+		npcMovement = (Movement) npcBase.GetNPCComponent(NPCComponentType.Movement);
+		npcAggro = (Aggro) npcBase.GetNPCComponent(NPCComponentType.Aggro);
 	}
 
 	private void OnTriggerEnter2D(Collider2D other) 
 	{
-		if (npcMovement.NPCMovementType == MovementType.Search) { return; }
-		if (other.gameObject.layer == Layer.NPC.GetHashCode() && other.GetComponentInChildren<NPCBase>().Faction != faction)
+		if (other.gameObject.layer == Layer.NPC.GetHashCode() && other.GetComponent<NPCBase>().Faction != npcBase.Faction)
 		{
-			if (!npcMovement.Aggro)
-			{
-				npcMovement.AggroOnTo(other.gameObject);
-			}
+			npcAggro = (Aggro) npcBase.GetNPCComponent(NPCComponentType.Aggro);
+			npcAggro.EnterRange(other.GetComponent<NPCBase>());
 		}
+	}
+
+	private void OnTriggerExit2D(Collider2D other) 
+	{
+		if (other.gameObject.layer == Layer.NPC.GetHashCode() && other.GetComponent<NPCBase>().Faction != npcBase.Faction)
+		{
+			npcAggro.ExitRange(other.GetComponent<NPCBase>());
+		}
+	
 	}
 }

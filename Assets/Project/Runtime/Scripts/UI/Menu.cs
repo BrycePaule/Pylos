@@ -74,7 +74,7 @@ public class Menu : MonoBehaviour
 
 	public void TogglePaths()
 	{
-		foreach (NPCMovement npcMovement in npcContainer.GetComponentsInChildren<NPCMovement>())
+		foreach (Movement npcMovement in npcContainer.GetComponentsInChildren<Movement>())
 		{
 			npcMovement.ShowPath = !npcMovement.ShowPath;
 		}
@@ -118,7 +118,7 @@ public class Menu : MonoBehaviour
 	{
 		if (!Tooltip.SelectedObject) { return; }
 		if (Tooltip.SelectedObject.layer != Layer.NPC.GetHashCode()) { return; }
-		NPCMovement npcMovement = Tooltip.SelectedObject.GetComponentInChildren<NPCMovement>();
+		Movement npcMovement = Tooltip.SelectedObject.GetComponentInChildren<Movement>();
 		npcMovement.searchingFor = ItemID.Wood;
 		npcMovement.NPCMovementType = MovementType.Search;
 	}

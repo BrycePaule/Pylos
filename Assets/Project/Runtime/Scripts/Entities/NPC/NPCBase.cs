@@ -22,4 +22,15 @@ public class NPCBase : MonoBehaviour
 			Components.Add(componentType, component);
 		}
 	}
+
+	public NPCComponentBase GetNPCComponent(NPCComponentType componentType)
+	{
+		if (Components.ContainsKey(componentType))
+		{
+			return Components[componentType];
+		}
+
+		print(this + " couldn't get " + componentType);
+		return null;
+	}
 }

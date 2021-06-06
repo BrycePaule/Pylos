@@ -94,31 +94,34 @@ public class NPCGenerator : MonoBehaviour
 	private void BuildNPC(GameObject npcObj, NPCType npcType)
 	{
 		NPCData _data = npcData[npcType];
-		NPCBase _base = npcObj.GetComponentInChildren<NPCBase>();
-		NPCMovement _movement = npcObj.GetComponentInChildren<NPCMovement>();
-		Health _health = npcObj.GetComponentInChildren<Health>();
+		NPCBase npcBase = npcObj.GetComponentInChildren<NPCBase>();
+
+		Movement npcMovement = (Movement) npcBase.GetNPCComponent(NPCComponentType.Movement);
+		Combat npcCombat = (Combat) npcBase.GetNPCComponent(NPCComponentType.Combat);
+		Health npcHealth = (Health) npcBase.GetNPCComponent(NPCComponentType.Health);
 
 		npcObj.name = npcType.ToString();
 
-		Vector2Int loc = MapSettings.SelectRandomLocation(_base.TravelTypes);
+		Vector2Int loc = MapSettings.SelectRandomLocation(npcBase.TravelTypes);
 		npcObj.transform.position = TileConversion.TileToWorld3D(loc);
-		_movement.TileLoc = loc;
+		npcMovement.TileLoc = loc;
 
-		_base.Faction = _data.Faction;
+		npcBase.Faction = _data.Faction;
 
-		_movement.MoveDelay = _data.MoveDelay;
-		_movement.TilesPerStep = _data.TilesPerStep;
-		_movement.MeanderRange = _data.MeanderRange;
-		_movement.SearchRange = _data.SearchRange;
-		_movement.RandomiseTimers();
-		_movement.RandomTargetLocation(_movement.TileLoc);
+		npcMovement.MoveDelay = _data.MoveDelay;
+		npcMovement.TilesPerStep = _data.TilesPerStep;
+		npcMovement.MeanderRange = _data.MeanderRange;
+		npcMovement.SearchRange = _data.SearchRange;
+		npcMovement.RandomiseTimers();
+		npcMovement.RandomTargetLocation(npcMovement.TileLoc);
 
-		_movement.Damage = _data.Damage;
-		_movement.AttackSpeed = _data.AttackSpeed;
-		_movement.AttackRange = _data.AttackRange;
-		_health.MaxHealth = _data.MaxHealth;
+		npcCombat.Damage = _data.Damage;
+		npcCombat.AttackSpeed = _data.AttackSpeed;
+		npcCombat.AttackRange = _data.AttackRange;
 
-		if (OVERRIDE_SPEED) { _movement.MoveDelay = MOVE_DELAY_OVERRIDE; }
+		npcHealth.MaxHealth = _data.MaxHealth;
+
+		if (OVERRIDE_SPEED) { npcMovement.MoveDelay = MOVE_DELAY_OVERRIDE; }
 	}
 
 	private void BuildNPCDictionary()
@@ -129,5 +132,4 @@ public class NPCGenerator : MonoBehaviour
 		}
 	}
 
-	
 }

@@ -14,7 +14,9 @@ public class Health : NPCComponentBase, IDamageable<float>
 	public UnityEvent OnDeathEvent;
 
 	private Slider slider;
-	private NPCMovement npcMovement;
+
+	public Movement npcMovement;
+	public Aggro npcAggro;
 
 	protected override void Awake() 
 	{
@@ -22,13 +24,13 @@ public class Health : NPCComponentBase, IDamageable<float>
 		npcBase.SubscribeComponent(NPCComponentType.Health, this);
 
 		slider = HealthBar.GetComponentInChildren<Slider>();
-		npcMovement = transform.parent.GetComponentInChildren<NPCMovement>();
 	}
-
-	private void Start() 
+	
+	private void Start()
 	{
-		CurrentHealth = MaxHealth;
-		slider.value = CurrentHealth;
+		npcMovement = (Movement) npcBase.GetNPCComponent(NPCComponentType.Movement);
+		npcAggro = (Aggro) npcBase.GetNPCComponent(NPCComponentType.Aggro);
+		ResetHealth();
 	}
 
 	private void Update()
@@ -44,14 +46,14 @@ public class Health : NPCComponentBase, IDamageable<float>
 		}
 	}
 
-	public void Damage(float value, GameObject damagedBy)
+	public void Damage(float value, NPCBase damagedBy)
 	{
 		CurrentHealth -= value;
 		UpdateHealthBarSlider();
 
 		if (CurrentHealth <= 0) { Kill(); }
 
-		if (!npcMovement.Aggro && damagedBy != null) { npcMovement.AggroOnTo(damagedBy); }
+		npcAggro.Increment(damagedBy); 
 	}
 
 	public void Heal(float value)
@@ -77,8 +79,14 @@ public class Health : NPCComponentBase, IDamageable<float>
 
 	public void Kill() 
 	{
-		OnDeathEvent.Invoke();
+		// OnDeathEvent.Invoke();
 		Destroy(transform.parent.gameObject);
+	}
+
+	public void ResetHealth()
+	{
+		CurrentHealth = MaxHealth;
+		slider.value = CurrentHealth;
 	}
 
 }

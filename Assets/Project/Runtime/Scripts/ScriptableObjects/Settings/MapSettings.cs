@@ -41,7 +41,7 @@ public class MapSettings : ScriptableObject
 	// Location
 	public int RandomIntInBounds()
 	{
-		return (int) Random.Range(0, MapSize);
+		return Random.Range(0, MapSize);
 	}
 
 	public Vector2Int SelectRandomLocation(List<TileTravelType> travelTypes)
@@ -53,8 +53,10 @@ public class MapSettings : ScriptableObject
 			Vector2Int potentialLoc = new Vector2Int(RandomIntInBounds(), RandomIntInBounds());
 
 			if (IsPathable(potentialLoc, travelTypes))
+			{
 				randomLoc = potentialLoc;
 				break;
+			}
 		}
 		return randomLoc;
 	}

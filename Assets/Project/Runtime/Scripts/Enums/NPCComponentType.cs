@@ -8,4 +8,6 @@ public enum NPCComponentType
 	Health,
 	AttackRadius,
 	DetectionRadius,
+	Combat,
+	Aggro,
 }

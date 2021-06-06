@@ -7,7 +7,7 @@ public class AttackRadius : NPCComponentBase
 	[SerializeField] private int attackRadius;
 	// [SerializeField] private int damage;
 
-	private NPCMovement npcMovement;
+	private Movement npcMovement;
 	private Faction faction;
 
 
