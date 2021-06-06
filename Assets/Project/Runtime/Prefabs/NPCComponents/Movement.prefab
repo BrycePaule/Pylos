@@ -106,13 +106,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MapSettings: {fileID: 11400000, guid: 8166e00235c27e447bcddb538b46923f, type: 2}
   GameSettings: {fileID: 11400000, guid: 4e4d342f6ff6a674ab4f03d6ff5fb20d, type: 2}
+  PlayerMaterials: {fileID: 11400000, guid: 6d73b3d588f6ffe4ebfe575cf22a7f0c, type: 2}
   NPCMovementType: 0
   TileLoc: {x: 0, y: 0}
   TargetLoc: {x: 0, y: 0}
   MoveDelay: 1.5
   TilesPerStep: 1
   MeanderRange: 0
-  ShowPath: 0
   searchingFor: 0
   FoundObject: {fileID: 0}
   SearchDelay: 3

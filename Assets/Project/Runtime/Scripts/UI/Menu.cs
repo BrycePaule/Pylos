@@ -73,11 +73,9 @@ public class Menu : MonoBehaviour
 
 	// BUTTON CALLBACKS
 
-	public void TogglePaths()
-	{
-		GameSettings.ShowPaths = !GameSettings.ShowPaths;
-	}
-	
+	public void TogglePaths() => GameSettings.ShowPaths = !GameSettings.ShowPaths;
+	public void ToggleDetectionRadiusWireframes() => GameSettings.ShowDetectionRadius = !GameSettings.ShowDetectionRadius;
+
 	public void HealthDown()
 	{
 		foreach (Health health in npcContainer.GetComponentsInChildren<Health>())
@@ -117,12 +115,13 @@ public class Menu : MonoBehaviour
 		if (!Tooltip.SelectedObject) { return; }
 		if (Tooltip.SelectedObject.layer != Layer.NPC.GetHashCode()) { return; }
 		Movement npcMovement = Tooltip.SelectedObject.GetComponentInChildren<Movement>();
-		npcMovement.searchingFor = ItemID.Wood;
+		npcMovement.searchingFor = id;
 		npcMovement.NPCMovementType = MovementType.Search;
 	}
 
 	public void SearchForWood() => SearchFor(ItemID.Wood); 
 	public void SearchForStone() => SearchFor(ItemID.Stone); 
+	public void CancelSearch() => SearchFor(ItemID.Item); 
 
 
 	// CAMERA

@@ -43,6 +43,7 @@ public class PathDrawer : NPCComponentBase
 			pathArray[i] = TileConversion.TileToWorld3D(path[i].GlobalLoc);
 		}
 
+		npcAggro = (Aggro) npcBase.GetNPCComponent(NPCComponentType.Aggro);
 		lineRenderer.startColor = (npcAggro.IsAggro) ? Color.red : Color.cyan;
 		lineRenderer.endColor = (npcAggro.IsAggro) ? Color.red : Color.cyan;
 

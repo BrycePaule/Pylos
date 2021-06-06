@@ -2,11 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using System.Reflection;
 
 public class Movement : NPCComponentBase
 {
 	public MapSettings MapSettings;
 	public GameSettings GameSettings;
+	public PlayerMaterials PlayerMaterials;
 
 	[Header("Movement")]
 	public MovementType NPCMovementType;
@@ -150,6 +152,9 @@ public class Movement : NPCComponentBase
 			if (FoundObject != null)
 			{
 				int taken = FoundObject.GetComponent<Container>().Take(searchingFor, 1);
+
+				FieldInfo _itemField = typeof(PlayerMaterials).GetField(searchingFor.ToString());
+				_itemField.SetValue(PlayerMaterials, (int) _itemField.GetValue(PlayerMaterials) + taken);
 
 				if (FoundObject == null) 
 				{

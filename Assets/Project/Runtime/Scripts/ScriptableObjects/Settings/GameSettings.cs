@@ -5,5 +5,7 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Settings/Game Settings")]
 public class GameSettings : ScriptableObject
 {
+	[Header("Debug")]
 	public bool ShowPaths;
+	public bool ShowDetectionRadius;
 }
