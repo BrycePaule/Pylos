@@ -6,32 +6,31 @@ using UnityEngine.Events;
 public class Movement : NPCComponentBase
 {
 	public MapSettings MapSettings;
-	[SerializeField] private GameObject targetPrefab;
+	public GameSettings GameSettings;
 
-	public GameObject Path;
-	public Vector2Int TileLoc;
-
+	[Header("Movement")]
 	public MovementType NPCMovementType;
+	public Vector2Int TileLoc;
+	public Vector2Int TargetLoc;
 	public float MoveDelay;
 	public float TilesPerStep; 
 	public int MeanderRange;
-	public int SearchRange;
-	public float SearchDelay;
-	public bool ShowPath;
 
-	public Vector2Int TargetLoc;
+	[Header("Searching")]
+	public ItemID searchingFor;
+	public GameObject FoundObject;
+	public float SearchDelay;
+	public int SearchRange;
+
 	private Rigidbody2D npcRB;
 	private LineRenderer lineRenderer;
 	private float moveTimer;
+	private float searchTimer;
+
 	private AStar aStar;
-
-	public float searchTimer;
-
-	public GameObject FoundObject;
-	public ItemID searchingFor;
-
-	public Aggro npcAggro;
-	public Combat npcCombat;
+	private Aggro npcAggro;
+	private Combat npcCombat;
+	private PathDrawer npcPathDrawer;
 
 	protected override void Awake() 
 	{
@@ -40,7 +39,6 @@ public class Movement : NPCComponentBase
 
 		npcRB = GetComponentInParent<Rigidbody2D>();
 		aStar = GetComponent<AStar>();
-		lineRenderer = Path.GetComponent<LineRenderer>();
 
 		if (!CheckCanMove()) { print(npcBase.name + " doesn't have a movement type"); }
 	}
@@ -49,6 +47,7 @@ public class Movement : NPCComponentBase
 	{
 		npcAggro = (Aggro) npcBase.GetNPCComponent(NPCComponentType.Aggro);
 		npcCombat = (Combat) npcBase.GetNPCComponent(NPCComponentType.Combat);
+		npcPathDrawer = (PathDrawer) npcBase.GetNPCComponent(NPCComponentType.PathDrawer);
 
 		RandomTargetLocation(TileLoc);
 
@@ -65,15 +64,6 @@ public class Movement : NPCComponentBase
 
 	private void FixedUpdate() 
 	{
-		if (ShowPath)
-		{
-			Path.SetActive(true);
-		}
-		else
-		{
-			Path.SetActive(false);
-		}
-
 		Move();
 		searchTimer += Time.deltaTime;
 	}
@@ -123,7 +113,7 @@ public class Movement : NPCComponentBase
 		npcRB.MovePosition(TileConversion.TileToWorld2D(path[0].GlobalLoc));
 		moveTimer = 0;
 
-		if (ShowPath) { DrawPathLine(path); }
+		npcPathDrawer.UpdatePath(path);
 	}
 
 	// MOVEMENT TYPES
@@ -241,20 +231,6 @@ public class Movement : NPCComponentBase
 	{
 		moveTimer += Random.Range(0, MoveDelay);
 		searchTimer += Random.Range(0, SearchDelay);
-	}
-
-	private void DrawPathLine(List<Node> path)
-	{
-		Vector3[] pathArray = new Vector3[path.Count];
-		for (int i = 0; i < path.Count; i++)
-		{
-			pathArray[i] = TileConversion.TileToWorld3D(path[i].GlobalLoc);
-		}
-
-		lineRenderer.startColor = (npcAggro.IsAggro) ? Color.red : Color.cyan;
-		lineRenderer.endColor = (npcAggro.IsAggro) ? Color.red : Color.cyan;
-		lineRenderer.positionCount = path.Count;
-		lineRenderer.SetPositions(pathArray);
 	}
 
 	private bool CheckCanMove()

@@ -15,8 +15,8 @@ public class Health : NPCComponentBase, IDamageable<float>
 
 	private Slider slider;
 
-	public Movement npcMovement;
-	public Aggro npcAggro;
+	private Movement npcMovement;
+	private Aggro npcAggro;
 
 	protected override void Awake() 
 	{

@@ -8,7 +8,7 @@ public class Aggro : NPCComponentBase
 
 	public AggroList AggroList = new AggroList();
 
-	public Movement npcMovement;
+	private Movement npcMovement;
 
 	protected override void Awake() 
 	{

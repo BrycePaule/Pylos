@@ -25,4 +25,7 @@ public class NPCData : ScriptableObject
 	public float Damage;
 	public float AttackSpeed;
 	public int AttackRange;
+
+	[Header("Detection Radius")]
+	public int DetectionRange;
 }

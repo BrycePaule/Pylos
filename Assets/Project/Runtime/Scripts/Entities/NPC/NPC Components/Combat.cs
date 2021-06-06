@@ -10,8 +10,8 @@ public class Combat : NPCComponentBase
 
 	private float attackTimer;
 
-	public Movement npcMovement;
-	public Aggro npcAggro;
+	private Movement npcMovement;
+	private Aggro npcAggro;
 
 	protected override void Awake() 
 	{

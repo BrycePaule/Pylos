@@ -6,8 +6,8 @@ public class DetectionRadius : NPCComponentBase
 {
 	[SerializeField] int detectionRadius;
 
-	public Movement npcMovement;
-	public Aggro npcAggro;
+	private Movement npcMovement;
+	private Aggro npcAggro;
 
 	protected override void Awake() 
 	{

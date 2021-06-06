@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Menu : MonoBehaviour
 {
+	public GameSettings GameSettings;
 
 	[SerializeField] private Canvas UICanvas;
 
@@ -74,10 +75,7 @@ public class Menu : MonoBehaviour
 
 	public void TogglePaths()
 	{
-		foreach (Movement npcMovement in npcContainer.GetComponentsInChildren<Movement>())
-		{
-			npcMovement.ShowPath = !npcMovement.ShowPath;
-		}
+		GameSettings.ShowPaths = !GameSettings.ShowPaths;
 	}
 	
 	public void HealthDown()

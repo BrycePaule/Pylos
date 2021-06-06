@@ -10,4 +10,5 @@ public enum NPCComponentType
 	DetectionRadius,
 	Combat,
 	Aggro,
+	PathDrawer,
 }
