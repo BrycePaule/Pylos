@@ -11,6 +11,9 @@ public class Health : NPCComponentBase, IDamageable<float>
 	[SerializeField] private Canvas HealthBarCanvas;
 	[SerializeField] private GameObject HealthBar;
 
+	public ParticleSystem OnHitSplatter;
+	public ParticleSystem OnDeathSplatter;
+
 	public UnityEvent OnDeathEvent;
 
 	private Slider slider;
@@ -54,6 +57,7 @@ public class Health : NPCComponentBase, IDamageable<float>
 		if (CurrentHealth <= 0) { Kill(); }
 
 		npcAggro.Increment(damagedBy); 
+		Instantiate(OnHitSplatter.gameObject, transform.position, Quaternion.identity);
 	}
 
 	public void Heal(float value)
@@ -80,6 +84,7 @@ public class Health : NPCComponentBase, IDamageable<float>
 	public void Kill() 
 	{
 		// OnDeathEvent.Invoke();
+		Instantiate(OnDeathSplatter.gameObject, transform.position, Quaternion.identity);
 		Destroy(transform.parent.gameObject);
 	}
 

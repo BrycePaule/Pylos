@@ -11,7 +11,7 @@ public class PropertyElement : MonoBehaviour
 	public string propertyText;
 	public string valueText;
 	
-	private void Update() 
+	private void FixedUpdate() 
 	{
 		this.gameObject.name = propertyText;
 		property.text = propertyText;

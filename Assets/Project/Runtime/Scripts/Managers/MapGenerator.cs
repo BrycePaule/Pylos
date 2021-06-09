@@ -33,7 +33,7 @@ public class MapGenerator : MonoBehaviour
 	[Header("Objects")]
 	[SerializeField] private Tilemap tilemap;
 	[SerializeField] private GameObject treeContainer;
-	[SerializeField] private NPCGenerator mobSpawner;
+	[SerializeField] private GameObject stoneContainer;
 
 	[Header("Prefabs")]
 	[SerializeField] private GameObject treePrefab;
@@ -127,8 +127,9 @@ public class MapGenerator : MonoBehaviour
 
 					if (RandomChance.Roll(10))
 					{
-						GameObject stone = Instantiate(stonePrefab, new Vector3(x + 0.5f, y + 0.5f, 0), Quaternion.identity, treeContainer.transform);
+						GameObject stone = Instantiate(stonePrefab, new Vector3(x + 0.5f, y + 0.5f, 0), Quaternion.identity, stoneContainer.transform);
 						stone.name = stonePrefab.name;
+						tileData.TravelType.Remove(TileTravelType.Walkable);
 						tileData.ContainedObjects.Add(stone);
 
 						stone.GetComponent<Container>().TileLoc = new Vector2Int(pos.x, pos.y);

@@ -13,7 +13,6 @@ public class Menu : MonoBehaviour
 	[SerializeField] private Cinemachine.CinemachineVirtualCamera DefaultCamera;
 	[SerializeField] private Tooltip Tooltip;
 
-	private bool menuEnabled;
 	private bool cameraObjectFollow;
 	private GameObject following;
 
@@ -26,7 +25,7 @@ public class Menu : MonoBehaviour
 
 	private void Awake() 
 	{
-		menuEnabled = false;
+		GameSettings.MenuIsOpen = false;
 	}
 
 	// MENU ANIMATION
@@ -35,7 +34,7 @@ public class Menu : MonoBehaviour
 	{
 		if (tweening) { return; }
 
-		if (menuEnabled)
+		if (GameSettings.MenuIsOpen)
 		{
 			TweenUpMenu();
 		}
@@ -48,7 +47,7 @@ public class Menu : MonoBehaviour
 	private void TweenDownMenu()
 	{
 		tweening = true;
-		menuEnabled = true;
+		GameSettings.MenuIsOpen = true;
 		gameObject.SetActive(true);
 		LeanTween.moveLocalY(gameObject, yDown, easeDuration).setEase(easeType).setOnComplete(FinishDownTween);
 	}
@@ -57,7 +56,7 @@ public class Menu : MonoBehaviour
 	{
 		tweening = true;
 		LeanTween.moveLocalY(gameObject, yUp, easeDuration).setEase(easeType).setOnComplete(FinishUpTween);
-		menuEnabled = false;
+		GameSettings.MenuIsOpen = false;
 	}
 
 	private void FinishDownTween()
@@ -112,9 +111,10 @@ public class Menu : MonoBehaviour
 	
 	private void SearchFor(ItemID id)
 	{
-		if (!Tooltip.SelectedObject) { return; }
-		if (Tooltip.SelectedObject.layer != Layer.NPC.GetHashCode()) { return; }
-		Movement npcMovement = Tooltip.SelectedObject.GetComponentInChildren<Movement>();
+		if (Tooltip.SelectedObjects.Count == 0) { return; }
+		if (Tooltip.SelectedObjects[0].layer != Layer.NPC.GetHashCode()) { return; }
+
+		Movement npcMovement = Tooltip.SelectedObjects[0].GetComponentInChildren<Movement>();
 		npcMovement.searchingFor = id;
 		npcMovement.NPCMovementType = MovementType.Search;
 	}
@@ -128,14 +128,14 @@ public class Menu : MonoBehaviour
 
 	private void UpdateCameraFollow()
 	{
-		if (Tooltip.SelectedObject == null)
+		if (Tooltip.SelectedObjects.Count == 0)
 		{
 			cameraObjectFollow = false;
 		}
 
 		if (cameraObjectFollow)
 		{
-			following = Tooltip.SelectedObject;
+			following = Tooltip.SelectedObjects[0];
 			DefaultCamera.m_Follow = following.transform;
 		}
 		else

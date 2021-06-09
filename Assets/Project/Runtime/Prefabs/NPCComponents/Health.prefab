@@ -47,6 +47,8 @@ MonoBehaviour:
   CurrentHealth: 0
   HealthBarCanvas: {fileID: 0}
   HealthBar: {fileID: 0}
+  OnHitSplatter: {fileID: 2509964855722949447, guid: de13e7906d6aa3948888631384df40d5, type: 3}
+  OnDeathSplatter: {fileID: 2509964855722949447, guid: 2ab64d30735e2a546a8c8d939d576019, type: 3}
   OnDeathEvent:
     m_PersistentCalls:
       m_Calls:
