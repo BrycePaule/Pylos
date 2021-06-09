@@ -5,10 +5,10 @@ using UnityEngine;
 public class CameraController : MonoBehaviour
 {
 	public MapSettings MapSettings;
+	public GameSettings GameSettings;
 	[SerializeField] private Cinemachine.CinemachineVirtualCamera CVCamera;
 
 	[Header("Movement")]
-	public float MoveDelay;
 	public int TilesPerStep;
 
 	[Header("Zoom")]
@@ -16,8 +16,6 @@ public class CameraController : MonoBehaviour
 	[SerializeField] private int MinZoomLevel;
 	[SerializeField] private int MaxZoomLevel;
 	[SerializeField] private int ZoomStep;
-
-	private float _moveTimer;
 
 	private void Start()
 	{
@@ -27,15 +25,15 @@ public class CameraController : MonoBehaviour
 
 	public void Move(Vector2 move)
 	{
-		_moveTimer += Time.deltaTime;
+		int dx = (int) (Mathf.RoundToInt(move.x) * TilesPerStep * (int) (ZoomLevel / 10) * GameSettings.CameraScrollSpeed);
+		int dy = (int) (Mathf.RoundToInt(move.y) * TilesPerStep * (int) (ZoomLevel / 10) * GameSettings.CameraScrollSpeed);
 
-		{
-			int dx = Mathf.RoundToInt(move.x) * TilesPerStep * (int) (ZoomLevel / 10);
-			int dy = Mathf.RoundToInt(move.y) * TilesPerStep * (int) (ZoomLevel / 10);
+		transform.position += new Vector3(dx, dy, 0);
+	}
 
-			transform.position += new Vector3(dx, dy, 0);
-			_moveTimer = 0;
-		}
+	public void MoveTo(Vector3 loc)
+	{
+		transform.position = loc;
 	}
 
 	public void Zoom(float value)

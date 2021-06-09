@@ -1046,8 +1046,8 @@ MonoBehaviour:
   CameraController: {fileID: 1685348465}
   DefaultCamera: {fileID: 428167016}
   Tooltip: {fileID: 1273974883}
-  yUp: 640
-  yDown: 540
+  yUp: 599
+  yDown: 499
   easeDuration: 0.1
   easeType: 2
 --- !u!1 &395595155
@@ -1397,7 +1397,7 @@ MonoBehaviour:
   m_Follow: {fileID: 1685348466}
   m_Lens:
     FieldOfView: 60
-    OrthographicSize: 26
+    OrthographicSize: 33
     NearClipPlane: 0.1
     FarClipPlane: 50
     Dutch: 0
@@ -1751,7 +1751,7 @@ Camera:
   far clip plane: 50
   field of view: 60
   orthographic: 1
-  orthographic size: 26
+  orthographic size: 33
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -4610,6 +4610,10 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: 04e80a41-b856-410f-9f38-6422f9c3a332
     m_ActionName: Player/ToggleMenu[/Keyboard/escape]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 8413d683-fdb2-4694-b34f-17b6ab97020c
+    m_ActionName: HotKeys/Save Location Marker[/Keyboard/ctrl,/Keyboard/1,/Keyboard/ctrl,/Keyboard/2,/Keyboard/ctrl,/Keyboard/3,/Keyboard/ctrl,/Keyboard/4,/Keyboard/ctrl,/Keyboard/5,/Keyboard/ctrl,/Keyboard/6,/Keyboard/ctrl,/Keyboard/7,/Keyboard/ctrl,/Keyboard/8,/Keyboard/ctrl,/Keyboard/9]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player
@@ -4628,7 +4632,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MapSettings: {fileID: 11400000, guid: 8166e00235c27e447bcddb538b46923f, type: 2}
-  Marker: {fileID: 7581292351006522613, guid: 843e2dc153988f140b39192394f612e1, type: 3}
+  LocationMarkers: {fileID: 11400000, guid: 283b24b172b5fa64db2fee146055c739, type: 2}
   cameraController: {fileID: 1685348467}
   UIcanvas: {fileID: 1778135945}
   eventSystem: {fileID: 1772443425}
@@ -4862,8 +4866,8 @@ MonoBehaviour:
   m_DeadZoneHeight: 0
   m_DeadZoneDepth: 0
   m_UnlimitedSoftZone: 0
-  m_SoftZoneWidth: 0.8
-  m_SoftZoneHeight: 0.8
+  m_SoftZoneWidth: 0.5
+  m_SoftZoneHeight: 0.5
   m_BiasX: 0
   m_BiasY: 0
   m_CenterOnActivate: 1
@@ -5689,8 +5693,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MapSettings: {fileID: 11400000, guid: 8166e00235c27e447bcddb538b46923f, type: 2}
+  GameSettings: {fileID: 11400000, guid: 4e4d342f6ff6a674ab4f03d6ff5fb20d, type: 2}
   CVCamera: {fileID: 428167016}
-  MoveDelay: 0.06
   TilesPerStep: 1
   ZoomLevel: 10
   MinZoomLevel: 10

@@ -14,3 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ShowPaths: 0
   ShowDetectionRadius: 0
+  MenuIsOpen: 0
+  CameraScrollSpeed: 0.7

@@ -5,11 +5,12 @@ using UnityEngine.InputSystem;
 using UnityEngine.Tilemaps;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using System;
 
 public class InputManager : MonoBehaviour
 {
 	public MapSettings MapSettings;
-	public GameObject Marker;
+	public LocationMarkers LocationMarkers;
 
 	[SerializeField] private CameraController cameraController;
 	[SerializeField] private Canvas UIcanvas;
@@ -28,6 +29,8 @@ public class InputManager : MonoBehaviour
 	private InputAction _playerRightClick;
 	private InputAction _toggleMenu;
 	private InputAction _cameraZoom;
+	private InputAction _locationSave;
+	private InputAction _locationSnap;
 
 	private Vector2 pointLastClicked;
 	private bool holdingMouseDown;
@@ -35,17 +38,20 @@ public class InputManager : MonoBehaviour
 
 	private void OnEnable()
 	{
-		_playerMovement.Enable();
-		_playerLeftClick.Enable();
-		_playerLeftClickHold.Enable();
-		_playerRightClick.Enable();
-		_toggleMenu.Enable();
-		_cameraZoom.Enable();
+		// _playerMovement.Enable();
+		// _playerLeftClick.Enable();
+		// _playerLeftClickHold.Enable();
+		// _playerRightClick.Enable();
+		// _toggleMenu.Enable();
+		// _cameraZoom.Enable();
+		// _locationSave.Enable();
+		// _locationSnap.Enable();
 	}
 
 	private void Awake()
 	{
 		PlayerControls _playerControls = new PlayerControls();
+		_playerControls.Enable();
 
 		_playerMovement = _playerControls.Player.Movement;
 
@@ -63,6 +69,12 @@ public class InputManager : MonoBehaviour
 
 		_cameraZoom = _playerControls.Camera.Zoom;
 		_cameraZoom.performed += OnCameraZoom;
+
+		_locationSave = _playerControls.HotKeys.SaveLocationMarker;
+		_locationSave.performed += ctx => OnLocationSave((int) ctx.ReadValue<float>());
+
+		_locationSnap = _playerControls.HotKeys.SnapToLocationMarker;
+		_locationSnap.performed += ctx => OnLocationSnap((int) ctx.ReadValue<float>());
 
 		ppu = UIcanvas.GetComponent<CanvasScaler>().referencePixelsPerUnit;
 	}
@@ -93,11 +105,27 @@ public class InputManager : MonoBehaviour
 		cameraController.Move(moveDir);
 	}
 
+	// CAMERA
 	private void OnCameraZoom(InputAction.CallbackContext context)
 	{
 		cameraController.Zoom(context.ReadValue<Vector2>().y);
 	}
 
+	private void OnLocationSave(int index)
+	{
+		LocationMarkers.Locations[index] = cameraController.transform.position;
+	}
+
+	private void OnLocationSnap(int index)
+	{
+		print(LocationMarkers.Locations[index]);
+		Vector3 loc = LocationMarkers.Locations[index];
+		if (loc != null)
+		{
+			cameraController.MoveTo(LocationMarkers.Locations[index]);
+		}
+	}
+	
 	// CLICK
 	private void OnLeftClick(Vector3 mpos, InputAction.CallbackContext context)
 	{
@@ -122,7 +150,7 @@ public class InputManager : MonoBehaviour
 		Vector3 worldPoint = ray.GetPoint(0);
 		Vector2Int tileLoc = TileConversion.WorldToTile(worldPoint);
 
-		// tooltip.DeselectAll();
+		tooltip.DeselectAll();
 		selectionBox.gameObject.SetActive(false);
 
 		print(tilemap.GetTile(new Vector3Int(tileLoc.x, tileLoc.y, 0)));
@@ -238,5 +266,6 @@ public class InputManager : MonoBehaviour
 	{
 		menu.ToggleMenu();
 	}
+
 
 }
