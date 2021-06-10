@@ -15,4 +15,4 @@ MonoBehaviour:
   ShowPaths: 0
   ShowDetectionRadius: 0
   MenuIsOpen: 0
-  CameraScrollSpeed: 0.7
+  CameraScrollSpeed: 1

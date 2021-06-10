@@ -10,6 +10,8 @@ public class CameraController : MonoBehaviour
 
 	[Header("Movement")]
 	public int TilesPerStep;
+	public float MoveDelay;
+	private float movetimer;
 
 	[Header("Zoom")]
 	public int ZoomLevel;
@@ -25,10 +27,15 @@ public class CameraController : MonoBehaviour
 
 	public void Move(Vector2 move)
 	{
-		int dx = (int) (Mathf.RoundToInt(move.x) * TilesPerStep * (int) (ZoomLevel / 10) * GameSettings.CameraScrollSpeed);
-		int dy = (int) (Mathf.RoundToInt(move.y) * TilesPerStep * (int) (ZoomLevel / 10) * GameSettings.CameraScrollSpeed);
+		movetimer += Time.deltaTime;
 
-		transform.position += new Vector3(dx, dy, 0);
+		if (movetimer >= MoveDelay)
+		{
+			int dx = (int) (Mathf.RoundToInt(move.x) * TilesPerStep * (int) (ZoomLevel / 10) * GameSettings.CameraScrollSpeed);
+			int dy = (int) (Mathf.RoundToInt(move.y) * TilesPerStep * (int) (ZoomLevel / 10) * GameSettings.CameraScrollSpeed);
+			transform.position += new Vector3(dx, dy, 0);
+			movetimer = 0;
+		}
 	}
 
 	public void MoveTo(Vector3 loc)
