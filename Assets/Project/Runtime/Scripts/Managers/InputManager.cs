@@ -10,7 +10,10 @@ using System;
 public class InputManager : MonoBehaviour
 {
 	public MapSettings MapSettings;
+	public PlayerSelections PlayerSelections;
 	public LocationMarkers LocationMarkers;
+
+	public GameObject Highlight;
 
 	[SerializeField] private CameraController cameraController;
 	[SerializeField] private Canvas UIcanvas;
@@ -34,8 +37,13 @@ public class InputManager : MonoBehaviour
 	private InputAction _locationSnap;
 
 	private Vector2 pointLastClicked;
+	private GameObject mouseMarker;
 	private bool holdingMouseDown;
 	private float ppu;
+
+
+	private GameObject rectMarker1;
+	private GameObject rectMarker2;
 
 	private void OnEnable()
 	{
@@ -51,6 +59,8 @@ public class InputManager : MonoBehaviour
 
 	private void Awake()
 	{
+		// mouseMarker = Instantiate(Highlight, Vector3.zero, Quaternion.identity);
+
 		PlayerControls _playerControls = new PlayerControls();
 		_playerControls.Enable();
 
@@ -88,17 +98,18 @@ public class InputManager : MonoBehaviour
 	{
 		selectionBox.gameObject.SetActive(false);
 		tileCursor.SetActive(false);
+		PlayerSelections.DeselectAll();
 	}
 
 	private void Update() 
 	{
 		Vector3 mpos = Mouse.current.position.ReadValue();
 
-		tooltip.Hover(GetSelectableUnderCursor(mpos));	
+		PlayerSelections.Hover(GetSelectableUnderCursor(mpos));	
 
 		if (holdingMouseDown == true) 
 		{ 
-			if (!Mouse.current.leftButton.isPressed) { OnHoldRelease(); }
+			if (!Mouse.current.leftButton.isPressed) { OnHoldRelease(mpos); }
 			UpdateSelectionBoxSize(mpos); 
 		}
 	}
@@ -124,7 +135,6 @@ public class InputManager : MonoBehaviour
 		cameraController.Boost = false;
 	}
 
-
 	private void OnLocationSave(int index)
 	{
 		LocationMarkers.Locations[index] = cameraController.transform.position;
@@ -149,11 +159,11 @@ public class InputManager : MonoBehaviour
 			GameObject obj = GetSelectableUnderCursor(mpos);
 			if (obj != null) 
 			{
-				tooltip.Select(GetSelectableUnderCursor(mpos)); 
+				PlayerSelections.Select(GetSelectableUnderCursor(mpos)); 
 			}
 			else
 			{
-				tooltip.DeselectAll();
+				PlayerSelections.DeselectAll();
 			}
 		}
 	}
@@ -164,7 +174,7 @@ public class InputManager : MonoBehaviour
 		Vector3 worldPoint = ray.GetPoint(0);
 		Vector2Int tileLoc = TileConversion.WorldToTile(worldPoint);
 
-		tooltip.DeselectAll();
+		PlayerSelections.DeselectAll();
 		selectionBox.gameObject.SetActive(false);
 
 		print(tilemap.GetTile(new Vector3Int(tileLoc.x, tileLoc.y, 0)));
@@ -189,19 +199,20 @@ public class InputManager : MonoBehaviour
 	private void OnLeftClickHold(Vector3 mpos, InputAction.CallbackContext context)
 	{
 		holdingMouseDown = true;
-		selectionBox.transform.position = pointLastClicked;
 		selectionBox.gameObject.SetActive(true);
 	}
 
-	private void OnHoldRelease()
+	private void OnHoldRelease(Vector2 currPos)
 	{
 		selectionBox.gameObject.SetActive(false);
 		holdingMouseDown = false;
 
-		Vector3 worldPos = Camera.main.ScreenToWorldPoint(selectionBox.anchoredPosition);
-		Vector2 size = selectionBox.sizeDelta / 64;
-		
-		// Instantiate(Marker, new Vector3(worldPos.x, worldPos.y, 1), Quaternion.identity);
+		Vector2 uiRectCentre = currPos - pointLastClicked;
+		Vector3 worldPos = Camera.main.ScreenToWorldPoint(new Vector3(pointLastClicked.x + (uiRectCentre.x / 2), pointLastClicked.y + (uiRectCentre.y / 2), 1));
+
+		Vector2 botLeft = Camera.main.ScreenToWorldPoint(pointLastClicked);
+		Vector2 topRight = Camera.main.ScreenToWorldPoint(currPos);
+		Vector2 size = (topRight - botLeft) / 2;
 
 		List<GameObject> playerUnits = new List<GameObject>();
 		List<GameObject> allSelectables = new List<GameObject>();
@@ -219,11 +230,11 @@ public class InputManager : MonoBehaviour
 
 		if (playerUnits.Count > 0)
 		{
-			tooltip.Select(playerUnits);
+			PlayerSelections.Select(playerUnits);
 		}
 		else if (allSelectables.Count > 0 )
 		{
-			tooltip.Select(allSelectables[0]);
+			PlayerSelections.Select(allSelectables[0]);
 		}
 	}
 
@@ -233,7 +244,7 @@ public class InputManager : MonoBehaviour
 		float height = currPos.y - pointLastClicked.y;
 
 		selectionBox.sizeDelta = new Vector2(width, height);
-		selectionBox.anchoredPosition = pointLastClicked + new Vector2(width/2, height/2);
+		selectionBox.position = pointLastClicked;
 	}
 
 	// UTILS

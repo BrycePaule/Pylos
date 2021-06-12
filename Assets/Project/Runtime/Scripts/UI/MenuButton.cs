@@ -14,7 +14,6 @@ public class MenuButton : MonoBehaviour
 
 	[Header("Settings")]
 	public string TitleText;
-	public Color TitleTextColor;
 	public Color ButtonClickColor;
 	public Sprite IconSprite;
 
@@ -22,7 +21,6 @@ public class MenuButton : MonoBehaviour
 	{
 		this.gameObject.name = TitleText;
 		Title.text = TitleText;
-		Title.color = TitleTextColor;
 		Icon.sprite = IconSprite;
 
 		ColorBlock cb = Button.colors;

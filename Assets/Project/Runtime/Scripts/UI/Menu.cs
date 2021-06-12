@@ -5,13 +5,13 @@ using UnityEngine;
 public class Menu : MonoBehaviour
 {
 	public GameSettings GameSettings;
+	public PlayerSelections PlayerSelections;
 
 	[SerializeField] private Canvas UICanvas;
 
 	[SerializeField] private GameObject npcContainer;
 	[SerializeField] private GameObject CameraController;
 	[SerializeField] private Cinemachine.CinemachineVirtualCamera DefaultCamera;
-	[SerializeField] private Tooltip Tooltip;
 
 	private bool cameraObjectFollow;
 	private GameObject following;
@@ -111,10 +111,10 @@ public class Menu : MonoBehaviour
 	
 	private void SearchFor(ItemID id)
 	{
-		if (Tooltip.SelectedObjects.Count == 0) { return; }
-		if (Tooltip.SelectedObjects[0].layer != Layer.NPC.GetHashCode()) { return; }
+		if (PlayerSelections.SelectedObjects.Count == 0) { return; }
+		if (PlayerSelections.SelectedObjects[0].layer != Layer.NPC.GetHashCode()) { return; }
 
-		Movement npcMovement = Tooltip.SelectedObjects[0].GetComponentInChildren<Movement>();
+		Movement npcMovement = PlayerSelections.SelectedObjects[0].GetComponentInChildren<Movement>();
 		npcMovement.searchingFor = id;
 		npcMovement.NPCMovementType = MovementType.Search;
 	}
@@ -128,14 +128,14 @@ public class Menu : MonoBehaviour
 
 	private void UpdateCameraFollow()
 	{
-		if (Tooltip.SelectedObjects.Count == 0)
+		if (PlayerSelections.SelectedObjects.Count == 0)
 		{
 			cameraObjectFollow = false;
 		}
 
 		if (cameraObjectFollow)
 		{
-			following = Tooltip.SelectedObjects[0];
+			following = PlayerSelections.SelectedObjects[0];
 			DefaultCamera.m_Follow = following.transform;
 		}
 		else

@@ -7,6 +7,9 @@ using System.Reflection;
 
 public class Tooltip : MonoBehaviour
 {
+	public PlayerSelections PlayerSelections;
+
+	[SerializeField] private GameObject container;
 	[SerializeField] private TMP_Text heading;
 	[SerializeField] private Image entitySprite;
 	[SerializeField] private GameObject healthBar;
@@ -15,9 +18,7 @@ public class Tooltip : MonoBehaviour
 	[SerializeField] private GameObject PropertyElementPrefab;
 	
 	private Slider slider;
-
-	public List<GameObject> SelectedObjects = new List<GameObject>();
-	public List<GameObject> HoveredObjects = new List<GameObject>();
+	private CanvasRenderer canvasRenderer;
 
 	private List<PropertyElement> propPool = new List<PropertyElement>();
 	private RectTransform tooltipRectTransform;
@@ -27,6 +28,7 @@ public class Tooltip : MonoBehaviour
 	private void Awake() 
 	{
 		slider = healthBar.GetComponentInChildren<Slider>();
+		canvasRenderer = gameObject.GetComponent<CanvasRenderer>();
 		tooltipRectTransform = gameObject.GetComponent<RectTransform>();
 		tooltipBaseHeight = tooltipRectTransform.rect.height;
 		propHeight = PropertyElementPrefab.GetComponent<LayoutElement>().preferredHeight;
@@ -39,13 +41,15 @@ public class Tooltip : MonoBehaviour
 
 	public void FixedUpdate()
 	{
-		if (SelectedObjects.Count > 0 )
+		if (PlayerSelections.SelectedObjects.Count > 0 )
 		{
 			UpdateTooltipDisplay();
+			EnableTooltip();
 		}
-		else if (HoveredObjects.Count > 0)
+		else if (PlayerSelections.HoveredObjects.Count > 0)
 		{
 			UpdateTooltipDisplay();
+			EnableTooltip();
 		}
 		else
 		{
@@ -57,13 +61,13 @@ public class Tooltip : MonoBehaviour
 	private void UpdateTooltipDisplay()
 	{
 		GameObject obj;
-		if (SelectedObjects.Count > 0)
+		if (PlayerSelections.SelectedObjects.Count > 0)
 		{
-			obj = SelectedObjects[0];
+			obj = PlayerSelections.SelectedObjects[0];
 		}
 		else
 		{
-			obj = HoveredObjects[0];
+			obj = PlayerSelections.HoveredObjects[0];
 		}
 
 		UpdateHeader(obj);
@@ -155,45 +159,12 @@ public class Tooltip : MonoBehaviour
 
 	public void EnableTooltip() 
 	{ 
-		gameObject.SetActive(true);
+		container.SetActive(true);
 	}
 
 	public void DisableTooltip()
 	{
-		gameObject.SetActive(false);
-	}
-
-	// MOUSE CALLBACKS
-
-	public void Hover(GameObject obj)
-	{
-		HoveredObjects = new List<GameObject>(); 
-		
-		if (obj != null)
-		{
-			HoveredObjects.Add(obj);
-			EnableTooltip();
-		}
-	}
-
-	public void Select(GameObject obj)
-	{
-		if (obj != null) { EnableTooltip(); }
-		SelectedObjects = new List<GameObject>(){obj};
-	}
-
-	public void Select(List<GameObject> objs)
-	{
-		if (objs.Count > 0) { EnableTooltip(); }
-
-		SelectedObjects = objs;
-	}
-
-	public void DeselectAll()
-	{
-		HoveredObjects.Clear();
-		SelectedObjects.Clear();
-		DisableTooltip();
+		container.SetActive(false);
 	}
 
 }

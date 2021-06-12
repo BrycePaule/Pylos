@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 2539501039617195457}
   - component: {fileID: 2539501039617195456}
   - component: {fileID: 2539501039617195458}
+  - component: {fileID: 2468721968648024871}
   m_Layer: 5
   m_Name: Property Title
   m_TagString: Untagged
@@ -76,7 +77,7 @@ MonoBehaviour:
   m_fontColor32:
     serializedVersion: 2
     rgba: 4285370797
-  m_fontColor: {r: 0.6784314, g: 0.5686275, b: 0.42745098, a: 1}
+  m_fontColor: {r: 0.8156863, g: 0.99607843, b: 0.9607843, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -155,6 +156,27 @@ MonoBehaviour:
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+--- !u!114 &2468721968648024871
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2539501039617195470}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e7b9d0b768432304ab31cb812ba65383, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  palette: {fileID: 11400000, guid: c81b8d03dc22a0d43ace346d6172c8e4, type: 2}
+  UIBase: []
+  UILight: []
+  UITrim: []
+  HP: []
+  HPBg: []
+  TextPrimary:
+  - {fileID: 2539501039617195456}
+  TextSecondary: []
 --- !u!1 &2539501039849554275
 GameObject:
   m_ObjectHideFlags: 0
@@ -167,6 +189,7 @@ GameObject:
   - component: {fileID: 2539501039849554279}
   - component: {fileID: 2539501039849554278}
   - component: {fileID: 2539501039849554277}
+  - component: {fileID: 8079113153188891031}
   m_Layer: 5
   m_Name: Property Value
   m_TagString: Untagged
@@ -248,8 +271,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 16
-  m_fontSizeBase: 16
+  m_fontSize: 14
+  m_fontSizeBase: 14
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -310,6 +333,27 @@ MonoBehaviour:
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+--- !u!114 &8079113153188891031
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2539501039849554275}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e7b9d0b768432304ab31cb812ba65383, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  palette: {fileID: 11400000, guid: c81b8d03dc22a0d43ace346d6172c8e4, type: 2}
+  UIBase: []
+  UILight: []
+  UITrim: []
+  HP: []
+  HPBg: []
+  TextPrimary: []
+  TextSecondary:
+  - {fileID: 2539501039849554278}
 --- !u!1 &2539501040501279273
 GameObject:
   m_ObjectHideFlags: 0
