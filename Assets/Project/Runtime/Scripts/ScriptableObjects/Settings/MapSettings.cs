@@ -23,13 +23,13 @@ public class MapSettings : ScriptableObject
 		return true;
 	}
 	
-	public bool IsPathable(Vector2Int loc,  List<TileTravelType> types)
+	public bool IsPathable(Vector2Int loc,  List<TileTravelType> travelTypes)
 	{
 		if (!IsWithinBounds(loc)) { return false; }
 
-		foreach (TileTravelType type in types)
+		foreach (TileTravelType travelType in travelTypes)
 		{
-			if (GetTile(loc).TravelType.Contains(type))
+			if (GetTile(loc).TravelType.Contains(travelType))
 			{
 				return true;
 			}
@@ -58,6 +58,7 @@ public class MapSettings : ScriptableObject
 				break;
 			}
 		}
+
 		return randomLoc;
 	}
 }

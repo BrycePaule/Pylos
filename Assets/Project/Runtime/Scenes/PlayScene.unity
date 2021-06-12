@@ -1397,7 +1397,7 @@ MonoBehaviour:
   m_Follow: {fileID: 1685348466}
   m_Lens:
     FieldOfView: 60
-    OrthographicSize: 21
+    OrthographicSize: 10
     NearClipPlane: 0.1
     FarClipPlane: 50
     Dutch: 0
@@ -1751,7 +1751,7 @@ Camera:
   far clip plane: 50
   field of view: 60
   orthographic: 1
-  orthographic size: 21
+  orthographic size: 10
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -5696,6 +5696,8 @@ MonoBehaviour:
   GameSettings: {fileID: 11400000, guid: 4e4d342f6ff6a674ab4f03d6ff5fb20d, type: 2}
   CVCamera: {fileID: 428167016}
   TilesPerStep: 1
+  Boost: 0
+  BoostMultiplier: 5
   MoveDelay: 0.06
   ZoomLevel: 10
   MinZoomLevel: 10

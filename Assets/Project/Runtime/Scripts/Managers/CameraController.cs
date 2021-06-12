@@ -10,6 +10,7 @@ public class CameraController : MonoBehaviour
 
 	[Header("Movement")]
 	public int TilesPerStep;
+	public bool Boost;
 	public float MoveDelay;
 	private float movetimer;
 
@@ -27,12 +28,24 @@ public class CameraController : MonoBehaviour
 
 	public void Move(Vector2 move)
 	{
+		if (move == Vector2.zero) { return; }
+
 		movetimer += Time.deltaTime;
 
 		if (movetimer >= MoveDelay)
 		{
-			int dx = (int) (Mathf.RoundToInt(move.x) * TilesPerStep * (int) (ZoomLevel / 10) * GameSettings.CameraScrollSpeed);
-			int dy = (int) (Mathf.RoundToInt(move.y) * TilesPerStep * (int) (ZoomLevel / 10) * GameSettings.CameraScrollSpeed);
+			int dx, dy;
+			if (Boost)
+			{
+				dx = (int) (Mathf.RoundToInt(move.x) * TilesPerStep * (int) (ZoomLevel / 10) * GameSettings.CameraBoostScrollSpeed);
+				dy = (int) (Mathf.RoundToInt(move.y) * TilesPerStep * (int) (ZoomLevel / 10) * GameSettings.CameraBoostScrollSpeed);
+			}
+			else
+			{
+				dx = (int) (Mathf.RoundToInt(move.x) * TilesPerStep * (int) (ZoomLevel / 10) * GameSettings.CameraScrollSpeed);
+				dy = (int) (Mathf.RoundToInt(move.y) * TilesPerStep * (int) (ZoomLevel / 10) * GameSettings.CameraScrollSpeed);
+			}
+
 			transform.position += new Vector3(dx, dy, 0);
 			movetimer = 0;
 		}

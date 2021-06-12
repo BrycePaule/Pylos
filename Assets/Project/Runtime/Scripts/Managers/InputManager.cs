@@ -29,6 +29,7 @@ public class InputManager : MonoBehaviour
 	private InputAction _playerRightClick;
 	private InputAction _toggleMenu;
 	private InputAction _cameraZoom;
+	private InputAction _cameraBoost;
 	private InputAction _locationSave;
 	private InputAction _locationSnap;
 
@@ -68,7 +69,11 @@ public class InputManager : MonoBehaviour
 		_toggleMenu.performed += ctx => OnToggleMenu();
 
 		_cameraZoom = _playerControls.Camera.Zoom;
-		_cameraZoom.performed += OnCameraZoom;
+		_cameraZoom.performed += ctx => OnCameraZoom(ctx);
+
+		_cameraBoost = _playerControls.Camera.Boost;
+		_cameraBoost.started += ctx => OnCameraBoostDown(ctx);
+		_cameraBoost.canceled += ctx => OnCameraBoostUp(ctx);
 
 		_locationSave = _playerControls.HotKeys.SaveLocationMarker;
 		_locationSave.performed += ctx => OnLocationSave((int) ctx.ReadValue<float>());
@@ -100,16 +105,25 @@ public class InputManager : MonoBehaviour
 
 	private void FixedUpdate() 
 	{
-		Vector2 moveDir = _playerMovement.ReadValue<Vector2>();
-		if (moveDir == Vector2.zero) { return; }
-		cameraController.Move(moveDir);
+		cameraController.Move(_playerMovement.ReadValue<Vector2>());
 	}
 
 	// CAMERA
-	private void OnCameraZoom(InputAction.CallbackContext context)
+	private void OnCameraZoom(InputAction.CallbackContext ctx)
 	{
-		cameraController.Zoom(context.ReadValue<Vector2>().y);
+		cameraController.Zoom(ctx.ReadValue<Vector2>().y);
 	}
+
+	private void OnCameraBoostDown(InputAction.CallbackContext ctx)
+	{
+		cameraController.Boost = true;
+	}
+
+	private void OnCameraBoostUp(InputAction.CallbackContext ctx)
+	{
+		cameraController.Boost = false;
+	}
+
 
 	private void OnLocationSave(int index)
 	{
