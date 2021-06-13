@@ -13,6 +13,7 @@ public class Tooltip : MonoBehaviour
 	[SerializeField] private TMP_Text heading;
 	[SerializeField] private Image entitySprite;
 	[SerializeField] private GameObject healthBar;
+	[SerializeField] private HealthBarValues healthBarValues;
 	[SerializeField] private GameObject infoBox;
 
 	[SerializeField] private GameObject PropertyElementPrefab;
@@ -142,6 +143,8 @@ public class Tooltip : MonoBehaviour
 			healthBar.SetActive(true);
 			Health objHealth = obj.GetComponentInChildren<Health>();
 			slider.value = objHealth.CurrentHealth / objHealth.MaxHealth;
+			healthBarValues.CurrentHealth = objHealth.CurrentHealth;
+			healthBarValues.MaxHealth = objHealth.MaxHealth;
 		}
 		else
 		{

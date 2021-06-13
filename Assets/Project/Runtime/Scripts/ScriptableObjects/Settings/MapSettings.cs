@@ -5,6 +5,7 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Settings/Map Settings")]
 public class MapSettings : ScriptableObject
 {
+	public float Seed;
 	public int MapSize;
 
 	[Header("Noise Generation")]

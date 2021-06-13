@@ -28,14 +28,14 @@ public class MapGenerator : MonoBehaviour
 
 	private void Awake()
 	{
-		MapSettings.Tiles = new GroundTileData[MapSettings.MapSize, MapSettings.MapSize];
-		float seed = Random.Range(0, 1f);
+		float seed = MapSettings.Seed == 0f ? Random.Range(0f, 1f) : MapSettings.Seed;
+		print("Seed: " + seed);
 
+		MapSettings.Tiles = new GroundTileData[MapSettings.MapSize, MapSettings.MapSize];
 		Renderer renderer = GetComponent<Renderer>();
 		renderer.material.mainTexture = GenerateTexture(seed);
 
 		SetTileMap(GenerateTexture(seed));
-		print("Seed: " + seed);
 	}
 
 	public Texture2D GenerateTexture(float seed)
@@ -105,7 +105,7 @@ public class MapGenerator : MonoBehaviour
 					}
 					else if (RandomChance.Roll(MapSettings.ShrubSpawnPercent))
 					{
-						GameObject shrub = Instantiate(shrubPrefabs[Random.Range(0, shrubPrefabs.Count - 1)], new Vector3(x + 0.5f, y + 0.5f, 0), Quaternion.identity, shrubContainer.transform);
+						GameObject shrub = Instantiate(shrubPrefabs[Random.Range(0, shrubPrefabs.Count)], new Vector3(x + 0.5f, y + 0.5f, 0), Quaternion.identity, shrubContainer.transform);
 						shrub.name = "Shrub";
 						shrub.GetComponent<SpriteRenderer>().flipX = RandomChance.Roll(50) ? true : false;
 						tileData.ContainedObjects.Add(shrub);
