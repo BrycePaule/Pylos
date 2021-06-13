@@ -7,14 +7,9 @@ public class Menu : MonoBehaviour
 	public SettingsInjecter SettingsInjecter;
 	public PlayerSelections PlayerSelections;
 
+	[SerializeField] private CameraController CameraController;
 	[SerializeField] private Canvas UICanvas;
-
 	[SerializeField] private GameObject npcContainer;
-	[SerializeField] private GameObject CameraController;
-	[SerializeField] private Cinemachine.CinemachineVirtualCamera DefaultCamera;
-
-	private bool cameraObjectFollow;
-	private GameObject following;
 
 	public int yUp;
 	public int yDown;
@@ -93,20 +88,14 @@ public class Menu : MonoBehaviour
 
 	public void ToggleCameraFollow()
 	{
-		if (cameraObjectFollow)
+		if (PlayerSelections.SelectedObjects.Count > 0)
 		{
-			if (following == null) 
-			{ 
-				following = null;
-				return; 
-			}
-
-			CameraController.transform.position = following.transform.position;
-			following = null;
+			CameraController.SetCameraFollow(PlayerSelections.SelectedObjects[0]);
 		}
-
-		cameraObjectFollow = !cameraObjectFollow;
-		UpdateCameraFollow();
+		else
+		{
+			CameraController.SetCameraFollow(null);
+		}
 	}
 	
 	private void SearchFor(ItemID id)
@@ -122,26 +111,5 @@ public class Menu : MonoBehaviour
 	public void SearchForWood() => SearchFor(ItemID.Wood); 
 	public void SearchForStone() => SearchFor(ItemID.Stone); 
 	public void CancelSearch() => SearchFor(ItemID.Item); 
-
-
-	// CAMERA
-
-	private void UpdateCameraFollow()
-	{
-		if (PlayerSelections.SelectedObjects.Count == 0)
-		{
-			cameraObjectFollow = false;
-		}
-
-		if (cameraObjectFollow)
-		{
-			following = PlayerSelections.SelectedObjects[0];
-			DefaultCamera.m_Follow = following.transform;
-		}
-		else
-		{
-			DefaultCamera.m_Follow = CameraController.transform;
-		}
-	}
 
 }

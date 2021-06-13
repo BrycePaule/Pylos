@@ -57,14 +57,6 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
-                },
-                {
-                    ""name"": ""ToggleMenu"",
-                    ""type"": ""Button"",
-                    ""id"": ""04e80a41-b856-410f-9f38-6422f9c3a332"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -164,17 +156,6 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""LeftClick"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""1a4b0cee-315c-40c9-b4fe-b5e8ee37e197"",
-                    ""path"": ""<Keyboard>/escape"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""ToggleMenu"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -334,6 +315,22 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                     ""id"": ""ad238385-5d94-4981-ac56-dc2da15e4f25"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": ""Scale"",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""ToggleMenu"",
+                    ""type"": ""Button"",
+                    ""id"": ""daef6845-65ae-4cb2-a368-8ca003152c5c"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""ToggleBuildMenu"",
+                    ""type"": ""Button"",
+                    ""id"": ""6c6b6ed6-1132-4f23-9765-ae859c669f68"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
                     ""interactions"": """"
                 }
             ],
@@ -931,6 +928,28 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                     ""action"": ""Snap To Location Marker"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c02d827f-8ab3-4977-997b-e59ba51798b6"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ToggleMenu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""49405b11-31a0-4465-bab6-100370583143"",
+                    ""path"": ""<Keyboard>/b"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ToggleBuildMenu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -944,7 +963,6 @@ public class @PlayerControls : IInputActionCollection, IDisposable
         m_Player_LeftClick = m_Player.FindAction("LeftClick", throwIfNotFound: true);
         m_Player_LeftClickHold = m_Player.FindAction("LeftClickHold", throwIfNotFound: true);
         m_Player_RightClick = m_Player.FindAction("RightClick", throwIfNotFound: true);
-        m_Player_ToggleMenu = m_Player.FindAction("ToggleMenu", throwIfNotFound: true);
         // Camera
         m_Camera = asset.FindActionMap("Camera", throwIfNotFound: true);
         m_Camera_Movement = m_Camera.FindAction("Movement", throwIfNotFound: true);
@@ -957,6 +975,8 @@ public class @PlayerControls : IInputActionCollection, IDisposable
         m_HotKeys = asset.FindActionMap("HotKeys", throwIfNotFound: true);
         m_HotKeys_SaveLocationMarker = m_HotKeys.FindAction("Save Location Marker", throwIfNotFound: true);
         m_HotKeys_SnapToLocationMarker = m_HotKeys.FindAction("Snap To Location Marker", throwIfNotFound: true);
+        m_HotKeys_ToggleMenu = m_HotKeys.FindAction("ToggleMenu", throwIfNotFound: true);
+        m_HotKeys_ToggleBuildMenu = m_HotKeys.FindAction("ToggleBuildMenu", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -1011,7 +1031,6 @@ public class @PlayerControls : IInputActionCollection, IDisposable
     private readonly InputAction m_Player_LeftClick;
     private readonly InputAction m_Player_LeftClickHold;
     private readonly InputAction m_Player_RightClick;
-    private readonly InputAction m_Player_ToggleMenu;
     public struct PlayerActions
     {
         private @PlayerControls m_Wrapper;
@@ -1021,7 +1040,6 @@ public class @PlayerControls : IInputActionCollection, IDisposable
         public InputAction @LeftClick => m_Wrapper.m_Player_LeftClick;
         public InputAction @LeftClickHold => m_Wrapper.m_Player_LeftClickHold;
         public InputAction @RightClick => m_Wrapper.m_Player_RightClick;
-        public InputAction @ToggleMenu => m_Wrapper.m_Player_ToggleMenu;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1046,9 +1064,6 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                 @RightClick.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnRightClick;
                 @RightClick.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnRightClick;
                 @RightClick.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnRightClick;
-                @ToggleMenu.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnToggleMenu;
-                @ToggleMenu.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnToggleMenu;
-                @ToggleMenu.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnToggleMenu;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -1068,9 +1083,6 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                 @RightClick.started += instance.OnRightClick;
                 @RightClick.performed += instance.OnRightClick;
                 @RightClick.canceled += instance.OnRightClick;
-                @ToggleMenu.started += instance.OnToggleMenu;
-                @ToggleMenu.performed += instance.OnToggleMenu;
-                @ToggleMenu.canceled += instance.OnToggleMenu;
             }
         }
     }
@@ -1163,12 +1175,16 @@ public class @PlayerControls : IInputActionCollection, IDisposable
     private IHotKeysActions m_HotKeysActionsCallbackInterface;
     private readonly InputAction m_HotKeys_SaveLocationMarker;
     private readonly InputAction m_HotKeys_SnapToLocationMarker;
+    private readonly InputAction m_HotKeys_ToggleMenu;
+    private readonly InputAction m_HotKeys_ToggleBuildMenu;
     public struct HotKeysActions
     {
         private @PlayerControls m_Wrapper;
         public HotKeysActions(@PlayerControls wrapper) { m_Wrapper = wrapper; }
         public InputAction @SaveLocationMarker => m_Wrapper.m_HotKeys_SaveLocationMarker;
         public InputAction @SnapToLocationMarker => m_Wrapper.m_HotKeys_SnapToLocationMarker;
+        public InputAction @ToggleMenu => m_Wrapper.m_HotKeys_ToggleMenu;
+        public InputAction @ToggleBuildMenu => m_Wrapper.m_HotKeys_ToggleBuildMenu;
         public InputActionMap Get() { return m_Wrapper.m_HotKeys; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1184,6 +1200,12 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                 @SnapToLocationMarker.started -= m_Wrapper.m_HotKeysActionsCallbackInterface.OnSnapToLocationMarker;
                 @SnapToLocationMarker.performed -= m_Wrapper.m_HotKeysActionsCallbackInterface.OnSnapToLocationMarker;
                 @SnapToLocationMarker.canceled -= m_Wrapper.m_HotKeysActionsCallbackInterface.OnSnapToLocationMarker;
+                @ToggleMenu.started -= m_Wrapper.m_HotKeysActionsCallbackInterface.OnToggleMenu;
+                @ToggleMenu.performed -= m_Wrapper.m_HotKeysActionsCallbackInterface.OnToggleMenu;
+                @ToggleMenu.canceled -= m_Wrapper.m_HotKeysActionsCallbackInterface.OnToggleMenu;
+                @ToggleBuildMenu.started -= m_Wrapper.m_HotKeysActionsCallbackInterface.OnToggleBuildMenu;
+                @ToggleBuildMenu.performed -= m_Wrapper.m_HotKeysActionsCallbackInterface.OnToggleBuildMenu;
+                @ToggleBuildMenu.canceled -= m_Wrapper.m_HotKeysActionsCallbackInterface.OnToggleBuildMenu;
             }
             m_Wrapper.m_HotKeysActionsCallbackInterface = instance;
             if (instance != null)
@@ -1194,6 +1216,12 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                 @SnapToLocationMarker.started += instance.OnSnapToLocationMarker;
                 @SnapToLocationMarker.performed += instance.OnSnapToLocationMarker;
                 @SnapToLocationMarker.canceled += instance.OnSnapToLocationMarker;
+                @ToggleMenu.started += instance.OnToggleMenu;
+                @ToggleMenu.performed += instance.OnToggleMenu;
+                @ToggleMenu.canceled += instance.OnToggleMenu;
+                @ToggleBuildMenu.started += instance.OnToggleBuildMenu;
+                @ToggleBuildMenu.performed += instance.OnToggleBuildMenu;
+                @ToggleBuildMenu.canceled += instance.OnToggleBuildMenu;
             }
         }
     }
@@ -1205,7 +1233,6 @@ public class @PlayerControls : IInputActionCollection, IDisposable
         void OnLeftClick(InputAction.CallbackContext context);
         void OnLeftClickHold(InputAction.CallbackContext context);
         void OnRightClick(InputAction.CallbackContext context);
-        void OnToggleMenu(InputAction.CallbackContext context);
     }
     public interface ICameraActions
     {
@@ -1221,5 +1248,7 @@ public class @PlayerControls : IInputActionCollection, IDisposable
     {
         void OnSaveLocationMarker(InputAction.CallbackContext context);
         void OnSnapToLocationMarker(InputAction.CallbackContext context);
+        void OnToggleMenu(InputAction.CallbackContext context);
+        void OnToggleBuildMenu(InputAction.CallbackContext context);
     }
 }

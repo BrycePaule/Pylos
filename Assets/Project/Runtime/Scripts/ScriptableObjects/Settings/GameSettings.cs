@@ -9,6 +9,7 @@ public class GameSettings : ScriptableObject
 	public bool ShowPaths;
 	public bool ShowDetectionRadius;
 	public bool MenuIsOpen;
+	public bool BuildMenuIsOpen;
 
 	[Header("Camera Settings")]
 	public float CameraScrollSpeed;

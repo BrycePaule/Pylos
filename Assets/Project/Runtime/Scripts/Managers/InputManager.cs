@@ -22,6 +22,7 @@ public class InputManager : MonoBehaviour
 	[SerializeField] private Tilemap tilemap;
 	[SerializeField] private Tooltip tooltip;
 	[SerializeField] private Menu menu;
+	[SerializeField] private BuildMenu buildMenu;
 	[SerializeField] private RectTransform selectionBox;
 	[SerializeField] private GameObject tileCursor;
 	[SerializeField] private LayerMask selectable;
@@ -31,6 +32,7 @@ public class InputManager : MonoBehaviour
 	private InputAction _playerLeftClickHold;
 	private InputAction _playerRightClick;
 	private InputAction _toggleMenu;
+	private InputAction _toggleBuildMenu;
 	private InputAction _cameraZoom;
 	private InputAction _cameraBoost;
 	private InputAction _locationSave;
@@ -75,15 +77,18 @@ public class InputManager : MonoBehaviour
 		_playerRightClick = _playerControls.Player.RightClick;
 		_playerRightClick.performed += ctx => OnRightClick(Mouse.current.position.ReadValue(), ctx);
 
-		_toggleMenu = _playerControls.Player.ToggleMenu;
-		_toggleMenu.performed += ctx => OnToggleMenu();
-
 		_cameraZoom = _playerControls.Camera.Zoom;
 		_cameraZoom.performed += ctx => OnCameraZoom(ctx);
 
 		_cameraBoost = _playerControls.Camera.Boost;
 		_cameraBoost.started += ctx => OnCameraBoostDown(ctx);
 		_cameraBoost.canceled += ctx => OnCameraBoostUp(ctx);
+
+		_toggleMenu = _playerControls.HotKeys.ToggleMenu;
+		_toggleMenu.performed += ctx => OnToggleMenu();
+
+		_toggleBuildMenu = _playerControls.HotKeys.ToggleBuildMenu;
+		_toggleBuildMenu.performed += ctx => OnToggleBuildMenu();
 
 		_locationSave = _playerControls.HotKeys.SaveLocationMarker;
 		_locationSave.performed += ctx => OnLocationSave((int) ctx.ReadValue<float>());
@@ -292,5 +297,9 @@ public class InputManager : MonoBehaviour
 		menu.ToggleMenu();
 	}
 
+	private void OnToggleBuildMenu()
+	{
+		buildMenu.ToggleBuildMenu();
+	}
 
 }

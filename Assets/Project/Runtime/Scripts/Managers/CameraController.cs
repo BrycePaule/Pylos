@@ -11,13 +11,14 @@ public class CameraController : MonoBehaviour
 	public int TilesPerStep;
 	public bool Boost;
 	public float MoveDelay;
-	private float movetimer;
 
 	[Header("Zoom")]
 	public int ZoomLevel;
 	[SerializeField] private int MinZoomLevel;
 	[SerializeField] private int MaxZoomLevel;
 	[SerializeField] private int ZoomStep;
+
+	private float movetimer;
 
 	private void Start()
 	{
@@ -27,9 +28,11 @@ public class CameraController : MonoBehaviour
 
 	public void Move(Vector2 move)
 	{
+		movetimer += Time.deltaTime;
+
 		if (move == Vector2.zero) { return; }
 
-		movetimer += Time.deltaTime;
+		SetCameraFollow(null);
 
 		if (movetimer >= MoveDelay)
 		{
@@ -59,5 +62,18 @@ public class CameraController : MonoBehaviour
 	{
 		ZoomLevel = (int) Mathf.Clamp(ZoomLevel + (-Mathf.Sign(value) * ZoomStep), MinZoomLevel, MaxZoomLevel);
 		CVCamera.m_Lens.OrthographicSize = ZoomLevel;
+	}
+
+	public void SetCameraFollow(GameObject obj)
+	{
+		if (obj == null)
+		{
+			transform.position = CVCamera.m_Follow.position;
+			CVCamera.m_Follow = transform;
+		}
+		else
+		{
+			CVCamera.m_Follow = obj.transform;
+		}
 	}
 }

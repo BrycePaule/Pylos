@@ -44,14 +44,6 @@
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
-                },
-                {
-                    "name": "ToggleMenu",
-                    "type": "Button",
-                    "id": "04e80a41-b856-410f-9f38-6422f9c3a332",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": ""
                 }
             ],
             "bindings": [
@@ -151,17 +143,6 @@
                     "processors": "",
                     "groups": "",
                     "action": "LeftClick",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "1a4b0cee-315c-40c9-b4fe-b5e8ee37e197",
-                    "path": "<Keyboard>/escape",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "ToggleMenu",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
@@ -321,6 +302,22 @@
                     "id": "ad238385-5d94-4981-ac56-dc2da15e4f25",
                     "expectedControlType": "Button",
                     "processors": "Scale",
+                    "interactions": ""
+                },
+                {
+                    "name": "ToggleMenu",
+                    "type": "Button",
+                    "id": "daef6845-65ae-4cb2-a368-8ca003152c5c",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "ToggleBuildMenu",
+                    "type": "Button",
+                    "id": "6c6b6ed6-1132-4f23-9765-ae859c669f68",
+                    "expectedControlType": "Button",
+                    "processors": "",
                     "interactions": ""
                 }
             ],
@@ -918,6 +915,28 @@
                     "action": "Snap To Location Marker",
                     "isComposite": false,
                     "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "c02d827f-8ab3-4977-997b-e59ba51798b6",
+                    "path": "<Keyboard>/escape",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ToggleMenu",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "49405b11-31a0-4465-bab6-100370583143",
+                    "path": "<Keyboard>/b",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ToggleBuildMenu",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         }
