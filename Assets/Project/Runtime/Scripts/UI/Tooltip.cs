@@ -40,17 +40,17 @@ public class Tooltip : MonoBehaviour
 		DisableTooltip();
 	}
 
-	public void FixedUpdate()
+	public void Update()
 	{
 		if (PlayerSelections.SelectedObjects.Count > 0 )
 		{
-			UpdateTooltipDisplay();
 			EnableTooltip();
+			UpdateTooltipDisplay();
 		}
 		else if (PlayerSelections.HoveredObjects.Count > 0)
 		{
-			UpdateTooltipDisplay();
 			EnableTooltip();
+			UpdateTooltipDisplay();
 		}
 		else
 		{
@@ -69,6 +69,12 @@ public class Tooltip : MonoBehaviour
 		else
 		{
 			obj = PlayerSelections.HoveredObjects[0];
+		}
+
+		if (obj == null)
+		{
+			DisableTooltip();
+			return; 
 		}
 
 		UpdateHeader(obj);

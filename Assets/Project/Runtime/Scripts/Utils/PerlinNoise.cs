@@ -6,7 +6,6 @@ public class PerlinNoise : MonoBehaviour
 {
 	public MapSettings MapSettings;
 
-    [Range(0, 1f)]
     public float heightCutoff = 0.5f;
 
     private void FixedUpdate()

@@ -67,7 +67,6 @@ public class Movement : NPCComponentBase
 	private void FixedUpdate() 
 	{
 		Move();
-		searchTimer += Time.deltaTime;
 	}
 
 	private void Move()
@@ -139,6 +138,8 @@ public class Movement : NPCComponentBase
 
 	private void MoveSearch()
 	{
+		searchTimer += Time.deltaTime;
+
 		if (searchingFor == ItemID.Item) { NPCMovementType = MovementType.Meander; }
 
 		if (searchTimer >= SearchDelay && FoundObject == null)
@@ -187,11 +188,11 @@ public class Movement : NPCComponentBase
 
 		TargetLoc = npcAggro.AggroList.Highest.GetComponentInChildren<Movement>().TileLoc;
 
-		npcCombat.Attack(npcAggro.AggroList.Highest);
+		bool attacked = npcCombat.Attack(npcAggro.AggroList.Highest);
 		
-		if (moveTimer >= MoveDelay)
+		if (moveTimer >= MoveDelay && !attacked)
 		{
-			List<Node> path = FindPathToTarget(maxAttempts: 5);
+			List<Node> path = FindPathToTarget(maxAttempts: 3);
 			TakeStepAlongPath(path);
 		}
 	}

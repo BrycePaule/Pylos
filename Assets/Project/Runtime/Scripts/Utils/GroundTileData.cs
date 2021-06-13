@@ -6,16 +6,12 @@ using UnityEditor;
 
 public class GroundTileData : TileBase
 {
+	public ColourPalette ColourPalette;
+
     public Tile Tile;
-    public List<GameObject> ContainedObjects;
     public GroundType GroundType;
 	public List<TileTravelType> TravelType;
-
-	public Color WaterColor;
-	public Color SandColor;
-	public Color DirtColor;
-	public Color GrassColor;
-	public Color StoneColor;
+    public List<GameObject> ContainedObjects;
 
     [MenuItem("Assets/Create/Tiles/GroundTileData")]
     public static void CreateGroundTile(MenuCommand menuCommand)
@@ -31,15 +27,15 @@ public class GroundTileData : TileBase
 		switch (type)
 		{
 			case GroundType.Water:
-				return WaterColor;
+				return ColourPalette.Water;
 			case GroundType.Sand:
-				return SandColor;
+				return ColourPalette.Sand;
 			case GroundType.Dirt:
-				return DirtColor;
+				return ColourPalette.Dirt;
 			case GroundType.Grass:
-				return GrassColor;
+				return ColourPalette.Grass;
 			default:
-				return StoneColor;
+				return ColourPalette.Stone;
 		}
 	}
 }

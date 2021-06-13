@@ -23,4 +23,6 @@ MonoBehaviour:
   GrassMaxHeight: 0.8
   TreeSpawnPercent: 3
   ShrubSpawnPercent: 7
-  StoneSpawnPercent: 8
+  SandSpotSpawnPercent: 5
+  DirtSpotSpawnPercent: 15
+  StoneSpawnPercent: 15

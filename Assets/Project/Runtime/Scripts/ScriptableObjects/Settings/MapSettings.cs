@@ -22,6 +22,8 @@ public class MapSettings : ScriptableObject
 	[Header("Object Spawning")]
 	[Range(0, 100)] public int TreeSpawnPercent; 
 	[Range(0, 100)] public int ShrubSpawnPercent; 
+	[Range(0, 100)] public int SandSpotSpawnPercent; 
+	[Range(0, 100)] public int DirtSpotSpawnPercent; 
 	[Range(0, 100)] public int StoneSpawnPercent; 
 
 	public GroundTileData[,] Tiles;

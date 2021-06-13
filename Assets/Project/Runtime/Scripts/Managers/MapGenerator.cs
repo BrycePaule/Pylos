@@ -7,6 +7,7 @@ public class MapGenerator : MonoBehaviour
 {
 	public MapSettings MapSettings;
 
+	[Header("Colour Shifts")]
 	[Range(0, 1f)] public float TileHueChangeStrength;
 	[Range(0, 1f)] public float TileSaturationChangeStrength;
 	[Range(0, 1f)] public float TileVibranceChangeStrength;
@@ -15,12 +16,16 @@ public class MapGenerator : MonoBehaviour
 	[SerializeField] private Tilemap tilemap;
 	[SerializeField] private GameObject treeContainer;
 	[SerializeField] private GameObject shrubContainer;
+	[SerializeField] private GameObject sandSpotContainer;
+	[SerializeField] private GameObject dirtSpotContainer;
 	[SerializeField] private GameObject stoneContainer;
 
 	[Header("Prefabs")]
 	[SerializeField] private GameObject treePrefab;
 	[SerializeField] private GameObject stonePrefab;
 	[SerializeField] private List<GameObject> shrubPrefabs;
+	[SerializeField] private List<GameObject> sandSpotsPrefabs;
+	[SerializeField] private List<GameObject> dirtSpotsPrefabs;
 
 	[Header("Tiles")]
 	[SerializeField] private Tile baseTile;
@@ -35,10 +40,10 @@ public class MapGenerator : MonoBehaviour
 		Renderer renderer = GetComponent<Renderer>();
 		renderer.material.mainTexture = GenerateTexture(seed);
 
-		SetTileMap(GenerateTexture(seed));
+		GenerateTileMap(GenerateTexture(seed));
 	}
 
-	public Texture2D GenerateTexture(float seed)
+	private Texture2D GenerateTexture(float seed)
 	{
 		Texture2D texture = new Texture2D(MapSettings.MapSize, MapSettings.MapSize);
 
@@ -53,14 +58,14 @@ public class MapGenerator : MonoBehaviour
 				
 				Color colour = new Color(sample, sample, sample);
 				texture.SetPixel(x, y, colour);    
-			}   
+			}
 		}
 
 		texture.Apply();
 		return texture;
 	}
 
-	private void SetTileMap(Texture2D noiseMap)
+	private void GenerateTileMap(Texture2D noiseMap)
 	{
 		for (int y = 0; y < MapSettings.MapSize; y++)
 		{
@@ -81,11 +86,21 @@ public class MapGenerator : MonoBehaviour
 				{
 					tileData = SetTileData(tileData, height);
 					tilemap.SetTile(pos, tileData.Tile);
+
+					if (RandomChance.Roll(MapSettings.SandSpotSpawnPercent))
+					{
+						InstantiateObject(sandSpotsPrefabs[Random.Range(0, sandSpotsPrefabs.Count)], pos, tileData, sandSpotContainer);
+					}
 				}
 				else if (height > MapSettings.SandMaxHeight && height <=  MapSettings.DirtMaxHeight)
 				{
 					tileData = SetTileData(tileData, height);
 					tilemap.SetTile(pos, tileData.Tile);
+
+					if (RandomChance.Roll(MapSettings.DirtSpotSpawnPercent))
+					{
+						InstantiateObject(dirtSpotsPrefabs[Random.Range(0, dirtSpotsPrefabs.Count)], pos, tileData, dirtSpotContainer);
+					}
 				}
 				else if (height > MapSettings.DirtMaxHeight && height <= MapSettings.GrassMaxHeight)
 				{
@@ -94,21 +109,15 @@ public class MapGenerator : MonoBehaviour
 
 					if (RandomChance.Roll(MapSettings.TreeSpawnPercent))
 					{
-						GameObject tree = Instantiate(treePrefab, new Vector3(x + 0.5f, y + 0.5f, 0), Quaternion.identity, treeContainer.transform);
-						tree.name = treePrefab.name;
-						tree.GetComponent<SpriteRenderer>().flipX = RandomChance.Roll(50) ? true : false;
-						tileData.TravelType.Remove(TileTravelType.Walkable);
-						tileData.ContainedObjects.Add(tree);
+						GameObject tree = InstantiateObject(treePrefab, pos, tileData, treeContainer);
 
+						tileData.TravelType.Remove(TileTravelType.Walkable);
 						tree.GetComponent<Container>().TileLoc = new Vector2Int(pos.x, pos.y);
 						tree.GetComponent<ExhaustableContainer>().Put(ItemID.Wood, 10);
 					}
 					else if (RandomChance.Roll(MapSettings.ShrubSpawnPercent))
 					{
-						GameObject shrub = Instantiate(shrubPrefabs[Random.Range(0, shrubPrefabs.Count)], new Vector3(x + 0.5f, y + 0.5f, 0), Quaternion.identity, shrubContainer.transform);
-						shrub.name = "Shrub";
-						shrub.GetComponent<SpriteRenderer>().flipX = RandomChance.Roll(50) ? true : false;
-						tileData.ContainedObjects.Add(shrub);
+						InstantiateObject(shrubPrefabs[Random.Range(0, shrubPrefabs.Count)], pos, tileData, shrubContainer);
 					}
 				}
 				else if (height > MapSettings.GrassMaxHeight)
@@ -118,11 +127,7 @@ public class MapGenerator : MonoBehaviour
 
 					if (RandomChance.Roll(MapSettings.StoneSpawnPercent))
 					{
-						GameObject stone = Instantiate(stonePrefab, new Vector3(x + 0.5f, y + 0.5f, 0), Quaternion.identity, stoneContainer.transform);
-						stone.name = stonePrefab.name;
-						stone.GetComponent<SpriteRenderer>().flipX = RandomChance.Roll(50) ? true : false;
-						tileData.TravelType.Remove(TileTravelType.Walkable);
-						tileData.ContainedObjects.Add(stone);
+						GameObject stone = InstantiateObject(stonePrefab, pos, tileData, stoneContainer);
 
 						stone.GetComponent<Container>().TileLoc = new Vector2Int(pos.x, pos.y);
 						stone.GetComponent<ExhaustableContainer>().Put(ItemID.Stone, 10);
@@ -143,14 +148,19 @@ public class MapGenerator : MonoBehaviour
 		return tileData;
 	}
 
-	public float ScaleValue(float OldMin, float OldMax, float NewMin, float NewMax, float OldValue)
+	private GameObject InstantiateObject(GameObject prefab, Vector3 pos, GroundTileData tileData, GameObject container)
 	{
-		float OldRange = (OldMax - OldMin);
-		float NewRange = (NewMax - NewMin);
-		return (((OldValue - OldMin) * NewRange) / OldRange) + NewMin;
+		GameObject obj = Instantiate(prefab, new Vector3(pos.x + 0.5f, pos.y + 0.5f, 0), Quaternion.identity, container.transform);
+
+		obj.name = prefab.name;
+		obj.GetComponent<SpriteRenderer>().flipX = RandomChance.Roll(50) ? true : false;
+
+		tileData.ContainedObjects.Add(obj);
+
+		return obj;
 	}
 
-	
+	// UTILS
 	private GroundType GetTileByHeight(float height)
 	{
 		if (height <= MapSettings.WaterMaxHeight)
@@ -163,5 +173,12 @@ public class MapGenerator : MonoBehaviour
 			return GroundType.Grass;
 		else
 			return GroundType.Stone;
+	}
+
+	public float ScaleValue(float OldMin, float OldMax, float NewMin, float NewMax, float OldValue)
+	{
+		float OldRange = (OldMax - OldMin);
+		float NewRange = (NewMax - NewMin);
+		return (((OldValue - OldMin) * NewRange) / OldRange) + NewMin;
 	}
 }

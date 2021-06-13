@@ -12,12 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ebd69e160132f64e937705735ab54de, type: 3}
   m_Name: GroundTileData
   m_EditorClassIdentifier: 
+  ColourPalette: {fileID: 11400000, guid: c81b8d03dc22a0d43ace346d6172c8e4, type: 2}
   Tile: {fileID: 11400000, guid: 2f14ec6332844c24fb5beff1f2710ccc, type: 2}
-  ContainedObjects: []
   GroundType: 3
   TravelType: 
-  WaterColor: {r: 0.25490198, g: 0.6509804, b: 0.8588236, a: 1}
-  SandColor: {r: 0.87843144, g: 0.8862746, b: 0.7490196, a: 1}
-  DirtColor: {r: 0.69803923, g: 0.5803922, b: 0.45098042, a: 1}
-  GrassColor: {r: 0.4156863, g: 0.59607846, b: 0.29803923, a: 1}
-  StoneColor: {r: 0.42352945, g: 0.38431376, b: 0.3529412, a: 1}
+  ContainedObjects: []
