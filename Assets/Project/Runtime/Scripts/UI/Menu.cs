@@ -31,35 +31,35 @@ public class Menu : MonoBehaviour
 
 		if (SettingsInjecter.GameSettings.MenuIsOpen)
 		{
-			TweenUpMenu();
+			TweenOutMenu();
 		}
 		else
 		{
-			TweenDownMenu();
+			TweenInMenu();
 		}
 	}
 
-	private void TweenDownMenu()
+	private void TweenInMenu()
 	{
 		tweening = true;
 		SettingsInjecter.GameSettings.MenuIsOpen = true;
 		gameObject.SetActive(true);
-		LeanTween.moveLocalY(gameObject, yDown, easeDuration).setEase(easeType).setOnComplete(FinishDownTween);
+		LeanTween.moveLocalY(gameObject, yDown, easeDuration).setEase(easeType).setOnComplete(FinishInTween);
 	}
 
-	private void TweenUpMenu()
+	public void TweenOutMenu()
 	{
 		tweening = true;
-		LeanTween.moveLocalY(gameObject, yUp, easeDuration).setEase(easeType).setOnComplete(FinishUpTween);
+		LeanTween.moveLocalY(gameObject, yUp, easeDuration).setEase(easeType).setOnComplete(FinishOutTween);
 		SettingsInjecter.GameSettings.MenuIsOpen = false;
 	}
 
-	private void FinishDownTween()
+	private void FinishInTween()
 	{
 		tweening = false;
 	}
 
-	private void FinishUpTween()
+	private void FinishOutTween()
 	{
 		tweening = false;
 		gameObject.SetActive(false);

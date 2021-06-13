@@ -42,7 +42,7 @@ public class BuildMenu : MonoBehaviour
 		LeanTween.moveLocalX(gameObject, xIn, easeDuration).setEase(easeType).setOnComplete(FinishInTween);
 	}
 
-	private void TweenOutMenu()
+	public void TweenOutMenu()
 	{
 		tweening = true;
 		LeanTween.moveLocalX(gameObject, xOut, easeDuration).setEase(easeType).setOnComplete(FinishOutTween);

@@ -2170,7 +2170,7 @@ MonoBehaviour:
   m_Follow: {fileID: 1685348466}
   m_Lens:
     FieldOfView: 60
-    OrthographicSize: 16
+    OrthographicSize: 19
     NearClipPlane: 0.1
     FarClipPlane: 50
     Dutch: 0
@@ -3392,7 +3392,7 @@ Camera:
   far clip plane: 50
   field of view: 60
   orthographic: 1
-  orthographic size: 16
+  orthographic size: 19
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -3863,7 +3863,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: f972c37ef7f332d4586d6b3ef3ce37b9, type: 2}
   - {fileID: 11400000, guid: c0610d3886569ca41ac8b56168ea5ed6, type: 2}
   - {fileID: 11400000, guid: 00193ffd478870848903c8d6fcd6900e, type: 2}
-  OVERRIDE_SPAWN_COUNTS: 1
+  OVERRIDE_SPAWN_COUNTS: 0
   NPCTYPE_OVERRIDE: 1
   SPAWN_CAP_OVERRIDE: 0
   OVERRIDE_SPEED: 0

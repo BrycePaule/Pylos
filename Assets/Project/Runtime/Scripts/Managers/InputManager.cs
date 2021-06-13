@@ -169,6 +169,7 @@ public class InputManager : MonoBehaviour
 			else
 			{
 				PlayerSelections.DeselectAll();
+				TurnOffMenus();
 			}
 		}
 	}
@@ -300,6 +301,12 @@ public class InputManager : MonoBehaviour
 	private void OnToggleBuildMenu()
 	{
 		buildMenu.ToggleBuildMenu();
+	}
+
+	private void TurnOffMenus()
+	{
+		if (SettingsInjecter.GameSettings.MenuIsOpen) { menu.TweenOutMenu(); }
+		if (SettingsInjecter.GameSettings.BuildMenuIsOpen) { buildMenu.TweenOutMenu(); }
 	}
 
 }
