@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Menu : MonoBehaviour
 {
-	public GameSettings GameSettings;
+	public SettingsInjecter SettingsInjecter;
 	public PlayerSelections PlayerSelections;
 
 	[SerializeField] private Canvas UICanvas;
@@ -25,7 +25,7 @@ public class Menu : MonoBehaviour
 
 	private void Awake() 
 	{
-		GameSettings.MenuIsOpen = false;
+		SettingsInjecter.GameSettings.MenuIsOpen = false;
 	}
 
 	// MENU ANIMATION
@@ -34,7 +34,7 @@ public class Menu : MonoBehaviour
 	{
 		if (tweening) { return; }
 
-		if (GameSettings.MenuIsOpen)
+		if (SettingsInjecter.GameSettings.MenuIsOpen)
 		{
 			TweenUpMenu();
 		}
@@ -47,7 +47,7 @@ public class Menu : MonoBehaviour
 	private void TweenDownMenu()
 	{
 		tweening = true;
-		GameSettings.MenuIsOpen = true;
+		SettingsInjecter.GameSettings.MenuIsOpen = true;
 		gameObject.SetActive(true);
 		LeanTween.moveLocalY(gameObject, yDown, easeDuration).setEase(easeType).setOnComplete(FinishDownTween);
 	}
@@ -56,7 +56,7 @@ public class Menu : MonoBehaviour
 	{
 		tweening = true;
 		LeanTween.moveLocalY(gameObject, yUp, easeDuration).setEase(easeType).setOnComplete(FinishUpTween);
-		GameSettings.MenuIsOpen = false;
+		SettingsInjecter.GameSettings.MenuIsOpen = false;
 	}
 
 	private void FinishDownTween()
@@ -72,8 +72,8 @@ public class Menu : MonoBehaviour
 
 	// BUTTON CALLBACKS
 
-	public void TogglePaths() => GameSettings.ShowPaths = !GameSettings.ShowPaths;
-	public void ToggleDetectionRadiusWireframes() => GameSettings.ShowDetectionRadius = !GameSettings.ShowDetectionRadius;
+	public void TogglePaths() => SettingsInjecter.GameSettings.ShowPaths = !SettingsInjecter.GameSettings.ShowPaths;
+	public void ToggleDetectionRadiusWireframes() => SettingsInjecter.GameSettings.ShowDetectionRadius = !SettingsInjecter.GameSettings.ShowDetectionRadius;
 
 	public void HealthDown()
 	{

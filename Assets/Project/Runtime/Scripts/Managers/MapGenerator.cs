@@ -23,9 +23,15 @@ public class MapGenerator : MonoBehaviour
 	[Header("Prefabs")]
 	[SerializeField] private GameObject treePrefab;
 	[SerializeField] private GameObject stonePrefab;
-	[SerializeField] private List<GameObject> shrubPrefabs;
-	[SerializeField] private List<GameObject> sandSpotsPrefabs;
-	[SerializeField] private List<GameObject> dirtSpotsPrefabs;
+	[SerializeField] private GameObject clutterPrefab;
+
+	[Header("Sprites")]
+	[SerializeField] private List<Sprite> treeSprites;
+	[SerializeField] private List<Sprite> stoneSprites;
+	[SerializeField] private List<Sprite> shrubSprites;
+	[SerializeField] private List<Sprite> sandSpotSprites;
+	[SerializeField] private List<Sprite> dirtSpotSprites;
+
 
 	[Header("Tiles")]
 	[SerializeField] private Tile baseTile;
@@ -89,7 +95,7 @@ public class MapGenerator : MonoBehaviour
 
 					if (RandomChance.Roll(SettingsInjecter.MapSettings.SandSpotSpawnPercent))
 					{
-						InstantiateObject(sandSpotsPrefabs[Random.Range(0, sandSpotsPrefabs.Count)], pos, tileData, sandSpotContainer);
+						InstantiateObject(clutterPrefab, pos, "Sand", tileData, sandSpotContainer, sandSpotSprites);
 					}
 				}
 				else if (height > SettingsInjecter.MapSettings.SandMaxHeight && height <=  SettingsInjecter.MapSettings.DirtMaxHeight)
@@ -99,7 +105,7 @@ public class MapGenerator : MonoBehaviour
 
 					if (RandomChance.Roll(SettingsInjecter.MapSettings.DirtSpotSpawnPercent))
 					{
-						InstantiateObject(dirtSpotsPrefabs[Random.Range(0, dirtSpotsPrefabs.Count)], pos, tileData, dirtSpotContainer);
+						InstantiateObject(clutterPrefab, pos, "Dirt Spot", tileData, dirtSpotContainer, dirtSpotSprites);
 					}
 				}
 				else if (height > SettingsInjecter.MapSettings.DirtMaxHeight && height <= SettingsInjecter.MapSettings.GrassMaxHeight)
@@ -109,7 +115,7 @@ public class MapGenerator : MonoBehaviour
 
 					if (RandomChance.Roll(SettingsInjecter.MapSettings.TreeSpawnPercent))
 					{
-						GameObject tree = InstantiateObject(treePrefab, pos, tileData, treeContainer);
+						GameObject tree = InstantiateObject(treePrefab, pos, "Tree", tileData, treeContainer, treeSprites, flipY: false);
 
 						tileData.TravelType.Remove(TileTravelType.Walkable);
 						tree.GetComponent<Container>().TileLoc = new Vector2Int(pos.x, pos.y);
@@ -117,7 +123,7 @@ public class MapGenerator : MonoBehaviour
 					}
 					else if (RandomChance.Roll(SettingsInjecter.MapSettings.ShrubSpawnPercent))
 					{
-						InstantiateObject(shrubPrefabs[Random.Range(0, shrubPrefabs.Count)], pos, tileData, shrubContainer);
+						InstantiateObject(clutterPrefab, pos, "Shrub", tileData, shrubContainer, shrubSprites);
 					}
 				}
 				else if (height > SettingsInjecter.MapSettings.GrassMaxHeight)
@@ -127,7 +133,7 @@ public class MapGenerator : MonoBehaviour
 
 					if (RandomChance.Roll(SettingsInjecter.MapSettings.StoneSpawnPercent))
 					{
-						GameObject stone = InstantiateObject(stonePrefab, pos, tileData, stoneContainer);
+						GameObject stone = InstantiateObject(stonePrefab, pos, "Dirt", tileData, stoneContainer, stoneSprites, flipY: false);
 
 						stone.GetComponent<Container>().TileLoc = new Vector2Int(pos.x, pos.y);
 						stone.GetComponent<ExhaustableContainer>().Put(ItemID.Stone, 10);
@@ -148,12 +154,18 @@ public class MapGenerator : MonoBehaviour
 		return tileData;
 	}
 
-	private GameObject InstantiateObject(GameObject prefab, Vector3 pos, GroundTileData tileData, GameObject container)
+	private GameObject InstantiateObject(GameObject prefab, Vector3 pos, string name, GroundTileData tileData, GameObject container, List<Sprite> sprites,  bool flipX = true, bool flipY = true)
 	{
 		GameObject obj = Instantiate(prefab, new Vector3(pos.x + 0.5f, pos.y + 0.5f, 0), Quaternion.identity, container.transform);
 
-		obj.name = prefab.name;
-		obj.GetComponent<SpriteRenderer>().flipX = RandomChance.Roll(50) ? true : false;
+		obj.name = name;
+
+		SpriteRenderer sr = obj.GetComponent<SpriteRenderer>();
+		sr.sprite = sprites[Random.Range(0, sprites.Count)];
+		if (flipX)
+			sr.flipX = RandomChance.Roll(50) ? true : false;
+		if (flipY)
+			sr.flipY = RandomChance.Roll(50) ? true : false;
 
 		tileData.ContainedObjects.Add(obj);
 
