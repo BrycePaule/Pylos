@@ -20,18 +20,39 @@ public class PlayerSelections : ScriptableObject
 
 	public void Select(GameObject obj)
 	{
+		DisableSelectionRings();
 		SelectedObjects = new List<GameObject>(){obj};
+		EnableSelectionRings();
 	}
 
 	public void Select(List<GameObject> objs)
 	{
+		DisableSelectionRings();
 		SelectedObjects = objs;
+		EnableSelectionRings();
 	}
 
 	public void DeselectAll()
 	{
+		DisableSelectionRings();
 		HoveredObjects.Clear();
 		SelectedObjects.Clear();
+	}
+
+	private void EnableSelectionRings()
+	{
+		foreach (GameObject obj in SelectedObjects)
+		{
+			obj.GetComponentInChildren<SelectionRing>().Select();
+		}
+	}
+
+	private void DisableSelectionRings()
+	{
+		foreach (GameObject obj in SelectedObjects)
+		{
+			obj.GetComponentInChildren<SelectionRing>().Deselect();
+		}
 	}
 
 }

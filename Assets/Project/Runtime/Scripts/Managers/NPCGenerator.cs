@@ -10,6 +10,7 @@ public class NPCGenerator : MonoBehaviour
 	public SettingsInjecter SettingsInjecter;
     public MapGenerator mapGenerator;
     public List<ScriptableObject> npcDataAssets;
+    public Transform npcContainer;
 
 	[Header("Overrides")]
     [SerializeField] private bool OVERRIDE_SPAWN_COUNTS;
@@ -47,7 +48,7 @@ public class NPCGenerator : MonoBehaviour
 		foreach (NPCType npc in System.Enum.GetValues(typeof(NPCType)))
 		{
 			Transform container = new GameObject(npc.ToString() + "Container").transform;
-			container.SetParent(transform);
+			container.SetParent(npcContainer);
 			Spawn(npc, npcData[npc].SpawnCount, container);
 		}
 	}

@@ -24,7 +24,7 @@ public class InputManager : MonoBehaviour
 	[SerializeField] private Menu menu;
 	[SerializeField] private BuildMenu buildMenu;
 	[SerializeField] private RectTransform selectionBox;
-	[SerializeField] private GameObject tileCursor;
+	// [SerializeField] private GameObject tileCursor;
 	[SerializeField] private LayerMask selectable;
 
 	private InputAction _playerMovement;
@@ -102,7 +102,7 @@ public class InputManager : MonoBehaviour
 	private void Start() 
 	{
 		selectionBox.gameObject.SetActive(false);
-		tileCursor.SetActive(false);
+		// tileCursor.SetActive(false);
 		PlayerSelections.DeselectAll();
 	}
 
@@ -276,21 +276,21 @@ public class InputManager : MonoBehaviour
 		return false;
 	}
 
-	private void UpdateTileCursor()
-	{
-		Ray ray = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
-		Vector3 worldPoint = ray.GetPoint(0);
-		Vector2Int mposInWorld = TileConversion.WorldToTile(worldPoint);
+	// private void UpdateTileCursor()
+	// {
+	// 	Ray ray = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
+	// 	Vector3 worldPoint = ray.GetPoint(0);
+	// 	Vector2Int mposInWorld = TileConversion.WorldToTile(worldPoint);
 
-		if (mposInWorld.x < 0 || mposInWorld.x >= SettingsInjecter.MapSettings.MapSize || mposInWorld.y < 0 || mposInWorld.y >= SettingsInjecter.MapSettings.MapSize)  
-		{ 
-			tileCursor.SetActive(false);
-			return; 
-		}
+	// 	if (mposInWorld.x < 0 || mposInWorld.x >= SettingsInjecter.MapSettings.MapSize || mposInWorld.y < 0 || mposInWorld.y >= SettingsInjecter.MapSettings.MapSize)  
+	// 	{ 
+	// 		tileCursor.SetActive(false);
+	// 		return; 
+	// 	}
 
-		tileCursor.transform.position = TileConversion.TileToWorld3D(mposInWorld);
-		tileCursor.SetActive(true);
-	}
+	// 	tileCursor.transform.position = TileConversion.TileToWorld3D(mposInWorld);
+	// 	tileCursor.SetActive(true);
+	// }
 
 	// MENU
 	private void OnToggleMenu()
