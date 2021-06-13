@@ -4,8 +4,7 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
-	public MapSettings MapSettings;
-	public GameSettings GameSettings;
+	public SettingsInjecter SettingsInjecter;
 	[SerializeField] private Cinemachine.CinemachineVirtualCamera CVCamera;
 
 	[Header("Movement")]
@@ -22,7 +21,7 @@ public class CameraController : MonoBehaviour
 
 	private void Start()
 	{
-		transform.position = TileConversion.TileToWorld3D(new Vector2Int(MapSettings.MapSize / 2, MapSettings.MapSize / 2));
+		transform.position = TileConversion.TileToWorld3D(new Vector2Int(SettingsInjecter.MapSettings.MapSize / 2, SettingsInjecter.MapSettings.MapSize / 2));
 		Zoom(0);
 	}
 
@@ -37,13 +36,13 @@ public class CameraController : MonoBehaviour
 			int dx, dy;
 			if (Boost)
 			{
-				dx = (int) (Mathf.RoundToInt(move.x) * TilesPerStep * (int) (ZoomLevel / 10) * GameSettings.CameraBoostScrollSpeed);
-				dy = (int) (Mathf.RoundToInt(move.y) * TilesPerStep * (int) (ZoomLevel / 10) * GameSettings.CameraBoostScrollSpeed);
+				dx = (int) (Mathf.RoundToInt(move.x) * TilesPerStep * (int) (ZoomLevel / 10) * SettingsInjecter.GameSettings.CameraBoostScrollSpeed);
+				dy = (int) (Mathf.RoundToInt(move.y) * TilesPerStep * (int) (ZoomLevel / 10) * SettingsInjecter.GameSettings.CameraBoostScrollSpeed);
 			}
 			else
 			{
-				dx = (int) (Mathf.RoundToInt(move.x) * TilesPerStep * (int) (ZoomLevel / 10) * GameSettings.CameraScrollSpeed);
-				dy = (int) (Mathf.RoundToInt(move.y) * TilesPerStep * (int) (ZoomLevel / 10) * GameSettings.CameraScrollSpeed);
+				dx = (int) (Mathf.RoundToInt(move.x) * TilesPerStep * (int) (ZoomLevel / 10) * SettingsInjecter.GameSettings.CameraScrollSpeed);
+				dy = (int) (Mathf.RoundToInt(move.y) * TilesPerStep * (int) (ZoomLevel / 10) * SettingsInjecter.GameSettings.CameraScrollSpeed);
 			}
 
 			transform.position += new Vector3(dx, dy, 0);

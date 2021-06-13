@@ -9,7 +9,7 @@ using System;
 
 public class InputManager : MonoBehaviour
 {
-	public MapSettings MapSettings;
+	public SettingsInjecter SettingsInjecter;
 	public PlayerSelections PlayerSelections;
 	public LocationMarkers LocationMarkers;
 
@@ -276,7 +276,7 @@ public class InputManager : MonoBehaviour
 		Vector3 worldPoint = ray.GetPoint(0);
 		Vector2Int mposInWorld = TileConversion.WorldToTile(worldPoint);
 
-		if (mposInWorld.x < 0 || mposInWorld.x >= MapSettings.MapSize || mposInWorld.y < 0 || mposInWorld.y >= MapSettings.MapSize)  
+		if (mposInWorld.x < 0 || mposInWorld.x >= SettingsInjecter.MapSettings.MapSize || mposInWorld.y < 0 || mposInWorld.y >= SettingsInjecter.MapSettings.MapSize)  
 		{ 
 			tileCursor.SetActive(false);
 			return; 

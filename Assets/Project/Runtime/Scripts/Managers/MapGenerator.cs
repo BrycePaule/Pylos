@@ -5,7 +5,7 @@ using UnityEngine.Tilemaps;
 
 public class MapGenerator : MonoBehaviour
 {
-	public MapSettings MapSettings;
+	public SettingsInjecter SettingsInjecter;
 
 	[Header("Colour Shifts")]
 	[Range(0, 1f)] public float TileHueChangeStrength;
@@ -33,10 +33,10 @@ public class MapGenerator : MonoBehaviour
 
 	private void Awake()
 	{
-		float seed = MapSettings.Seed == 0f ? Random.Range(0f, 1f) : MapSettings.Seed;
+		float seed = SettingsInjecter.MapSettings.Seed == 0f ? Random.Range(0f, 1f) : SettingsInjecter.MapSettings.Seed;
 		print("Seed: " + seed);
 
-		MapSettings.Tiles = new GroundTileData[MapSettings.MapSize, MapSettings.MapSize];
+		SettingsInjecter.MapSettings.Tiles = new GroundTileData[SettingsInjecter.MapSettings.MapSize, SettingsInjecter.MapSettings.MapSize];
 		Renderer renderer = GetComponent<Renderer>();
 		renderer.material.mainTexture = GenerateTexture(seed);
 
@@ -45,16 +45,16 @@ public class MapGenerator : MonoBehaviour
 
 	private Texture2D GenerateTexture(float seed)
 	{
-		Texture2D texture = new Texture2D(MapSettings.MapSize, MapSettings.MapSize);
+		Texture2D texture = new Texture2D(SettingsInjecter.MapSettings.MapSize, SettingsInjecter.MapSettings.MapSize);
 
-		for (int y = 0; y < MapSettings.MapSize; y++)
+		for (int y = 0; y < SettingsInjecter.MapSettings.MapSize; y++)
 		{
-			for (int x = 0; x < MapSettings.MapSize; x++)
+			for (int x = 0; x < SettingsInjecter.MapSettings.MapSize; x++)
 			{
-				float xCoord = (float) x / MapSettings.MapSize * MapSettings.Scale + MapSettings.OffsetX;
-				float yCoord = (float) y / MapSettings.MapSize * MapSettings.Scale + MapSettings.OffsetY;
+				float xCoord = (float) x / SettingsInjecter.MapSettings.MapSize * SettingsInjecter.MapSettings.Scale + SettingsInjecter.MapSettings.OffsetX;
+				float yCoord = (float) y / SettingsInjecter.MapSettings.MapSize * SettingsInjecter.MapSettings.Scale + SettingsInjecter.MapSettings.OffsetY;
 				
-				float sample = Mathf.PerlinNoise(xCoord + MapSettings.MapSize * seed, yCoord + MapSettings.MapSize * seed);
+				float sample = Mathf.PerlinNoise(xCoord + SettingsInjecter.MapSettings.MapSize * seed, yCoord + SettingsInjecter.MapSettings.MapSize * seed);
 				
 				Color colour = new Color(sample, sample, sample);
 				texture.SetPixel(x, y, colour);    
@@ -67,47 +67,47 @@ public class MapGenerator : MonoBehaviour
 
 	private void GenerateTileMap(Texture2D noiseMap)
 	{
-		for (int y = 0; y < MapSettings.MapSize; y++)
+		for (int y = 0; y < SettingsInjecter.MapSettings.MapSize; y++)
 		{
-			for (int x = 0; x < MapSettings.MapSize; x++)
+			for (int x = 0; x < SettingsInjecter.MapSettings.MapSize; x++)
 			{
 				Vector3Int pos = new Vector3Int(x, y, 0);
 				float height = noiseMap.GetPixel(x, y).r;
 
 				GroundTileData tileData = Instantiate(groundTileDataAsset);
-				MapSettings.Tiles[x, y] = tileData;
+				SettingsInjecter.MapSettings.Tiles[x, y] = tileData;
 
-				if (height <= MapSettings.WaterMaxHeight)
+				if (height <= SettingsInjecter.MapSettings.WaterMaxHeight)
 				{
 					tileData = SetTileData(tileData, height, walkable: false, swimmable: true);
 					tilemap.SetTile(pos, tileData.Tile);
 				}
-				else if (height > MapSettings.WaterMaxHeight && height <= MapSettings.SandMaxHeight )
+				else if (height > SettingsInjecter.MapSettings.WaterMaxHeight && height <= SettingsInjecter.MapSettings.SandMaxHeight )
 				{
 					tileData = SetTileData(tileData, height);
 					tilemap.SetTile(pos, tileData.Tile);
 
-					if (RandomChance.Roll(MapSettings.SandSpotSpawnPercent))
+					if (RandomChance.Roll(SettingsInjecter.MapSettings.SandSpotSpawnPercent))
 					{
 						InstantiateObject(sandSpotsPrefabs[Random.Range(0, sandSpotsPrefabs.Count)], pos, tileData, sandSpotContainer);
 					}
 				}
-				else if (height > MapSettings.SandMaxHeight && height <=  MapSettings.DirtMaxHeight)
+				else if (height > SettingsInjecter.MapSettings.SandMaxHeight && height <=  SettingsInjecter.MapSettings.DirtMaxHeight)
 				{
 					tileData = SetTileData(tileData, height);
 					tilemap.SetTile(pos, tileData.Tile);
 
-					if (RandomChance.Roll(MapSettings.DirtSpotSpawnPercent))
+					if (RandomChance.Roll(SettingsInjecter.MapSettings.DirtSpotSpawnPercent))
 					{
 						InstantiateObject(dirtSpotsPrefabs[Random.Range(0, dirtSpotsPrefabs.Count)], pos, tileData, dirtSpotContainer);
 					}
 				}
-				else if (height > MapSettings.DirtMaxHeight && height <= MapSettings.GrassMaxHeight)
+				else if (height > SettingsInjecter.MapSettings.DirtMaxHeight && height <= SettingsInjecter.MapSettings.GrassMaxHeight)
 				{
 					tileData = SetTileData(tileData, height);
 					tilemap.SetTile(pos, tileData.Tile);
 
-					if (RandomChance.Roll(MapSettings.TreeSpawnPercent))
+					if (RandomChance.Roll(SettingsInjecter.MapSettings.TreeSpawnPercent))
 					{
 						GameObject tree = InstantiateObject(treePrefab, pos, tileData, treeContainer);
 
@@ -115,17 +115,17 @@ public class MapGenerator : MonoBehaviour
 						tree.GetComponent<Container>().TileLoc = new Vector2Int(pos.x, pos.y);
 						tree.GetComponent<ExhaustableContainer>().Put(ItemID.Wood, 10);
 					}
-					else if (RandomChance.Roll(MapSettings.ShrubSpawnPercent))
+					else if (RandomChance.Roll(SettingsInjecter.MapSettings.ShrubSpawnPercent))
 					{
 						InstantiateObject(shrubPrefabs[Random.Range(0, shrubPrefabs.Count)], pos, tileData, shrubContainer);
 					}
 				}
-				else if (height > MapSettings.GrassMaxHeight)
+				else if (height > SettingsInjecter.MapSettings.GrassMaxHeight)
 				{
 					tileData = SetTileData(tileData, height);
 					tilemap.SetTile(pos, tileData.Tile);
 
-					if (RandomChance.Roll(MapSettings.StoneSpawnPercent))
+					if (RandomChance.Roll(SettingsInjecter.MapSettings.StoneSpawnPercent))
 					{
 						GameObject stone = InstantiateObject(stonePrefab, pos, tileData, stoneContainer);
 
@@ -163,13 +163,13 @@ public class MapGenerator : MonoBehaviour
 	// UTILS
 	private GroundType GetTileByHeight(float height)
 	{
-		if (height <= MapSettings.WaterMaxHeight)
+		if (height <= SettingsInjecter.MapSettings.WaterMaxHeight)
 			return GroundType.Water;
-		else if (height > MapSettings.WaterMaxHeight && height <= MapSettings.SandMaxHeight)
+		else if (height > SettingsInjecter.MapSettings.WaterMaxHeight && height <= SettingsInjecter.MapSettings.SandMaxHeight)
 			return GroundType.Sand;
-		else if (height > MapSettings.SandMaxHeight && height <=  MapSettings.DirtMaxHeight)
+		else if (height > SettingsInjecter.MapSettings.SandMaxHeight && height <=  SettingsInjecter.MapSettings.DirtMaxHeight)
 			return GroundType.Dirt;
-		else if (height > MapSettings.DirtMaxHeight && height <= MapSettings.GrassMaxHeight)
+		else if (height > SettingsInjecter.MapSettings.DirtMaxHeight && height <= SettingsInjecter.MapSettings.GrassMaxHeight)
 			return GroundType.Grass;
 		else
 			return GroundType.Stone;

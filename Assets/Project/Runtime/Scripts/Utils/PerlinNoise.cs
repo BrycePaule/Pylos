@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PerlinNoise : MonoBehaviour
 {
-	public MapSettings MapSettings;
+	public SettingsInjecter SettingsInjecter;
 
     public float heightCutoff = 0.5f;
 
@@ -16,12 +16,12 @@ public class PerlinNoise : MonoBehaviour
 
     private Texture2D GenerateTexture()
     {
-        Texture2D texture = new Texture2D(MapSettings.MapSize, MapSettings.MapSize);
+        Texture2D texture = new Texture2D(SettingsInjecter.MapSettings.MapSize, SettingsInjecter.MapSettings.MapSize);
 
         // generate noise
-        for (int x = 0; x < MapSettings.MapSize; x++)
+        for (int x = 0; x < SettingsInjecter.MapSettings.MapSize; x++)
         {
-            for (int y = 0; y < MapSettings.MapSize; y++)
+            for (int y = 0; y < SettingsInjecter.MapSettings.MapSize; y++)
             {
                 Color colour = CalculateColour(x, y);
                 texture.SetPixel(x, y, colour);    
@@ -34,8 +34,8 @@ public class PerlinNoise : MonoBehaviour
 
     private Color CalculateColour(int x, int y)
     {
-        float xCoord = (float) x / MapSettings.MapSize * MapSettings.Scale + MapSettings.OffsetX;
-        float yCoord = (float) y / MapSettings.MapSize * MapSettings.Scale + MapSettings.OffsetY;
+        float xCoord = (float) x / SettingsInjecter.MapSettings.MapSize * SettingsInjecter.MapSettings.Scale + SettingsInjecter.MapSettings.OffsetX;
+        float yCoord = (float) y / SettingsInjecter.MapSettings.MapSize * SettingsInjecter.MapSettings.Scale + SettingsInjecter.MapSettings.OffsetY;
 
         float sample = Mathf.PerlinNoise(xCoord, yCoord);
         if (sample < heightCutoff) { sample = 0; }

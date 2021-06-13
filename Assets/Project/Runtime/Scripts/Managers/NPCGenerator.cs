@@ -6,21 +6,20 @@ using UnityEngine.Tilemaps;
 
 public class NPCGenerator : MonoBehaviour
 {
-	public MapSettings MapSettings;
+	[Header("Init")]
+	public SettingsInjecter SettingsInjecter;
+    public MapGenerator mapGenerator;
+    public List<ScriptableObject> npcDataAssets;
 
-	[Header("DEV STUFF")]
+	[Header("Overrides")]
     [SerializeField] private bool OVERRIDE_SPAWN_COUNTS;
     [SerializeField] private NPCType NPCTYPE_OVERRIDE;
     [SerializeField] private int SPAWN_CAP_OVERRIDE;
     [SerializeField] private bool OVERRIDE_SPEED;
     [SerializeField] private float MOVE_DELAY_OVERRIDE;
-	[Space(20)]
 
-    [SerializeField] private List<ScriptableObject> npcDataAssets;
 
-    [SerializeField] private MapGenerator mapGenerator;
-    [SerializeField] private GameObject npcContainer;
-
+	[Header("Settings")]
     [SerializeField] private int spawnCheckDelay;
 
 	private float _spawnCheckTimer;
@@ -39,7 +38,7 @@ public class NPCGenerator : MonoBehaviour
 			NPCType npc = NPCTYPE_OVERRIDE;
 
 			Transform container = new GameObject(npc.ToString() + "Container").transform;
-			container.SetParent(npcContainer.transform);
+			container.SetParent(transform);
 			Spawn(npc, SPAWN_CAP_OVERRIDE, container);
 
 			return;
@@ -48,7 +47,7 @@ public class NPCGenerator : MonoBehaviour
 		foreach (NPCType npc in System.Enum.GetValues(typeof(NPCType)))
 		{
 			Transform container = new GameObject(npc.ToString() + "Container").transform;
-			container.SetParent(npcContainer.transform);
+			container.SetParent(transform);
 			Spawn(npc, npcData[npc].SpawnCount, container);
 		}
 	}
@@ -62,7 +61,7 @@ public class NPCGenerator : MonoBehaviour
 		{
 			foreach (NPCType npc in System.Enum.GetValues(typeof(NPCType)))
 			{
-				Transform container = npcContainer.transform.Find(npc.ToString() + "Container");
+				Transform container = transform.Find(npc.ToString() + "Container");
 				if (container)
 				{
 					if (container.transform.childCount < npcData[npc].SpawnCount)
@@ -73,7 +72,7 @@ public class NPCGenerator : MonoBehaviour
 				else
 				{
 					container = new GameObject(npc.ToString() + "Container").transform;
-					container.SetParent(npcContainer.transform);
+					container.SetParent(transform);
 					Spawn(npc, npcData[npc].SpawnCount, container);
 				}
 			}
@@ -102,7 +101,7 @@ public class NPCGenerator : MonoBehaviour
 
 		npcObj.name = npcType.ToString();
 
-		Vector2Int loc = MapSettings.SelectRandomLocation(npcBase.TravelTypes);
+		Vector2Int loc = SettingsInjecter.MapSettings.SelectRandomLocation(npcBase.TravelTypes);
 		npcObj.transform.position = TileConversion.TileToWorld3D(loc);
 		npcMovement.TileLoc = loc;
 

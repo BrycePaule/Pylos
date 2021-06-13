@@ -151,7 +151,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1181753008}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &22984852
 GameObject:
@@ -1561,7 +1561,7 @@ MonoBehaviour:
   m_Follow: {fileID: 1685348466}
   m_Lens:
     FieldOfView: 60
-    OrthographicSize: 25
+    OrthographicSize: 10
     NearClipPlane: 0.1
     FarClipPlane: 50
     Dutch: 0
@@ -1928,12 +1928,12 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 506697918}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 1181753008}
-  m_RootOrder: 2
+  m_Father: {fileID: 1569158675}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &519420028
 GameObject:
@@ -1989,7 +1989,7 @@ Camera:
   far clip plane: 50
   field of view: 60
   orthographic: 1
-  orthographic size: 25
+  orthographic size: 10
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -2128,19 +2128,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 98688cf90c5ba6b40acf1fdcfd7c13ca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MapSettings: {fileID: 11400000, guid: 8166e00235c27e447bcddb538b46923f, type: 2}
-  OVERRIDE_SPAWN_COUNTS: 0
-  NPCTYPE_OVERRIDE: 1
-  SPAWN_CAP_OVERRIDE: 0
-  OVERRIDE_SPEED: 0
-  MOVE_DELAY_OVERRIDE: 0.1
+  SettingsInjecter: {fileID: 11400000, guid: 92354eb417464bf45b76fccfef2d1549, type: 2}
+  mapGenerator: {fileID: 1251181798}
   npcDataAssets:
   - {fileID: 11400000, guid: 943d1f383f506ac429a33d367e8fe515, type: 2}
   - {fileID: 11400000, guid: f972c37ef7f332d4586d6b3ef3ce37b9, type: 2}
   - {fileID: 11400000, guid: c0610d3886569ca41ac8b56168ea5ed6, type: 2}
   - {fileID: 11400000, guid: 00193ffd478870848903c8d6fcd6900e, type: 2}
-  mapGenerator: {fileID: 1251181798}
-  npcContainer: {fileID: 836852476}
+  OVERRIDE_SPAWN_COUNTS: 1
+  NPCTYPE_OVERRIDE: 1
+  SPAWN_CAP_OVERRIDE: 0
+  OVERRIDE_SPEED: 0
+  MOVE_DELAY_OVERRIDE: 0.1
   spawnCheckDelay: 30
 --- !u!1 &685865325
 GameObject:
@@ -2628,7 +2627,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1181753008}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &770296139
 GameObject:
@@ -4731,12 +4730,10 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 739906435}
-  - {fileID: 1865912406}
-  - {fileID: 506697919}
-  - {fileID: 12675129}
   - {fileID: 1663232353}
-  - {fileID: 1302902797}
+  - {fileID: 739906435}
+  - {fileID: 12675129}
+  - {fileID: 1569158675}
   m_Father: {fileID: 1671748793}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -4881,7 +4878,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 02430633830db554f8ad408c778698b7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MapSettings: {fileID: 11400000, guid: 8166e00235c27e447bcddb538b46923f, type: 2}
+  SettingsInjecter: {fileID: 11400000, guid: 92354eb417464bf45b76fccfef2d1549, type: 2}
   TileHueChangeStrength: 0
   TileSaturationChangeStrength: 0.1
   TileVibranceChangeStrength: 0
@@ -4970,7 +4967,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e0d176064c148fc43a78c4486c098c94, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MapSettings: {fileID: 11400000, guid: 8166e00235c27e447bcddb538b46923f, type: 2}
+  SettingsInjecter: {fileID: 11400000, guid: 92354eb417464bf45b76fccfef2d1549, type: 2}
   topBorder: {fileID: 1865292466}
   botBorder: {fileID: 685865325}
   leftBorder: {fileID: 1088477338}
@@ -5064,12 +5061,12 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1302902796}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 1181753008}
-  m_RootOrder: 5
+  m_Father: {fileID: 1569158675}
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1325939816
 GameObject:
@@ -5476,7 +5473,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8aa13ef940c031c48b7475707b42120c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MapSettings: {fileID: 11400000, guid: 8166e00235c27e447bcddb538b46923f, type: 2}
+  SettingsInjecter: {fileID: 11400000, guid: 92354eb417464bf45b76fccfef2d1549, type: 2}
   PlayerSelections: {fileID: 11400000, guid: 2f8964e7759bf3749965706ac3b96609, type: 2}
   LocationMarkers: {fileID: 11400000, guid: 283b24b172b5fa64db2fee146055c739, type: 2}
   Highlight: {fileID: 780779809152605257, guid: 12398b36c97aade459a35f7eec85f9e3, type: 3}
@@ -5847,7 +5844,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1513176170}
   m_Layer: 0
-  m_Name: NPC
+  m_Name: NPCs
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5898,6 +5895,39 @@ Transform:
   - {fileID: 1392745998}
   m_Father: {fileID: 1373381077}
   m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1569158674
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1569158675}
+  m_Layer: 0
+  m_Name: Clutter
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1569158675
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1569158674}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 506697919}
+  - {fileID: 1302902797}
+  - {fileID: 1865912406}
+  m_Father: {fileID: 1181753008}
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1597938400
 GameObject:
@@ -6383,7 +6413,7 @@ Transform:
   - {fileID: 1088477339}
   - {fileID: 1041875792}
   m_Father: {fileID: 1181753008}
-  m_RootOrder: 4
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1665054392
 GameObject:
@@ -6627,8 +6657,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bde0f395487a8614bad97e9c29c01d65, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MapSettings: {fileID: 11400000, guid: 8166e00235c27e447bcddb538b46923f, type: 2}
-  GameSettings: {fileID: 11400000, guid: 4e4d342f6ff6a674ab4f03d6ff5fb20d, type: 2}
+  SettingsInjecter: {fileID: 11400000, guid: 92354eb417464bf45b76fccfef2d1549, type: 2}
   CVCamera: {fileID: 428167016}
   TilesPerStep: 1
   Boost: 0
@@ -7540,12 +7569,12 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1865912405}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 1181753008}
-  m_RootOrder: 1
+  m_Father: {fileID: 1569158675}
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1889477078
 GameObject:
@@ -8373,7 +8402,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 25, y: 25}
+  m_AnchoredPosition: {x: 10, y: 10}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0, y: 0}
 --- !u!114 &2003569657

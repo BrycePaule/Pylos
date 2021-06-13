@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class MapBoundary : MonoBehaviour
 {
-	public MapSettings MapSettings;
+	public SettingsInjecter SettingsInjecter;
+
 	[SerializeField] private GameObject topBorder; 
 	[SerializeField] private GameObject botBorder; 
 	[SerializeField] private GameObject leftBorder; 
@@ -12,7 +13,7 @@ public class MapBoundary : MonoBehaviour
 
 	private void Awake() 
 	{
-		int size = MapSettings.MapSize;
+		int size = SettingsInjecter.MapSettings.MapSize;
 
 		topBorder.transform.position = new Vector3(size / 2, size + 1.5f, 0);
 		topBorder.transform.localScale = new Vector3(size + 6, 3, 1);

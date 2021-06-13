@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ExhaustableContainer : Container, IExhaustableContainer
 {
-	public MapSettings MapSettings;
+	public SettingsInjecter SettingsInjecter;
 
 	public bool IsEmpty()
 	{
@@ -13,7 +13,7 @@ public class ExhaustableContainer : Container, IExhaustableContainer
 
 	public void Exhaust()
 	{
-		MapSettings.GetTile(TileLoc).ContainedObjects.Remove(gameObject);
+		SettingsInjecter.MapSettings.GetTile(TileLoc).ContainedObjects.Remove(gameObject);
 		Destroy(gameObject);
 	}
 	

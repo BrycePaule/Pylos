@@ -6,8 +6,7 @@ using System.Reflection;
 
 public class Movement : NPCComponentBase
 {
-	public MapSettings MapSettings;
-	public GameSettings GameSettings;
+	public SettingsInjecter SettingsInjecter;
 	public PlayerMaterials PlayerMaterials;
 
 	[Header("Movement")]
@@ -160,7 +159,7 @@ public class Movement : NPCComponentBase
 				if (FoundObject == null) 
 				{
 					FoundObject = null;
-					MapSettings.GetTile(TargetLoc).ContainedObjects.Remove(FoundObject);
+					SettingsInjecter.MapSettings.GetTile(TargetLoc).ContainedObjects.Remove(FoundObject);
 					searchTimer += SearchDelay;
 				}
 			}
@@ -201,7 +200,7 @@ public class Movement : NPCComponentBase
 
 	private GameObject FindSearchObject()
 	{
-		ObjectLocationPair objLocPair = GridHelpers.SpiralSearch(searchingFor, TileLoc, SearchRange, MapSettings.Tiles);
+		ObjectLocationPair objLocPair = GridHelpers.SpiralSearch(searchingFor, TileLoc, SearchRange, SettingsInjecter.MapSettings.Tiles);
 		
 		if (objLocPair.obj != null) {
 			TargetLoc = objLocPair.loc;
@@ -217,12 +216,12 @@ public class Movement : NPCComponentBase
 		{
 			// clamping means that on edges the units will just keep trying to path out of the map, meaning they stay on the edge
 			Vector2Int potentialTarget = new Vector2Int(
-				Mathf.Clamp(TileLoc.x + (int) Random.Range(-MeanderRange, MeanderRange), 0, MapSettings.MapSize - 1),
-				Mathf.Clamp(TileLoc.y + (int) Random.Range(-MeanderRange, MeanderRange), 0, MapSettings.MapSize - 1));
+				Mathf.Clamp(TileLoc.x + (int)Random.Range(-MeanderRange, MeanderRange), 0, SettingsInjecter.MapSettings.MapSize - 1),
+				Mathf.Clamp(TileLoc.y + (int)Random.Range(-MeanderRange, MeanderRange), 0, SettingsInjecter.MapSettings.MapSize - 1));
 
 			if (potentialTarget == currentLocation) { continue; }
 
-			if (MapSettings.IsPathable(potentialTarget, npcBase.TravelTypes))
+			if (SettingsInjecter.MapSettings.IsPathable(potentialTarget, npcBase.TravelTypes))
 			{
 				TargetLoc = potentialTarget;
 				break;
