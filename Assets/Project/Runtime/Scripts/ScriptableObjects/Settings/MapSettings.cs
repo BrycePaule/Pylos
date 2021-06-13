@@ -7,9 +7,21 @@ public class MapSettings : ScriptableObject
 {
 	public int MapSize;
 
+	[Header("Noise Generation")]
 	public float Scale;
 	public float OffsetX;
 	public float OffsetY;
+
+	[Header("Terrain Generation")]
+	[Range(0, 1f)] public float WaterMaxHeight;
+	[Range(0, 1f)] public float SandMaxHeight;
+	[Range(0, 1f)] public float DirtMaxHeight;
+	[Range(0, 1f)] public float GrassMaxHeight;
+
+	[Header("Object Spawning")]
+	[Range(0, 100)] public int TreeSpawnPercent; 
+	[Range(0, 100)] public int ShrubSpawnPercent; 
+	[Range(0, 100)] public int StoneSpawnPercent; 
 
 	public GroundTileData[,] Tiles;
 

@@ -16,4 +16,11 @@ public class ColourPalette : ScriptableObject
 	[Header("Text")]
 	public Color TextPrimary;
 	public Color TextSecondary;
+
+	[Header("Tiles")]
+	public Color Water;
+	public Color Sand;
+	public Color Dirt;
+	public Color Grass;
+	public Color Stone;
 }

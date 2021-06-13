@@ -82,7 +82,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 0
+  m_PresetInfoIsWorld: 1
 --- !u!114 &4383776128787987663
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -111,6 +111,7 @@ GameObject:
   - component: {fileID: 4958833928408686598}
   - component: {fileID: 225909433515966336}
   - component: {fileID: 8680323859004982278}
+  - component: {fileID: 783248967707459046}
   m_Layer: 5
   m_Name: Border
   m_TagString: Untagged
@@ -152,13 +153,13 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 650705030898786403}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 1}
+  m_Color: {r: 0.105882354, g: 0.12156863, b: 0.12156863, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -175,6 +176,27 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &783248967707459046
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 650705030898786403}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e7b9d0b768432304ab31cb812ba65383, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  palette: {fileID: 11400000, guid: c81b8d03dc22a0d43ace346d6172c8e4, type: 2}
+  UIBase:
+  - {fileID: 8680323859004982278}
+  UILight: []
+  UITrim: []
+  HP: []
+  HPBg: []
+  TextPrimary: []
+  TextSecondary: []
 --- !u!1 &1601993163022430001
 GameObject:
   m_ObjectHideFlags: 0
@@ -186,6 +208,7 @@ GameObject:
   - component: {fileID: 5642657011240696289}
   - component: {fileID: 8325519193049676526}
   - component: {fileID: 2678560750866454315}
+  - component: {fileID: 6345101631223516640}
   m_Layer: 5
   m_Name: Background
   m_TagString: Untagged
@@ -233,7 +256,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0, b: 0, a: 1}
+  m_Color: {r: 0.16981131, g: 0.0481399, b: 0.04565681, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -250,6 +273,27 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &6345101631223516640
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1601993163022430001}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e7b9d0b768432304ab31cb812ba65383, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  palette: {fileID: 11400000, guid: c81b8d03dc22a0d43ace346d6172c8e4, type: 2}
+  UIBase: []
+  UILight: []
+  UITrim: []
+  HP: []
+  HPBg:
+  - {fileID: 2678560750866454315}
+  TextPrimary: []
+  TextSecondary: []
 --- !u!1 &6791893086572523532
 GameObject:
   m_ObjectHideFlags: 0
@@ -261,6 +305,7 @@ GameObject:
   - component: {fileID: 6401895129216795210}
   - component: {fileID: 4585106833598568486}
   - component: {fileID: 4005500118135811417}
+  - component: {fileID: 327144318564804986}
   m_Layer: 5
   m_Name: Bar
   m_TagString: Untagged
@@ -308,7 +353,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.5638945, g: 1, b: 0, a: 1}
+  m_Color: {r: 0.9411765, g: 0.27058825, b: 0.25882354, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -325,6 +370,27 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &327144318564804986
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6791893086572523532}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e7b9d0b768432304ab31cb812ba65383, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  palette: {fileID: 11400000, guid: c81b8d03dc22a0d43ace346d6172c8e4, type: 2}
+  UIBase: []
+  UILight: []
+  UITrim: []
+  HP:
+  - {fileID: 4005500118135811417}
+  HPBg: []
+  TextPrimary: []
+  TextSecondary: []
 --- !u!1 &7640041237413306701
 GameObject:
   m_ObjectHideFlags: 0
@@ -451,7 +517,7 @@ MonoBehaviour:
   m_MinValue: 0
   m_MaxValue: 1
   m_WholeNumbers: 0
-  m_Value: 0.549
+  m_Value: 0.892
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []

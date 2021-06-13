@@ -16,3 +16,10 @@ MonoBehaviour:
   Scale: 5
   OffsetX: 2.22
   OffsetY: 17.3
+  WaterMaxHeight: 0.2
+  SandMaxHeight: 0.28
+  DirtMaxHeight: 0.37
+  GrassMaxHeight: 0.8
+  TreeSpawnPercent: 3
+  ShrubSpawnPercent: 7
+  StoneSpawnPercent: 8
