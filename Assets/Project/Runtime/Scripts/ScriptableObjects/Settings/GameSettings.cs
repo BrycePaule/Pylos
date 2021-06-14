@@ -14,4 +14,7 @@ public class GameSettings : ScriptableObject
 	[Header("Camera Settings")]
 	public float CameraScrollSpeed;
 	public float CameraBoostScrollSpeed;
+
+	[Header("Building")]
+	public bool IsBuilding;
 }

@@ -9,7 +9,9 @@ public enum Layer
 	UI = 5,
 
 	Ground = 8,
+
 	Objects = 10,
+	Buildings = 11,
 
 	NPC = 13,
 	NPCComponent = 14,

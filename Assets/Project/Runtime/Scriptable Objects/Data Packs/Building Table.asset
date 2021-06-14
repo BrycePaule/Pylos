@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c16fdc34f00fe154e950b758c2b57e4f, type: 3}
+  m_Name: Building Table
+  m_EditorClassIdentifier: 
+  Buildings:
+  - ID: 0
+    Name: Campfire
+    Sprite: {fileID: 21300000, guid: a5d78444bf5d684478cdf8e6099dbbb6, type: 3}
+    Icon: {fileID: 21300000, guid: d1d556d997f76834fb3d87f15a6f8920, type: 3}

@@ -26,6 +26,7 @@ public class InputManager : MonoBehaviour
 	[SerializeField] private RectTransform selectionBox;
 	// [SerializeField] private GameObject tileCursor;
 	[SerializeField] private LayerMask selectable;
+	[SerializeField] private BuildGhost BuildGhost;
 
 	private InputAction _playerMovement;
 	private InputAction _playerLeftClick;
@@ -42,7 +43,6 @@ public class InputManager : MonoBehaviour
 	private GameObject mouseMarker;
 	private bool holdingMouseDown;
 	private float ppu;
-
 
 	private GameObject rectMarker1;
 	private GameObject rectMarker2;
@@ -110,7 +110,14 @@ public class InputManager : MonoBehaviour
 	{
 		Vector3 mpos = Mouse.current.position.ReadValue();
 
-		PlayerSelections.Hover(GetSelectableUnderCursor(mpos));	
+		if (SettingsInjecter.GameSettings.IsBuilding)
+		{
+			BuildGhost.UpdateLocation(mpos);
+		}
+		else
+		{
+			PlayerSelections.Hover(GetSelectableUnderCursor(mpos));	
+		}
 
 		if (holdingMouseDown == true) 
 		{ 
@@ -158,18 +165,27 @@ public class InputManager : MonoBehaviour
 	// CLICK
 	private void OnLeftClick(Vector3 mpos, InputAction.CallbackContext context)
 	{
-		pointLastClicked = mpos;
-		if (!ClickedUI(mpos))
+		if (SettingsInjecter.GameSettings.IsBuilding)
 		{
-			GameObject obj = GetSelectableUnderCursor(mpos);
-			if (obj != null) 
+			SettingsInjecter.GameSettings.IsBuilding = false;
+			BuildGhost.Disable();
+			BuildGhost.Build(mpos);
+		}
+		else
+		{
+			pointLastClicked = mpos;
+			if (!ClickedUI(mpos))
 			{
-				PlayerSelections.Select(GetSelectableUnderCursor(mpos)); 
-			}
-			else
-			{
-				PlayerSelections.DeselectAll();
-				TurnOffMenus();
+				GameObject obj = GetSelectableUnderCursor(mpos);
+				if (obj != null) 
+				{
+					PlayerSelections.Select(GetSelectableUnderCursor(mpos)); 
+				}
+				else
+				{
+					PlayerSelections.DeselectAll();
+					TurnOffMenus();
+				}
 			}
 		}
 	}

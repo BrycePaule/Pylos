@@ -5,7 +5,9 @@ using UnityEngine;
 public class BuildMenu : MonoBehaviour
 {
 	public SettingsInjecter SettingsInjecter;
+	public BuildingTable BuildingTable;
 	public PlayerSelections PlayerSelections;
+	public BuildGhost BuildGhost;
 
 	public int xOut;
 	public int xIn;
@@ -61,7 +63,23 @@ public class BuildMenu : MonoBehaviour
 	}
 
 	// BUTTON CALLBACKS
-	private void SearchFor(ItemID id)
+
+	// BUILDING
+	public void Build(int id)
+	{
+		TweenOutMenu();
+		SettingsInjecter.GameSettings.IsBuilding = true;
+		BuildingTableEntry building = BuildingTable.GetById(id);
+
+		if (building != null)
+		{
+			BuildGhost.UpdateCurrentGhost(building);
+			BuildGhost.Enable();
+		}
+	}
+
+	// SEARCHING
+	public void SearchFor(ItemID id)
 	{
 		if (PlayerSelections.SelectedObjects.Count == 0) { return; }
 		if (PlayerSelections.SelectedObjects[0].layer != Layer.NPC.GetHashCode()) { return; }
