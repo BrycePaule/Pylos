@@ -4,9 +4,11 @@ using UnityEngine;
 
 public class CameraControllerFollowRandomiser : MonoBehaviour
 {
-	[SerializeField] private Cinemachine.CinemachineVirtualCamera cam;
-	[SerializeField] private Transform NPCcontainer;
+	[Header("References")]
+	public Cinemachine.CinemachineVirtualCamera cam;
+	public Transform NPCcontainer;
 
+	[Header("Settings")]
 	public float SwitchDelay;
 	public bool RandomiseDelayTime;
 	public float MinRandomDelay;

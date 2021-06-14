@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class PathDrawer : NPCComponentBase
 {
-	public GameSettings GameSettings;
+	[Header("References")]
+	public SettingsInjecter SettingsInjecter;
 
 	private LineRenderer lineRenderer;
 
@@ -25,7 +26,7 @@ public class PathDrawer : NPCComponentBase
 
 	private void FixedUpdate() 
 	{
-		if (GameSettings.ShowPaths)
+		if (SettingsInjecter.GameSettings.ShowPaths)
 		{
 			lineRenderer.enabled = true;
 		}

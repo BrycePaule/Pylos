@@ -4,19 +4,20 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
+	[Header("References")]
 	public SettingsInjecter SettingsInjecter;
-	[SerializeField] private Cinemachine.CinemachineVirtualCamera CVCamera;
+	public Cinemachine.CinemachineVirtualCamera CVCamera;
 
-	[Header("Movement")]
+	[Header("Movement Settings")]
 	public int TilesPerStep;
 	public bool Boost;
 	public float MoveDelay;
 
-	[Header("Zoom")]
+	[Header("Zoom Settings")]
 	public int ZoomLevel;
-	[SerializeField] private int MinZoomLevel;
-	[SerializeField] private int MaxZoomLevel;
-	[SerializeField] private int ZoomStep;
+	public int MinZoomLevel;
+	public int MaxZoomLevel;
+	public int ZoomStep;
 
 	private float movetimer;
 

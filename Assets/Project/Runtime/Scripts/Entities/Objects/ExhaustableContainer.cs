@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class ExhaustableContainer : Container, IExhaustableContainer
 {
+	[Header("References")]
 	public SettingsInjecter SettingsInjecter;
 
 	public bool IsEmpty()

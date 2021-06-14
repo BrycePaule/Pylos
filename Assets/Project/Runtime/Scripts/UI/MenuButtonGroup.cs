@@ -7,7 +7,7 @@ using UnityEngine.Events;
 [ExecuteAlways]
 public class MenuButtonGroup : MonoBehaviour
 {
-	[Header("Init")]
+	[Header("References")]
 	public TMPro.TMP_Text Title;
 	public GameObject ButtonContainer;
 

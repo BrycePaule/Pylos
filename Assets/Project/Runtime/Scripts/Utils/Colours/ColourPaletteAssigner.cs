@@ -6,7 +6,8 @@ using UnityEngine.UI;
 [ExecuteInEditMode]
 public class ColourPaletteAssigner : MonoBehaviour
 {
-	[SerializeField] private ColourPalette palette;
+	[Header("References")]
+	public ColourPalette palette;
 
 	[Header("UI")]
 	public List<Image> UIBase = new List<Image>();

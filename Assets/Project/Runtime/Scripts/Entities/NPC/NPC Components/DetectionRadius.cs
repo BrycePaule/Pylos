@@ -4,9 +4,11 @@ using UnityEngine;
 
 public class DetectionRadius : NPCComponentBase
 {
-	public GameSettings GameSettings;
+	[Header("References")]
+	public SettingsInjecter SettingsInjecter;
 
-	[SerializeField] int detectionRadius;
+	[Header("Settings")]
+	public int detectionRadius;
 
 	private SpriteRenderer sr;
 
@@ -30,7 +32,7 @@ public class DetectionRadius : NPCComponentBase
 
 	private void FixedUpdate()
 	{
-		if (GameSettings.ShowDetectionRadius)
+		if (SettingsInjecter.GameSettings.ShowDetectionRadius)
 		{
 			sr.enabled = true;
 		}

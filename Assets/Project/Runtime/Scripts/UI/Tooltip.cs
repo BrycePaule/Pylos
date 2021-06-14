@@ -7,16 +7,17 @@ using System.Reflection;
 
 public class Tooltip : MonoBehaviour
 {
+	[Header("References")]
 	public PlayerSelections PlayerSelections;
 
-	[SerializeField] private GameObject container;
-	[SerializeField] private TMP_Text heading;
-	[SerializeField] private Image entitySprite;
-	[SerializeField] private GameObject healthBar;
-	[SerializeField] private HealthBarValues healthBarValues;
-	[SerializeField] private GameObject infoBox;
+	public GameObject TooltipContainer;
+	public TMP_Text HeaderText;
+	public Image Icon;
+	public GameObject HealthBar;
+	public HealthBarValues HealthBarValues;
+	public GameObject InfoBox;
 
-	[SerializeField] private GameObject PropertyElementPrefab;
+	public GameObject PropertyElementPrefab;
 	
 	private Slider slider;
 	private CanvasRenderer canvasRenderer;
@@ -28,7 +29,7 @@ public class Tooltip : MonoBehaviour
 
 	private void Awake() 
 	{
-		slider = healthBar.GetComponentInChildren<Slider>();
+		slider = HealthBar.GetComponentInChildren<Slider>();
 		canvasRenderer = gameObject.GetComponent<CanvasRenderer>();
 		tooltipRectTransform = gameObject.GetComponent<RectTransform>();
 		tooltipBaseHeight = tooltipRectTransform.rect.height;
@@ -103,7 +104,7 @@ public class Tooltip : MonoBehaviour
 
 	private void UpdateInfoBoxSize<T>(GameObject obj)
 	{
-		tooltipRectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, tooltipBaseHeight + ((healthBar.activeInHierarchy ? 0 : 1) * -10) + (typeof(T).GetFields().Length * propHeight));
+		tooltipRectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, tooltipBaseHeight + ((HealthBar.activeInHierarchy ? 0 : 1) * -10) + (typeof(T).GetFields().Length * propHeight));
 	}
 
 	private void BuildDisplayProperties<T>(GameObject obj, T comp)
@@ -114,7 +115,7 @@ public class Tooltip : MonoBehaviour
 		int missingProps = fieldCount - propPool.Count;
 		for (int i = 0; i < missingProps; i++)
 		{
-			propPool.Add(Instantiate(PropertyElementPrefab, new Vector3(0, 0, 0), Quaternion.identity, infoBox.transform).GetComponent<PropertyElement>());
+			propPool.Add(Instantiate(PropertyElementPrefab, new Vector3(0, 0, 0), Quaternion.identity, InfoBox.transform).GetComponent<PropertyElement>());
 		}
 
 		// disable unused property elements
@@ -135,46 +136,46 @@ public class Tooltip : MonoBehaviour
 
 	private void DisableAllProperties()
 	{
-		for (int i = 0; i < infoBox.transform.childCount; i++)
+		for (int i = 0; i < InfoBox.transform.childCount; i++)
 		{
-			infoBox.transform.GetChild(i).gameObject.SetActive(false);
+			InfoBox.transform.GetChild(i).gameObject.SetActive(false);
 		}
 
-		tooltipRectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, tooltipBaseHeight + ((healthBar.activeInHierarchy ? 0 : 1) * -10));
+		tooltipRectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, tooltipBaseHeight + ((HealthBar.activeInHierarchy ? 0 : 1) * -10));
 	}
 
 	private void UpdateHealthBar(GameObject obj)
 	{
 		if (obj.GetComponentInChildren<Health>() != null)
 		{
-			healthBar.SetActive(true);
+			HealthBar.SetActive(true);
 			Health objHealth = obj.GetComponentInChildren<Health>();
 			slider.value = objHealth.CurrentHealth / objHealth.MaxHealth;
-			healthBarValues.CurrentHealth = objHealth.CurrentHealth;
-			healthBarValues.MaxHealth = objHealth.MaxHealth;
+			HealthBarValues.CurrentHealth = objHealth.CurrentHealth;
+			HealthBarValues.MaxHealth = objHealth.MaxHealth;
 		}
 		else
 		{
-			healthBar.SetActive(false);
+			HealthBar.SetActive(false);
 		}
 	}
 
 	private void UpdateHeader(GameObject obj)
 	{
-		heading.text = obj.name;
+		HeaderText.text = obj.name;
 		SpriteRenderer sr = obj.GetComponent<SpriteRenderer>();
-		entitySprite.sprite = sr.sprite;
-		entitySprite.color = sr.color;
+		Icon.sprite = sr.sprite;
+		Icon.color = sr.color;
 	}
 
 	public void EnableTooltip() 
 	{ 
-		container.SetActive(true);
+		TooltipContainer.SetActive(true);
 	}
 
 	public void DisableTooltip()
 	{
-		container.SetActive(false);
+		TooltipContainer.SetActive(false);
 	}
 
 }

@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class AStar : MonoBehaviour
 {
+	[Header("References")]
 	public SettingsInjecter SettingsInjecter;
 
 	private Node[,] nodes;

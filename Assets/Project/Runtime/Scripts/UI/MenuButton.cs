@@ -7,7 +7,7 @@ using UnityEngine.Events;
 [ExecuteAlways]
 public class MenuButton : MonoBehaviour
 {
-	[Header("Do not touch")]
+	[Header("References")]
 	public TMPro.TMP_Text Title;
 	public Button Button;
 	public Image Icon;

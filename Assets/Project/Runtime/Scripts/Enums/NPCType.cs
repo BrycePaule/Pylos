@@ -4,8 +4,8 @@ using UnityEngine;
 
 public enum NPCType
 {
-	Rabbit,
-	Wolf,
-	Goblin,
-	Hero,
+	Rabbit = 0,
+	Wolf = 1,
+	Goblin = 2,
+	Hero = 3,
 }

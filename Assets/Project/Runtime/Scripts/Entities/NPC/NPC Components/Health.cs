@@ -6,15 +6,15 @@ using UnityEngine.UI;
 
 public class Health : NPCComponentBase, IDamageable<float>
 {
-	[SerializeField] public float MaxHealth;
-	[SerializeField] public float CurrentHealth;
-	[SerializeField] private Canvas HealthBarCanvas;
-	[SerializeField] private GameObject HealthBar;
-
+	[Header("References")]
 	public ParticleSystem OnHitSplatter;
 	public ParticleSystem OnDeathSplatter;
 
-	public UnityEvent OnDeathEvent;
+	[Header("Settings")]
+	public float MaxHealth;
+	public float CurrentHealth;
+	public Canvas HealthBarCanvas;
+	public GameObject HealthBar;
 
 	private Slider slider;
 
@@ -60,7 +60,7 @@ public class Health : NPCComponentBase, IDamageable<float>
 		Instantiate(OnHitSplatter.gameObject, transform.position, Quaternion.identity);
 	}
 
-	public void Heal(float value)
+	public void Heal(float value, GameObject healedBy)
 	{
 		CurrentHealth = Mathf.Clamp(CurrentHealth + value, 0, MaxHealth);
 		UpdateHealthBarSlider();
@@ -83,7 +83,6 @@ public class Health : NPCComponentBase, IDamageable<float>
 
 	public void Kill() 
 	{
-		// OnDeathEvent.Invoke();
 		Instantiate(OnDeathSplatter.gameObject, transform.position, Quaternion.identity);
 		Destroy(transform.parent.gameObject);
 	}

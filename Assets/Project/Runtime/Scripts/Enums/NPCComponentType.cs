@@ -4,11 +4,11 @@ using UnityEngine;
 
 public enum NPCComponentType
 {
-	Movement,
-	Health,
-	AttackRadius,
-	DetectionRadius,
-	Combat,
-	Aggro,
-	PathDrawer,
+	Movement = 0,
+	Health = 1,
+	AttackRadius = 2,
+	DetectionRadius = 3,
+	Combat = 4,
+	Aggro = 5,
+	PathDrawer = 6,
 }

@@ -8,9 +8,11 @@ using UnityEngine.UI;
 [ExecuteInEditMode]
 public class BuildMenuButton : MonoBehaviour
 {
+	[Header("References")]
 	public BuildingTable BuildingTable;
 	public BuildMenu BuildMenu;
 
+	[Header("Settings")]
 	public Button Button;
 	public Image Image;
 	public int BuildingID;

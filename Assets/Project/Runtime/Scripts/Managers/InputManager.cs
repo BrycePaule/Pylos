@@ -9,24 +9,30 @@ using System;
 
 public class InputManager : MonoBehaviour
 {
+	[Header("References")]
 	public SettingsInjecter SettingsInjecter;
 	public PlayerSelections PlayerSelections;
 	public LocationMarkers LocationMarkers;
+	public EventSystem EventSystem;
 
+	[Header("UI References")]
+	public Canvas UIcanvas;
+	public Tooltip Tooltip;
+	public Menu Menu;
+	public BuildMenu BuildMenu;
+	public RectTransform SelectionBox;
+	public LayerMask SelectableLayers;
+	public BuildGhost BuildGhost;
+
+	[Header("Camera")]
+	public CameraController CameraController;
+
+	[Header("Map")]
+	public MapGenerator MapGenerator;
+	public Tilemap Tilemap;
+
+	[Header("Debug")]
 	public GameObject Highlight;
-
-	[SerializeField] private CameraController cameraController;
-	[SerializeField] private Canvas UIcanvas;
-	[SerializeField] private EventSystem eventSystem;
-	[SerializeField] private MapGenerator mapGenerator;
-	[SerializeField] private Tilemap tilemap;
-	[SerializeField] private Tooltip tooltip;
-	[SerializeField] private Menu menu;
-	[SerializeField] private BuildMenu buildMenu;
-	[SerializeField] private RectTransform selectionBox;
-	// [SerializeField] private GameObject tileCursor;
-	[SerializeField] private LayerMask selectable;
-	[SerializeField] private BuildGhost BuildGhost;
 
 	private InputAction _playerMovement;
 	private InputAction _playerLeftClick;
@@ -47,22 +53,8 @@ public class InputManager : MonoBehaviour
 	private GameObject rectMarker1;
 	private GameObject rectMarker2;
 
-	private void OnEnable()
-	{
-		// _playerMovement.Enable();
-		// _playerLeftClick.Enable();
-		// _playerLeftClickHold.Enable();
-		// _playerRightClick.Enable();
-		// _toggleMenu.Enable();
-		// _cameraZoom.Enable();
-		// _locationSave.Enable();
-		// _locationSnap.Enable();
-	}
-
 	private void Awake()
 	{
-		// mouseMarker = Instantiate(Highlight, Vector3.zero, Quaternion.identity);
-
 		PlayerControls _playerControls = new PlayerControls();
 		_playerControls.Enable();
 
@@ -101,8 +93,7 @@ public class InputManager : MonoBehaviour
 
 	private void Start() 
 	{
-		selectionBox.gameObject.SetActive(false);
-		// tileCursor.SetActive(false);
+		SelectionBox.gameObject.SetActive(false);
 		PlayerSelections.DeselectAll();
 	}
 
@@ -128,28 +119,28 @@ public class InputManager : MonoBehaviour
 
 	private void FixedUpdate() 
 	{
-		cameraController.Move(_playerMovement.ReadValue<Vector2>());
+		CameraController.Move(_playerMovement.ReadValue<Vector2>());
 	}
 
 	// CAMERA
 	private void OnCameraZoom(InputAction.CallbackContext ctx)
 	{
-		cameraController.Zoom(ctx.ReadValue<Vector2>().y);
+		CameraController.Zoom(ctx.ReadValue<Vector2>().y);
 	}
 
 	private void OnCameraBoostDown(InputAction.CallbackContext ctx)
 	{
-		cameraController.Boost = true;
+		CameraController.Boost = true;
 	}
 
 	private void OnCameraBoostUp(InputAction.CallbackContext ctx)
 	{
-		cameraController.Boost = false;
+		CameraController.Boost = false;
 	}
 
 	private void OnLocationSave(int index)
 	{
-		LocationMarkers.Locations[index] = cameraController.transform.position;
+		LocationMarkers.Locations[index] = CameraController.transform.position;
 	}
 
 	private void OnLocationSnap(int index)
@@ -158,7 +149,7 @@ public class InputManager : MonoBehaviour
 		Vector3 loc = LocationMarkers.Locations[index];
 		if (loc != null)
 		{
-			cameraController.MoveTo(LocationMarkers.Locations[index]);
+			CameraController.MoveTo(LocationMarkers.Locations[index]);
 		}
 	}
 	
@@ -192,12 +183,23 @@ public class InputManager : MonoBehaviour
 
 	private void OnRightClick(Vector3 mpos, InputAction.CallbackContext context)
 	{
+		if (SettingsInjecter.GameSettings.IsBuilding)
+		{
+			BuildGhost.Disable();
+		}
+
+		if (SettingsInjecter.GameSettings.MenuIsOpen || SettingsInjecter.GameSettings.BuildMenuIsOpen)
+		{
+			Menu.TweenOutMenu();
+			BuildMenu.TweenOutMenu();
+		}
+
 		Ray ray = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
 		Vector3 worldPoint = ray.GetPoint(0);
 		Vector2Int tileLoc = TileConversion.WorldToTile(worldPoint);
 
 		PlayerSelections.DeselectAll();
-		selectionBox.gameObject.SetActive(false);
+		SelectionBox.gameObject.SetActive(false);
 
 		foreach (TileTravelType type in SettingsInjecter.MapSettings.GetTile(tileLoc).TravelType)
 		{
@@ -208,7 +210,7 @@ public class InputManager : MonoBehaviour
 	private GameObject GetSelectableUnderCursor(Vector3 mpos)
 	{
 		Ray ray = Camera.main.ScreenPointToRay(mpos);
-		RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction, 100f, selectable);
+		RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction, 100f, SelectableLayers);
 
 		if (hit) 
 		{
@@ -224,12 +226,12 @@ public class InputManager : MonoBehaviour
 	private void OnLeftClickHold(Vector3 mpos, InputAction.CallbackContext context)
 	{
 		holdingMouseDown = true;
-		selectionBox.gameObject.SetActive(true);
+		SelectionBox.gameObject.SetActive(true);
 	}
 
 	private void OnHoldRelease(Vector2 currPos)
 	{
-		selectionBox.gameObject.SetActive(false);
+		SelectionBox.gameObject.SetActive(false);
 		holdingMouseDown = false;
 
 		Vector2 uiRectCentre = currPos - pointLastClicked;
@@ -242,7 +244,7 @@ public class InputManager : MonoBehaviour
 		List<GameObject> playerUnits = new List<GameObject>();
 		List<GameObject> allSelectables = new List<GameObject>();
 
-		RaycastHit2D[] hits = Physics2D.BoxCastAll(worldPos, size, 0, Vector2.zero, Mathf.Infinity, selectable);
+		RaycastHit2D[] hits = Physics2D.BoxCastAll(worldPos, size, 0, Vector2.zero, Mathf.Infinity, SelectableLayers);
 		foreach (RaycastHit2D hit in hits)
 		{
 			GameObject obj = hit.transform.gameObject;
@@ -268,15 +270,15 @@ public class InputManager : MonoBehaviour
 		float width = currPos.x - pointLastClicked.x;
 		float height = currPos.y - pointLastClicked.y;
 
-		selectionBox.sizeDelta = new Vector2(width, height);
-		selectionBox.position = pointLastClicked;
+		SelectionBox.sizeDelta = new Vector2(width, height);
+		SelectionBox.position = pointLastClicked;
 	}
 
 	// UTILS
 
 	private bool ClickedUI(Vector3 mpos)
 	{ 
-		PointerEventData PointerEventData = new PointerEventData(eventSystem);
+		PointerEventData PointerEventData = new PointerEventData(EventSystem);
 		PointerEventData.position = mpos;
 
 		List<RaycastResult> hits = new List<RaycastResult>();
@@ -314,18 +316,18 @@ public class InputManager : MonoBehaviour
 	// MENU
 	private void OnToggleMenu()
 	{
-		menu.ToggleMenu();
+		Menu.ToggleMenu();
 	}
 
 	private void OnToggleBuildMenu()
 	{
-		buildMenu.ToggleBuildMenu();
+		BuildMenu.ToggleBuildMenu();
 	}
 
 	private void TurnOffMenus()
 	{
-		if (SettingsInjecter.GameSettings.MenuIsOpen) { menu.TweenOutMenu(); }
-		if (SettingsInjecter.GameSettings.BuildMenuIsOpen) { buildMenu.TweenOutMenu(); }
+		if (SettingsInjecter.GameSettings.MenuIsOpen) { Menu.TweenOutMenu(); }
+		if (SettingsInjecter.GameSettings.BuildMenuIsOpen) { BuildMenu.TweenOutMenu(); }
 	}
 
 }

@@ -4,15 +4,17 @@ using UnityEngine;
 
 public class BuildMenu : MonoBehaviour
 {
+	[Header("References")]
 	public SettingsInjecter SettingsInjecter;
-	public BuildingTable BuildingTable;
 	public PlayerSelections PlayerSelections;
+	public BuildingTable BuildingTable;
 	public BuildGhost BuildGhost;
 
+	[Header("Settings")]
 	public int xOut;
 	public int xIn;
-	public float easeDuration;
-	public LeanTweenType easeType;
+	public float EaseDuration;
+	public LeanTweenType EaseType;
 
 	private bool tweening;
 
@@ -41,13 +43,13 @@ public class BuildMenu : MonoBehaviour
 		tweening = true;
 		SettingsInjecter.GameSettings.BuildMenuIsOpen = true;
 		gameObject.SetActive(true);
-		LeanTween.moveLocalX(gameObject, xIn, easeDuration).setEase(easeType).setOnComplete(FinishInTween);
+		LeanTween.moveLocalX(gameObject, xIn, EaseDuration).setEase(EaseType).setOnComplete(FinishInTween);
 	}
 
 	public void TweenOutMenu()
 	{
 		tweening = true;
-		LeanTween.moveLocalX(gameObject, xOut, easeDuration).setEase(easeType).setOnComplete(FinishOutTween);
+		LeanTween.moveLocalX(gameObject, xOut, EaseDuration).setEase(EaseType).setOnComplete(FinishOutTween);
 		SettingsInjecter.GameSettings.BuildMenuIsOpen = false;
 	}
 

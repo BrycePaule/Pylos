@@ -6,22 +6,21 @@ using UnityEngine.Tilemaps;
 
 public class NPCGenerator : MonoBehaviour
 {
-	[Header("Init")]
+	[Header("References")]
 	public SettingsInjecter SettingsInjecter;
-    public MapGenerator mapGenerator;
-    public List<ScriptableObject> npcDataAssets;
-    public Transform npcContainer;
-
-	[Header("Overrides")]
-    [SerializeField] private bool OVERRIDE_SPAWN_COUNTS;
-    [SerializeField] private NPCType NPCTYPE_OVERRIDE;
-    [SerializeField] private int SPAWN_CAP_OVERRIDE;
-    [SerializeField] private bool OVERRIDE_SPEED;
-    [SerializeField] private float MOVE_DELAY_OVERRIDE;
-
+	public MapGenerator MapGenerator;
+	public Transform NPCContainer;
+	public List<ScriptableObject> NPCDataAssets;
 
 	[Header("Settings")]
-    [SerializeField] private int spawnCheckDelay;
+	public int SpawnCheckDelay;
+
+	[Header("Overrides")]
+	public bool OVERRIDE_SPAWN_COUNTS;
+	public NPCType NPCTYPE_OVERRIDE;
+	public int SPAWN_CAP_OVERRIDE;
+	public bool OVERRIDE_SPEED;
+	public float MOVE_DELAY_OVERRIDE;
 
 	private float _spawnCheckTimer;
 
@@ -48,7 +47,7 @@ public class NPCGenerator : MonoBehaviour
 		foreach (NPCType npc in System.Enum.GetValues(typeof(NPCType)))
 		{
 			Transform container = new GameObject(npc.ToString() + "Container").transform;
-			container.SetParent(npcContainer);
+			container.SetParent(NPCContainer);
 			Spawn(npc, npcData[npc].SpawnCount, container);
 		}
 	}
@@ -58,7 +57,7 @@ public class NPCGenerator : MonoBehaviour
 		if (OVERRIDE_SPAWN_COUNTS) { return;}
 
 		_spawnCheckTimer += Time.deltaTime;
-		if (_spawnCheckTimer > spawnCheckDelay)
+		if (_spawnCheckTimer > SpawnCheckDelay)
 		{
 			foreach (NPCType npc in System.Enum.GetValues(typeof(NPCType)))
 			{
@@ -126,7 +125,7 @@ public class NPCGenerator : MonoBehaviour
 
 	private void BuildNPCDictionary()
 	{
-		foreach (NPCData asset in npcDataAssets)
+		foreach (NPCData asset in NPCDataAssets)
 		{
 			npcData.Add(asset.NPCType, asset);
 		}

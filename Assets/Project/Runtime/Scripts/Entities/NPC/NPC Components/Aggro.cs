@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class Aggro : NPCComponentBase
 {
+	[Header("Settings")]
 	public bool IsAggro;
-
 	public AggroList AggroList = new AggroList();
 
 	private Movement npcMovement;

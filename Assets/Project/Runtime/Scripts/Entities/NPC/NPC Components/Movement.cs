@@ -6,13 +6,14 @@ using System.Reflection;
 
 public class Movement : NPCComponentBase
 {
+	[Header("References")]
 	public SettingsInjecter SettingsInjecter;
 	public PlayerMaterials PlayerMaterials;
 
-	[Header("Movement")]
-	public MovementType NPCMovementType;
+	[Header("Settings")]
 	public Vector2Int TileLoc;
 	public Vector2Int TargetLoc;
+	public MovementType NPCMovementType;
 	public float MoveDelay;
 	public float TilesPerStep; 
 	public int MeanderRange;

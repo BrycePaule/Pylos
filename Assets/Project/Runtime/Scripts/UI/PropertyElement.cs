@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[ExecuteAlways]
+[ExecuteInEditMode]
 public class PropertyElement : MonoBehaviour
 {
 	public TMPro.TMP_Text property;

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public enum TileTravelType
 {
-	Impassable,
-    Walkable,
-    Swimmable,
+	Impassable = 0,
+    Walkable = 1,
+    Swimmable = 2,
 }

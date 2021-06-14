@@ -4,17 +4,18 @@ using UnityEngine;
 
 public class Menu : MonoBehaviour
 {
+	[Header("References")]
 	public SettingsInjecter SettingsInjecter;
 	public PlayerSelections PlayerSelections;
+	public CameraController CameraController;
+	public Canvas UICanvas;
+	public GameObject NPCContainer;
 
-	[SerializeField] private CameraController CameraController;
-	[SerializeField] private Canvas UICanvas;
-	[SerializeField] private GameObject npcContainer;
-
+	[Header("Settings")]
 	public int yUp;
 	public int yDown;
-	public float easeDuration;
-	public LeanTweenType easeType;
+	public float EaseDuration;
+	public LeanTweenType EaseType;
 
 	private bool tweening;
 
@@ -44,13 +45,13 @@ public class Menu : MonoBehaviour
 		tweening = true;
 		SettingsInjecter.GameSettings.MenuIsOpen = true;
 		gameObject.SetActive(true);
-		LeanTween.moveLocalY(gameObject, yDown, easeDuration).setEase(easeType).setOnComplete(FinishInTween);
+		LeanTween.moveLocalY(gameObject, yDown, EaseDuration).setEase(EaseType).setOnComplete(FinishInTween);
 	}
 
 	public void TweenOutMenu()
 	{
 		tweening = true;
-		LeanTween.moveLocalY(gameObject, yUp, easeDuration).setEase(easeType).setOnComplete(FinishOutTween);
+		LeanTween.moveLocalY(gameObject, yUp, EaseDuration).setEase(EaseType).setOnComplete(FinishOutTween);
 		SettingsInjecter.GameSettings.MenuIsOpen = false;
 	}
 
@@ -72,7 +73,7 @@ public class Menu : MonoBehaviour
 
 	public void HealthDown()
 	{
-		foreach (Health health in npcContainer.GetComponentsInChildren<Health>())
+		foreach (Health health in NPCContainer.GetComponentsInChildren<Health>())
 		{
 			health.Damage(1, null);
 		}
@@ -80,9 +81,9 @@ public class Menu : MonoBehaviour
 
 	public void HealthUp()
 	{
-		foreach (Health health in npcContainer.GetComponentsInChildren<Health>())
+		foreach (Health health in NPCContainer.GetComponentsInChildren<Health>())
 		{
-			health.Heal(1);
+			health.Heal(1, null);
 		}
 	}
 

@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class AggroList
 {
+	[Header("Settings")]
 	public Dictionary<NPCBase, int> targets = new Dictionary<NPCBase, int>();
 	public NPCBase Highest;
 

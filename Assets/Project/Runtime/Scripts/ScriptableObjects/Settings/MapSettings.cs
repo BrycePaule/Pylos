@@ -13,7 +13,7 @@ public class MapSettings : ScriptableObject
 	public float OffsetX;
 	public float OffsetY;
 
-	[Header("Terrain Generation")]
+	[Header("Terrain Heights")]
 	[Range(0, 1f)] public float WaterMaxHeight;
 	[Range(0, 1f)] public float SandMaxHeight;
 	[Range(0, 1f)] public float DirtMaxHeight;

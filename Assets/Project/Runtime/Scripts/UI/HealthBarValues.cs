@@ -5,9 +5,11 @@ using UnityEngine.UI;
 
 public class HealthBarValues : MonoBehaviour
 {
+	[Header("References")]
 	public TMPro.TMP_Text CurrentHealthText;
 	public TMPro.TMP_Text MaxHealthText;
 
+	[Header("Settings")]
 	public float CurrentHealth;
 	public float MaxHealth;
 

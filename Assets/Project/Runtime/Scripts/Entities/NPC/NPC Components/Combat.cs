@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Combat : NPCComponentBase
 {
+	[Header("Settings")]
 	public float Damage;
 	public float AttackSpeed;
 	public int AttackRange;

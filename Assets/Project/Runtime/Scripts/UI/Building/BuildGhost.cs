@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class BuildGhost : MonoBehaviour
 {
+	[Header("References")]
 	public SettingsInjecter SettingsInjecter;
-
 	public GameObject BuildingContainer;
 
 	private SpriteRenderer sr;
-	private BuildingTableEntry buildingGhost;
+	private BuildingTableEntry currentGhost;
 
 	private void Awake()
 	{
@@ -26,9 +26,9 @@ public class BuildGhost : MonoBehaviour
 
 	public void UpdateCurrentGhost(BuildingTableEntry building)
 	{
-		if (buildingGhost == building) { return; }
+		if (currentGhost == building) { return; }
 
-		buildingGhost = building;
+		currentGhost = building;
 		sr.sprite = building.Sprite;
 	}
 
@@ -37,28 +37,28 @@ public class BuildGhost : MonoBehaviour
 		Ray ray = Camera.main.ScreenPointToRay(mpos);
 		Vector3 worldPoint = ray.GetPoint(0);
 
-		GameObject building = Instantiate(buildingGhost.Prefab, TileConversion.TileToWorld3D(TileConversion.WorldToTile(worldPoint)), Quaternion.identity, BuildingContainer.transform);
-		building.name = buildingGhost.Name;
+		GameObject building = Instantiate(currentGhost.Prefab, TileConversion.TileToWorld3D(TileConversion.WorldToTile(worldPoint)), Quaternion.identity, BuildingContainer.transform);
+		building.name = currentGhost.Name;
 
 		BuildingBase bBase = building.GetComponent<BuildingBase>();
 		bBase.TileLoc = TileConversion.WorldToTile(worldPoint);
 		bBase.Faction = Faction.Pylos;
-		bBase.ID = buildingGhost.ID;
-		bBase.TravelType = buildingGhost.TravelType;
-		if (buildingGhost.TravelType == TileTravelType.Impassable)
+		bBase.ID = currentGhost.ID;
+		bBase.TravelType = currentGhost.TravelType;
+		if (currentGhost.TravelType == TileTravelType.Impassable)
 		{
 			building.GetComponent<BoxCollider2D>().isTrigger = true;
 		}
 
 		SpriteRenderer bSR = building.GetComponent<SpriteRenderer>();
-		bSR.sprite = buildingGhost.Sprite;
+		bSR.sprite = currentGhost.Sprite;
 
 		SettingsInjecter.MapSettings.GetTile(TileConversion.WorldToTile(worldPoint)).ContainedObjects.Add(building);
 
 		List<TileTravelType> tileTT = SettingsInjecter.MapSettings.GetTile(TileConversion.WorldToTile(worldPoint)).TravelType;
-		if (!tileTT.Contains(buildingGhost.TravelType))
+		if (!tileTT.Contains(currentGhost.TravelType))
 		{
-			SettingsInjecter.MapSettings.GetTile(TileConversion.WorldToTile(worldPoint)).TravelType.Add(buildingGhost.TravelType);
+			SettingsInjecter.MapSettings.GetTile(TileConversion.WorldToTile(worldPoint)).TravelType.Add(currentGhost.TravelType);
 		}
 	}
 

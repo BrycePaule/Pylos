@@ -4,7 +4,7 @@ using UnityEngine;
 
 public enum MovementType
 {
-	Meander,
-	Chase,
-	Search,
+	Meander = 0,
+	Chase = 1,
+	Search = 2,
 }

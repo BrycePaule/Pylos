@@ -20,6 +20,7 @@ public class PlayerSelections : ScriptableObject
 
 	public void Select(GameObject obj)
 	{
+		CheckMissings();
 		DisableSelectionRings();
 		SelectedObjects = new List<GameObject>(){obj};
 		EnableSelectionRings();
@@ -27,6 +28,7 @@ public class PlayerSelections : ScriptableObject
 
 	public void Select(List<GameObject> objs)
 	{
+		CheckMissings();
 		DisableSelectionRings();
 		SelectedObjects = objs;
 		EnableSelectionRings();
@@ -34,6 +36,7 @@ public class PlayerSelections : ScriptableObject
 
 	public void DeselectAll()
 	{
+		CheckMissings();
 		DisableSelectionRings();
 		HoveredObjects.Clear();
 		SelectedObjects.Clear();
@@ -52,6 +55,17 @@ public class PlayerSelections : ScriptableObject
 		foreach (GameObject obj in SelectedObjects)
 		{
 			obj.GetComponentInChildren<SelectionRing>().Deselect();
+		}
+	}
+
+	private void CheckMissings()
+	{
+		for (int i = SelectedObjects.Count - 1; i >= 0; i--)
+		{
+			if (SelectedObjects[i] == null) 
+			{
+				SelectedObjects.RemoveAt(i);
+			}
 		}
 	}
 
