@@ -56,7 +56,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   NPCType: 0
   Faction: 3
-  TravelTypes: 00000000
+  TravelTypes: 01000000
 --- !u!212 &5329338898667464234
 SpriteRenderer:
   m_ObjectHideFlags: 0

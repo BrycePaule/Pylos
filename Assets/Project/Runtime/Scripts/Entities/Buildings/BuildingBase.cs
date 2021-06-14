@@ -7,4 +7,5 @@ public class BuildingBase : MonoBehaviour
 	public int ID;
 	public Vector2Int TileLoc;
 	public Faction Faction;
+	public TileTravelType TravelType;
 }

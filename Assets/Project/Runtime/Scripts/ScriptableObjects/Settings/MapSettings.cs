@@ -41,6 +41,7 @@ public class MapSettings : ScriptableObject
 	public bool IsPathable(Vector2Int loc,  List<TileTravelType> travelTypes)
 	{
 		if (!IsWithinBounds(loc)) { return false; }
+		if (GetTile(loc).TravelType.Contains(TileTravelType.Impassable)) { return false; }
 
 		foreach (TileTravelType travelType in travelTypes)
 		{

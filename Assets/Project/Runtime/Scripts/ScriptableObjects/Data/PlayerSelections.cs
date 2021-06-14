@@ -5,8 +5,8 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Data Packs/Player Selections")]
 public class PlayerSelections : ScriptableObject
 {
-	public List<GameObject> SelectedObjects = new List<GameObject>();
-	public List<GameObject> HoveredObjects = new List<GameObject>();
+	public List<GameObject> SelectedObjects;
+	public List<GameObject> HoveredObjects;
 
 	public void Hover(GameObject obj)
 	{

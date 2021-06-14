@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class BuildGhost : MonoBehaviour
 {
-	public GameObject BuildingPrefab;
+	public SettingsInjecter SettingsInjecter;
+
 	public GameObject BuildingContainer;
 
 	private SpriteRenderer sr;
@@ -36,16 +37,29 @@ public class BuildGhost : MonoBehaviour
 		Ray ray = Camera.main.ScreenPointToRay(mpos);
 		Vector3 worldPoint = ray.GetPoint(0);
 
-		GameObject building = Instantiate(BuildingPrefab, TileConversion.TileToWorld3D(TileConversion.WorldToTile(worldPoint)), Quaternion.identity, BuildingContainer.transform);
+		GameObject building = Instantiate(buildingGhost.Prefab, TileConversion.TileToWorld3D(TileConversion.WorldToTile(worldPoint)), Quaternion.identity, BuildingContainer.transform);
 		building.name = buildingGhost.Name;
 
 		BuildingBase bBase = building.GetComponent<BuildingBase>();
 		bBase.TileLoc = TileConversion.WorldToTile(worldPoint);
 		bBase.Faction = Faction.Pylos;
 		bBase.ID = buildingGhost.ID;
+		bBase.TravelType = buildingGhost.TravelType;
+		if (buildingGhost.TravelType == TileTravelType.Impassable)
+		{
+			building.GetComponent<BoxCollider2D>().isTrigger = true;
+		}
 
 		SpriteRenderer bSR = building.GetComponent<SpriteRenderer>();
 		bSR.sprite = buildingGhost.Sprite;
+
+		SettingsInjecter.MapSettings.GetTile(TileConversion.WorldToTile(worldPoint)).ContainedObjects.Add(building);
+
+		List<TileTravelType> tileTT = SettingsInjecter.MapSettings.GetTile(TileConversion.WorldToTile(worldPoint)).TravelType;
+		if (!tileTT.Contains(buildingGhost.TravelType))
+		{
+			SettingsInjecter.MapSettings.GetTile(TileConversion.WorldToTile(worldPoint)).TravelType.Add(buildingGhost.TravelType);
+		}
 	}
 
 

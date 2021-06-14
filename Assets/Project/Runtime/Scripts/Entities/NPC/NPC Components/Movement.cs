@@ -41,7 +41,7 @@ public class Movement : NPCComponentBase
 		npcRB = GetComponentInParent<Rigidbody2D>();
 		aStar = GetComponent<AStar>();
 
-		if (!CheckCanMove()) { print(npcBase.name + " doesn't have a movement type"); }
+		if (!CheckHasMovementType()) { print(npcBase.name + " doesn't have a movement type"); }
 	}
 
 	private void Start() 
@@ -123,15 +123,8 @@ public class Movement : NPCComponentBase
 
 		if (moveTimer >= MoveDelay)
 		{
-			List<Node> path = FindPathToTarget(maxAttempts: 5);
-			if (path.Count == 0) 
-			{
-				RandomTargetLocation(TileLoc); 
-			}
-			else
-			{
-				TakeStepAlongPath(path);
-			}
+			List<Node> path = FindPathToTarget(maxAttempts: 3);
+			TakeStepAlongPath(path);
 		}
 	}
 
@@ -171,7 +164,7 @@ public class Movement : NPCComponentBase
 
 		if (moveTimer >= MoveDelay)
 		{
-			List<Node> path = FindPathToTarget(maxAttempts: 5, acceptNearest: true);
+			List<Node> path = FindPathToTarget(maxAttempts: 3, acceptNearest: true);
 			TakeStepAlongPath(path);
 		}
 	}
@@ -238,8 +231,19 @@ public class Movement : NPCComponentBase
 		searchTimer += Random.Range(0, SearchDelay);
 	}
 
-	private bool CheckCanMove()
+	private bool CheckHasMovementType()
 	{
-		return npcBase.TravelTypes.Count > 0;
+		if (npcBase.TravelTypes.Count >= 2)
+		{
+			return true;
+		} 
+		else if (npcBase.TravelTypes.Count == 1 && npcBase.TravelTypes[0] != TileTravelType.Impassable)
+		{
+			return true;
+		}
+		else 
+		{
+			return false;
+		}
 	}
 }

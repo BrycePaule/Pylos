@@ -199,7 +199,10 @@ public class InputManager : MonoBehaviour
 		PlayerSelections.DeselectAll();
 		selectionBox.gameObject.SetActive(false);
 
-		print(tilemap.GetTile(new Vector3Int(tileLoc.x, tileLoc.y, 0)));
+		foreach (TileTravelType type in SettingsInjecter.MapSettings.GetTile(tileLoc).TravelType)
+		{
+			print(type);
+		}
 	}
 
 	private GameObject GetSelectableUnderCursor(Vector3 mpos)

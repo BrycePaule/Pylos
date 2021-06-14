@@ -7,6 +7,10 @@ public class BuildingTableEntry
 {
 	public int ID;
 	public string Name;
+	public TileTravelType TravelType;
+
 	public Sprite Sprite;
 	public Sprite Icon;
+
+	public GameObject Prefab;
 }

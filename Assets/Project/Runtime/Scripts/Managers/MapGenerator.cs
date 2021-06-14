@@ -105,7 +105,7 @@ public class MapGenerator : MonoBehaviour
 
 					if (RandomChance.Roll(SettingsInjecter.MapSettings.DirtSpotSpawnPercent))
 					{
-						InstantiateObject(clutterPrefab, pos, "Dirt Spot", tileData, dirtSpotContainer, dirtSpotSprites);
+						InstantiateObject(clutterPrefab, pos, "Dirt", tileData, dirtSpotContainer, dirtSpotSprites);
 					}
 				}
 				else if (height > SettingsInjecter.MapSettings.DirtMaxHeight && height <= SettingsInjecter.MapSettings.GrassMaxHeight)
@@ -117,7 +117,7 @@ public class MapGenerator : MonoBehaviour
 					{
 						GameObject tree = InstantiateObject(treePrefab, pos, "Tree", tileData, treeContainer, treeSprites, flipY: false);
 
-						tileData.TravelType.Remove(TileTravelType.Walkable);
+						tileData.TravelType.Add(TileTravelType.Impassable);
 						tree.GetComponent<Container>().TileLoc = new Vector2Int(pos.x, pos.y);
 						tree.GetComponent<ExhaustableContainer>().Put(ItemID.Wood, 10);
 					}
@@ -133,7 +133,7 @@ public class MapGenerator : MonoBehaviour
 
 					if (RandomChance.Roll(SettingsInjecter.MapSettings.StoneSpawnPercent))
 					{
-						GameObject stone = InstantiateObject(stonePrefab, pos, "Dirt", tileData, stoneContainer, stoneSprites, flipY: false);
+						GameObject stone = InstantiateObject(stonePrefab, pos, "Stone", tileData, stoneContainer, stoneSprites, flipY: false);
 
 						stone.GetComponent<Container>().TileLoc = new Vector2Int(pos.x, pos.y);
 						stone.GetComponent<ExhaustableContainer>().Put(ItemID.Stone, 10);

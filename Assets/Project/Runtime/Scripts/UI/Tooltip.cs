@@ -37,6 +37,7 @@ public class Tooltip : MonoBehaviour
 
 	private void Start() 
 	{
+		PlayerSelections.DeselectAll();
 		DisableTooltip();
 	}
 
