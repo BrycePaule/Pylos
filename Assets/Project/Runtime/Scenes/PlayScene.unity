@@ -552,7 +552,7 @@ MonoBehaviour:
   m_Follow: {fileID: 1685348466}
   m_Lens:
     FieldOfView: 60
-    OrthographicSize: 50
+    OrthographicSize: 14
     NearClipPlane: 0.1
     FarClipPlane: 50
     Dutch: 0
@@ -819,7 +819,7 @@ Camera:
   far clip plane: 50
   field of view: 60
   orthographic: 1
-  orthographic size: 50
+  orthographic size: 14
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -1606,7 +1606,7 @@ GameObject:
   - component: {fileID: 833007544}
   - component: {fileID: 833007543}
   m_Layer: 0
-  m_Name: ShaderTestSquare
+  m_Name: ShaderTest
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1631,7 +1631,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 626f6a758161eb040b4246fdb72b5933, type: 2}
+  - {fileID: 2100000, guid: 24b06da6ea62ad44fa51598245e771c1, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1649,15 +1649,15 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -1677569415
+  m_SortingLayer: 7
   m_SortingOrder: 0
-  m_Sprite: {fileID: 7482667652216324306, guid: 48e93eef0688c4a259cb0eddcd8661f7, type: 3}
+  m_Sprite: {fileID: 21300000, guid: ef3c2346664ed0e42b89a8c7133dba4f, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 1.125, y: 1.125}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1

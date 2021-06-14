@@ -108,7 +108,11 @@ public class Movement : NPCComponentBase
 	
 	private void TakeStepAlongPath(List<Node> path)
 	{
-		if (path.Count == 0) { return; }
+		if (path.Count == 0) 
+		{
+			moveTimer = 0;
+			return;
+		}
 
 		TileLoc = path[0].GlobalLoc;
 		npcRB.MovePosition(TileConversion.TileToWorld2D(path[0].GlobalLoc));

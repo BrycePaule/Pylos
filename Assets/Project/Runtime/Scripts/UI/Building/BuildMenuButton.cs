@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using UnityEditor;
 
 [ExecuteInEditMode]
 public class BuildMenuButton : MonoBehaviour
@@ -19,8 +20,10 @@ public class BuildMenuButton : MonoBehaviour
 
 	private void Update() 
 	{
-		Button.onClick.AddListener(() => { BuildMenu.Build(BuildingID); });
+		Button.onClick.RemoveAllListeners();
+		Button.onClick.AddListener(() => { BuildMenu.Build(BuildingID); print("clicked"); });
 		Image.sprite = BuildingTable.GetById(BuildingID).Icon;
+		gameObject.name = BuildingTable.GetById(BuildingID).Name;
 	}
 
 }
