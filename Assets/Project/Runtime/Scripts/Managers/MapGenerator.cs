@@ -37,16 +37,20 @@ public class MapGenerator : MonoBehaviour
 	public Tile BaseTile;
 	public GroundTileData GroundTileData;
 
+	[Header("Generation")]
+	public float Seed;
+	public Texture2D NoiseTexture;
+
 	private void Awake()
 	{
-		float seed = SettingsInjecter.MapSettings.Seed == 0f ? Random.Range(0f, 1f) : SettingsInjecter.MapSettings.Seed;
-		print("Seed: " + seed);
+		Seed = SettingsInjecter.MapSettings.Seed == 0f ? Random.Range(0f, 1f) : SettingsInjecter.MapSettings.Seed;
+		print("Seed: " + Seed);
 
 		SettingsInjecter.MapSettings.Tiles = new GroundTileData[SettingsInjecter.MapSettings.MapSize, SettingsInjecter.MapSettings.MapSize];
 		Renderer renderer = GetComponent<Renderer>();
-		renderer.material.mainTexture = GenerateTexture(seed);
+		renderer.material.mainTexture = GenerateTexture(Seed);
 
-		GenerateTileMap(GenerateTexture(seed));
+		GenerateTileMap(GenerateTexture(Seed));
 	}
 
 	private Texture2D GenerateTexture(float seed)

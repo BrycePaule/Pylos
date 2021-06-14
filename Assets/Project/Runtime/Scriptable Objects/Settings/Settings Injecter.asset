@@ -14,3 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   GameSettings: {fileID: 11400000, guid: 4e4d342f6ff6a674ab4f03d6ff5fb20d, type: 2}
   MapSettings: {fileID: 11400000, guid: a9ab348c667c3404aba1ac3855c3c987, type: 2}
+  NPCSettings: {fileID: 11400000, guid: a317d5a89c73d2c49b2b081733856881, type: 2}

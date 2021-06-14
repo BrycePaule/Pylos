@@ -15,13 +15,6 @@ public class NPCGenerator : MonoBehaviour
 	[Header("Settings")]
 	public int SpawnCheckDelay;
 
-	[Header("Overrides")]
-	public bool OVERRIDE_SPAWN_COUNTS;
-	public NPCType NPCTYPE_OVERRIDE;
-	public int SPAWN_CAP_OVERRIDE;
-	public bool OVERRIDE_SPEED;
-	public float MOVE_DELAY_OVERRIDE;
-
 	private float _spawnCheckTimer;
 
 	private Dictionary<NPCType, NPCData> npcData = new Dictionary<NPCType, NPCData>();
@@ -33,17 +26,27 @@ public class NPCGenerator : MonoBehaviour
 
 	private void Start() 
 	{
-		if (OVERRIDE_SPAWN_COUNTS)
+		NPCSettings settings = SettingsInjecter.NPCSettings;
+		if (settings.OverrideSpawnCaps || settings.OverrideNPCTypes || settings.OverrideNPCSpeeds)
 		{
-			NPCType npc = NPCTYPE_OVERRIDE;
+			foreach (NPCType npc in System.Enum.GetValues(typeof(NPCType)))
+			{
+				if (settings.OverrideNPCTypes)
+					if (npc != settings.NPCType)
+						continue;
 
-			Transform container = new GameObject(npc.ToString() + "Container").transform;
-			container.SetParent(transform);
-			Spawn(npc, SPAWN_CAP_OVERRIDE, container);
+				Transform container = new GameObject(npc.ToString() + "Container").transform;
+				container.SetParent(NPCContainer);
 
+				int count = npcData[npc].SpawnCount;
+				if (settings.OverrideSpawnCaps)
+					count = settings.SpawnCap;
+
+				Spawn(npc, count, container);
+			}
 			return;
 		}
-
+	
 		foreach (NPCType npc in System.Enum.GetValues(typeof(NPCType)))
 		{
 			Transform container = new GameObject(npc.ToString() + "Container").transform;
@@ -54,7 +57,8 @@ public class NPCGenerator : MonoBehaviour
 
 	private void FixedUpdate() 
 	{
-		if (OVERRIDE_SPAWN_COUNTS) { return;}
+		if (SettingsInjecter.NPCSettings.OverrideSpawnCaps || SettingsInjecter.NPCSettings.OverrideNPCTypes || SettingsInjecter.NPCSettings.OverrideNPCSpeeds)
+			return;
 
 		_spawnCheckTimer += Time.deltaTime;
 		if (_spawnCheckTimer > SpawnCheckDelay)
@@ -120,7 +124,7 @@ public class NPCGenerator : MonoBehaviour
 
 		npcHealth.MaxHealth = _data.MaxHealth;
 
-		if (OVERRIDE_SPEED) { npcMovement.MoveDelay = MOVE_DELAY_OVERRIDE; }
+		if (SettingsInjecter.NPCSettings.OverrideNPCSpeeds) { npcMovement.MoveDelay = SettingsInjecter.NPCSettings.MoveDelay; }
 	}
 
 	private void BuildNPCDictionary()

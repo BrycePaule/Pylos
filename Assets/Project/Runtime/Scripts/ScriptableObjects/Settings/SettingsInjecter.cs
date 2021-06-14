@@ -7,4 +7,5 @@ public class SettingsInjecter : ScriptableObject
 {
 	public GameSettings GameSettings;
 	public MapSettings MapSettings;
+	public NPCSettings NPCSettings;
 }
