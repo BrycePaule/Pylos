@@ -13,7 +13,9 @@ MonoBehaviour:
   m_Name: Map Settings 2
   m_EditorClassIdentifier: 
   Seed: 0
-  MapSize: 255
+  MapSize: 256
+  UseTextureFromFile: 1
+  TextureName: 0.487179
   Scale: 7.57
   OffsetX: 2.22
   OffsetY: 17.3

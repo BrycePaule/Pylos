@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using System.IO;
 
 public class MapGenerator : MonoBehaviour
 {
@@ -47,15 +48,30 @@ public class MapGenerator : MonoBehaviour
 		print("Seed: " + Seed);
 
 		SettingsInjecter.MapSettings.Tiles = new GroundTileData[SettingsInjecter.MapSettings.MapSize, SettingsInjecter.MapSettings.MapSize];
-		Renderer renderer = GetComponent<Renderer>();
-		renderer.material.mainTexture = GenerateTexture(Seed);
 
-		GenerateTileMap(GenerateTexture(Seed));
+		GenerateTexture(Seed);
+		Renderer renderer = GetComponent<Renderer>();
+		renderer.material.mainTexture = NoiseTexture;
+
+		PopulateTilemap();
 	}
 
-	private Texture2D GenerateTexture(float seed)
+	private void GenerateTexture(float seed)
 	{
-		Texture2D texture = new Texture2D(SettingsInjecter.MapSettings.MapSize, SettingsInjecter.MapSettings.MapSize);
+		if (SettingsInjecter.MapSettings.UseTextureFromFile)
+		{
+			string filePath = Application.dataPath + "/../Assets/Project/TextureExports/" + SettingsInjecter.MapSettings.TextureName + ".png";
+
+			if (File.Exists(filePath)) {
+				print("Loaded Seed: " + SettingsInjecter.MapSettings.TextureName);
+				NoiseTexture = new Texture2D(2, 2);
+				NoiseTexture.LoadImage(File.ReadAllBytes(filePath));
+				return;
+			}
+
+		}
+
+		NoiseTexture = new Texture2D(SettingsInjecter.MapSettings.MapSize, SettingsInjecter.MapSettings.MapSize);
 
 		for (int y = 0; y < SettingsInjecter.MapSettings.MapSize; y++)
 		{
@@ -67,22 +83,21 @@ public class MapGenerator : MonoBehaviour
 				float sample = Mathf.PerlinNoise(xCoord + SettingsInjecter.MapSettings.MapSize * seed, yCoord + SettingsInjecter.MapSettings.MapSize * seed);
 				
 				Color colour = new Color(sample, sample, sample);
-				texture.SetPixel(x, y, colour);    
+				NoiseTexture.SetPixel(x, y, colour);    
 			}
 		}
 
-		texture.Apply();
-		return texture;
+		NoiseTexture.Apply();
 	}
 
-	private void GenerateTileMap(Texture2D noiseMap)
+	private void PopulateTilemap()
 	{
 		for (int y = 0; y < SettingsInjecter.MapSettings.MapSize; y++)
 		{
 			for (int x = 0; x < SettingsInjecter.MapSettings.MapSize; x++)
 			{
 				Vector3Int pos = new Vector3Int(x, y, 0);
-				float height = noiseMap.GetPixel(x, y).r;
+				float height = NoiseTexture.GetPixel(x, y).r;
 
 				GroundTileData tileData = Instantiate(GroundTileData);
 				SettingsInjecter.MapSettings.Tiles[x, y] = tileData;
@@ -197,4 +212,5 @@ public class MapGenerator : MonoBehaviour
 		float NewRange = (NewMax - NewMin);
 		return (((OldValue - OldMin) * NewRange) / OldRange) + NewMin;
 	}
+
 }

@@ -9,6 +9,8 @@ public class MapSettings : ScriptableObject
 	public int MapSize;
 
 	[Header("Noise Generation")]
+	public bool UseTextureFromFile;
+	public string TextureName;
 	public float Scale;
 	public float OffsetX;
 	public float OffsetY;
