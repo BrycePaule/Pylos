@@ -17,4 +17,8 @@ public class GameSettings : ScriptableObject
 
 	[Header("Building")]
 	public bool IsBuilding;
+
+	[Header("Selection")]
+	public LayerMask SelectableLayers;
+	public LayerMask NonBuildableLayers;
 }

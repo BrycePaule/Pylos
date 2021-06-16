@@ -35,6 +35,9 @@ public class BuildGhost : MonoBehaviour
 	public void Build(Vector3 mpos)
 	{
 		Ray ray = Camera.main.ScreenPointToRay(mpos);
+		RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction, 100f, SettingsInjecter.GameSettings.NonBuildableLayers);
+		if (hit) { return; }
+
 		Vector3 worldPoint = ray.GetPoint(0);
 
 		GameObject building = Instantiate(currentGhost.Prefab, TileConversion.TileToWorld3D(TileConversion.WorldToTile(worldPoint)), Quaternion.identity, BuildingContainer.transform);
@@ -61,7 +64,6 @@ public class BuildGhost : MonoBehaviour
 			SettingsInjecter.MapSettings.GetTile(TileConversion.WorldToTile(worldPoint)).TravelType.Add(currentGhost.TravelType);
 		}
 	}
-
 
 	public void Enable() => gameObject.SetActive(true);
 	public void Disable() => gameObject.SetActive(false);

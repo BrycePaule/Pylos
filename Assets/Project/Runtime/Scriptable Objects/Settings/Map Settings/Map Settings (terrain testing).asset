@@ -10,19 +10,21 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 628c0c44d351f794e89b1f428421377b, type: 3}
-  m_Name: Map Settings (test) 1
+  m_Name: Map Settings (terrain testing)
   m_EditorClassIdentifier: 
-  Seed: 0
+  Seed: 8.05
   MapSize: 256
-  Scale: 7.57
-  OffsetX: 2.22
-  OffsetY: 17.3
-  WaterMaxHeight: 0.13
-  SandMaxHeight: 0.19
-  DirtMaxHeight: 0.34
-  GrassMaxHeight: 0.85
-  TreeSpawnPercent: 4
-  ShrubSpawnPercent: 7
-  SandSpotSpawnPercent: 2
-  DirtSpotSpawnPercent: 8
-  StoneSpawnPercent: 12
+  UseTextureFromFile: 0
+  TextureName: 
+  Scale: 4.67
+  OffsetX: 0
+  OffsetY: 0
+  WaterMaxHeight: 0
+  SandMaxHeight: 0.236
+  DirtMaxHeight: 0.468
+  GrassMaxHeight: 0.77
+  TreeSpawnPercent: 0
+  ShrubSpawnPercent: 0
+  SandSpotSpawnPercent: 0
+  DirtSpotSpawnPercent: 0
+  StoneSpawnPercent: 0

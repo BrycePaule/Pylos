@@ -9,7 +9,7 @@ public enum Layer
 	UI = 5,
 
 	Ground = 8,
-
+	Clutter = 9,
 	Objects = 10,
 	Buildings = 11,
 

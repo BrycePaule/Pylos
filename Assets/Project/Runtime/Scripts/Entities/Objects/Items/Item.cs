@@ -2,9 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Item : MonoBehaviour
+[System.Serializable]
+public class Item
 {
 	public int ID;
-	public int Count;
-	public int MaxStackSize;
+	public string Name;
+
+	public Sprite Sprite;
+	public Sprite Icon;
+
+	public Recipe Recipe;
 }

@@ -21,7 +21,6 @@ public class InputManager : MonoBehaviour
 	public Menu Menu;
 	public BuildMenu BuildMenu;
 	public RectTransform SelectionBox;
-	public LayerMask SelectableLayers;
 	public BuildGhost BuildGhost;
 
 	[Header("Camera")]
@@ -210,7 +209,7 @@ public class InputManager : MonoBehaviour
 	private GameObject GetSelectableUnderCursor(Vector3 mpos)
 	{
 		Ray ray = Camera.main.ScreenPointToRay(mpos);
-		RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction, 100f, SelectableLayers);
+		RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction, 100f, SettingsInjecter.GameSettings.SelectableLayers);
 
 		if (hit) 
 		{
@@ -244,7 +243,7 @@ public class InputManager : MonoBehaviour
 		List<GameObject> playerUnits = new List<GameObject>();
 		List<GameObject> allSelectables = new List<GameObject>();
 
-		RaycastHit2D[] hits = Physics2D.BoxCastAll(worldPos, size, 0, Vector2.zero, Mathf.Infinity, SelectableLayers);
+		RaycastHit2D[] hits = Physics2D.BoxCastAll(worldPos, size, 0, Vector2.zero, Mathf.Infinity, SettingsInjecter.GameSettings.SelectableLayers);
 		foreach (RaycastHit2D hit in hits)
 		{
 			GameObject obj = hit.transform.gameObject;

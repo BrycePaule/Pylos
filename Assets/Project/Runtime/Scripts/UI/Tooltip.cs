@@ -82,13 +82,13 @@ public class Tooltip : MonoBehaviour
 		UpdateHeader(obj);
 		UpdateHealthBar(obj);
 
-		if (obj.GetComponent<Item>())
-		{
-			Item item = obj.GetComponent<Item>();
-			BuildDisplayProperties<Item>(obj, item);
-			UpdateInfoBoxSize<Item>(obj);
-			return;
-		}
+		// if (obj.GetComponent<Item>())
+		// {
+		// 	Item item = obj.GetComponent<Item>();
+		// 	BuildDisplayProperties<Item>(obj, item);
+		// 	UpdateInfoBoxSize<Item>(obj);
+		// 	return;
+		// }
 
 		if (obj.GetComponent<NPCBase>())
 		{
