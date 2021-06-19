@@ -29,4 +29,15 @@ public static class Colors
 
 		return Color.HSVToRGB(h + Hdrandom, s + Sdrandom, v + Vdrandom);
 	}
+
+	public static Color Darken(Color colour, float percent = 0.05f)
+	{
+		float h, s, v;
+		Color.RGBToHSV(colour, out h, out s, out v);
+
+		v -= v * percent;
+		s -= s * percent;
+
+		return Color.HSVToRGB(h, s, v);
+	}
 }

@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: Settings Injecter
   m_EditorClassIdentifier: 
   GameSettings: {fileID: 11400000, guid: 4e4d342f6ff6a674ab4f03d6ff5fb20d, type: 2}
-  MapSettings: {fileID: 11400000, guid: a9ab348c667c3404aba1ac3855c3c987, type: 2}
+  MapSettings: {fileID: 11400000, guid: 2a9fae1ca2865a244b2f01771919f2e3, type: 2}
   NPCSettings: {fileID: 11400000, guid: 2eb6eed04af330c42b9cdbb2e0f588c9, type: 2}

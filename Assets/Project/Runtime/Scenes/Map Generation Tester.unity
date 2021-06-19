@@ -250,6 +250,7 @@ GameObject:
   - component: {fileID: 1251181797}
   - component: {fileID: 1251181799}
   - component: {fileID: 1251181798}
+  - component: {fileID: 1251181800}
   m_Layer: 0
   m_Name: Generator
   m_TagString: Untagged
@@ -283,15 +284,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab30b79a0228c0e4086a32f4a3f5028b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MapSettings: {fileID: 11400000, guid: 2a9fae1ca2865a244b2f01771919f2e3, type: 2}
-  ColourPalette: {fileID: 11400000, guid: c81b8d03dc22a0d43ace346d6172c8e4, type: 2}
   SR: {fileID: 1251181799}
-  combos:
-  - freq: 1
-    amp: 1
-  - freq: 1
-    amp: 2
-  noiseTexture: {fileID: 0}
+  TerrainGenerator: {fileID: 1251181800}
+  DisplayBiomes: 0
 --- !u!212 &1251181799
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -343,3 +338,29 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &1251181800
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1251181796}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 855800332b9751a48aed18af6348d479, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SettingsInjecter: {fileID: 11400000, guid: 92354eb417464bf45b76fccfef2d1549, type: 2}
+  ColourPalette: {fileID: 11400000, guid: c81b8d03dc22a0d43ace346d6172c8e4, type: 2}
+  BiomeSteps: 3
+  BiomeColourDiff: 0.03
+  TerrainNoiseSettings:
+  - Frequency: 0.79
+    Amplitude: 0.73
+  - Frequency: 2.71
+    Amplitude: 0.3
+  - Frequency: 1.53
+    Amplitude: 0.4
+  BiomeNoiseSettings:
+  - Frequency: 1.05
+    Amplitude: 1.38
