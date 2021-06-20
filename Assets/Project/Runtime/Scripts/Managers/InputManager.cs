@@ -200,12 +200,10 @@ public class InputManager : MonoBehaviour
 		PlayerSelections.DeselectAll();
 		SelectionBox.gameObject.SetActive(false);
 
-		print(SettingsInjecter.MapSettings.GetTile(tileLoc).GroundType);
-		print(SettingsInjecter.MapSettings.GetTile(tileLoc).Tile.color);
-		// foreach (TileTravelType type in SettingsInjecter.MapSettings.GetTile(tileLoc).TravelType)
-		// {
-		// 	print(type);
-		// }
+		foreach (TileTravelType type in SettingsInjecter.MapSettings.GetTile(tileLoc).TravelType)
+		{
+			print(type);
+		}
 	}
 
 	private GameObject GetSelectableUnderCursor(Vector3 mpos)

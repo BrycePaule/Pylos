@@ -6,7 +6,7 @@ public class CameraControllerFollowRandomiser : MonoBehaviour
 {
 	[Header("References")]
 	public Cinemachine.CinemachineVirtualCamera cam;
-	public Transform NPCcontainer;
+	public Transform NPCContainer;
 
 	[Header("Settings")]
 	public float SwitchDelay;
@@ -17,31 +17,28 @@ public class CameraControllerFollowRandomiser : MonoBehaviour
 	private float switchTimer;
 	private float randomSwitchDelay;
 
-	private void FixedUpdate()
+	private void Update()
 	{
-		print(switchTimer);
 		switchTimer += Time.deltaTime;
 
-		if (RandomiseDelayTime)
+		if (cam.Follow == null) { RandomiseTarget(); }
+
+		if (RandomiseDelayTime && switchTimer >= randomSwitchDelay)
 		{
-			if (switchTimer >= randomSwitchDelay)
-			{
-				RandomiseTarget();
-				RandomiseDelay();
-				switchTimer = 0;
-			}
-			else if (switchTimer >= SwitchDelay)
-			{
-				RandomiseTarget();
-				switchTimer = 0;
-			}
-		} 
+			RandomiseTarget();
+			RandomiseDelay();
+		}
+		else if (switchTimer >= SwitchDelay)
+		{
+			RandomiseTarget();
+		}
 	}
 
 	private void RandomiseTarget()
 	{
-		NPCBase[] npcs = NPCcontainer.GetComponentsInChildren<NPCBase>();
+		NPCBase[] npcs = NPCContainer.GetComponentsInChildren<NPCBase>();
 		cam.Follow = npcs[Random.Range(0, npcs.Length - 1)].transform;
+		switchTimer = 0;
 	}
 
 	private void RandomiseDelay()

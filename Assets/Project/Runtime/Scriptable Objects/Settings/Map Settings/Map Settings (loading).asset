@@ -12,17 +12,31 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 628c0c44d351f794e89b1f428421377b, type: 3}
   m_Name: Map Settings (loading)
   m_EditorClassIdentifier: 
-  Seed: 0
-  MapSize: 50
-  Scale: 5
-  OffsetX: 20.21
-  OffsetY: 57.5
-  WaterMaxHeight: 0
-  SandMaxHeight: 0
-  DirtMaxHeight: 0
-  GrassMaxHeight: 0
-  TreeSpawnPercent: 0
-  ShrubSpawnPercent: 0
-  SandSpotSpawnPercent: 0
-  DirtSpotSpawnPercent: 0
-  StoneSpawnPercent: 0
+  Seed: 0.13815784
+  MapSize: 256
+  UseTextureFromFile: 0
+  TextureName: 
+  Scale: 7.3
+  OffsetX: 0
+  OffsetY: 0
+  BiomeSteps: 3
+  BiomeColourDiff: 0.04
+  TerrainNoiseSettings:
+  - Frequency: 0.79
+    Amplitude: 0.73
+  - Frequency: 2.71
+    Amplitude: 0.3
+  - Frequency: 1.53
+    Amplitude: 0.4
+  BiomeNoiseSettings:
+  - Frequency: 1.48
+    Amplitude: 1.47
+  WaterMaxHeight: 0.463
+  SandMaxHeight: 0.507
+  DirtMaxHeight: 0.598
+  GrassMaxHeight: 0.875
+  TreeSpawnPercent: 4
+  ShrubSpawnPercent: 7
+  SandSpotSpawnPercent: 2
+  DirtSpotSpawnPercent: 8
+  StoneSpawnPercent: 12
