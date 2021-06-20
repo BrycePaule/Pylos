@@ -71,7 +71,7 @@ public class BuildMenu : MonoBehaviour
 	{
 		TweenOutMenu();
 		SettingsInjecter.GameSettings.IsBuilding = true;
-		BuildingTableEntry building = BuildingTable.GetById(id);
+		Building building = BuildingTable.GetById(id);
 
 		if (building != null)
 		{

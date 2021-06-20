@@ -13,15 +13,5 @@ MonoBehaviour:
   m_Name: Building Table
   m_EditorClassIdentifier: 
   Buildings:
-  - ID: 0
-    Name: Building Base
-    TravelType: 0
-    Sprite: {fileID: 21300000, guid: 65a64c5117d7480459963250cf3ef688, type: 3}
-    Icon: {fileID: 21300000, guid: 0c0219a9fa9054749bf1005cb94bc8f9, type: 3}
-    Prefab: {fileID: 3835236248429051867, guid: 61d9ac6e15195944ab758ef0bf73cced, type: 3}
-  - ID: 1
-    Name: Campfire
-    TravelType: 1
-    Sprite: {fileID: 21300000, guid: a5d78444bf5d684478cdf8e6099dbbb6, type: 3}
-    Icon: {fileID: 21300000, guid: d1d556d997f76834fb3d87f15a6f8920, type: 3}
-    Prefab: {fileID: 7100282226449897453, guid: f676edd8029b51643a8d579ce5d29f3a, type: 3}
+  - {fileID: 11400000, guid: 701904e3263245348b2c79f8513303a2, type: 2}
+  - {fileID: 11400000, guid: 403c8d8ec8ef9344f9a4537614db20c9, type: 2}

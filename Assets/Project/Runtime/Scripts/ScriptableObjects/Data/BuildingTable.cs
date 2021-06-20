@@ -2,14 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "Data Packs/Building Table")]
+[CreateAssetMenu(fileName = "New Building Table", menuName = "Data Packs/Building/Building Table")]
 public class BuildingTable : ScriptableObject
 {
-	public List<BuildingTableEntry> Buildings = new List<BuildingTableEntry>();
+	public List<Building> Buildings = new List<Building>();
 
-	public BuildingTableEntry GetById(int id)
+	public Building GetById(int id)
 	{
-		foreach (BuildingTableEntry entry in Buildings)
+		foreach (Building entry in Buildings)
 		{
 			if (entry.ID == id) { return entry; } 
 		}

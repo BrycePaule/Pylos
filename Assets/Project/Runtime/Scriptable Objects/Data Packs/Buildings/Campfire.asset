@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ffd0b259816813f4481fe3db34a47bc5, type: 3}
+  m_Name: Campfire
+  m_EditorClassIdentifier: 
+  ID: 1
+  Name: Campfire
+  TravelType: 1
+  Sprite: {fileID: 21300000, guid: a5d78444bf5d684478cdf8e6099dbbb6, type: 3}
+  Icon: {fileID: 21300000, guid: d1d556d997f76834fb3d87f15a6f8920, type: 3}
+  Prefab: {fileID: 7100282226449897453, guid: f676edd8029b51643a8d579ce5d29f3a, type: 3}

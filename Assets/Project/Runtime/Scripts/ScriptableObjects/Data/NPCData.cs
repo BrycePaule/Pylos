@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-[CreateAssetMenu(fileName = "NPCData", menuName = "NPCData/DefaultNPCData", order = 1)]
+[CreateAssetMenu(fileName = "New NPCData", menuName = "Data Packs/NPC Data", order = 1)]
 public class NPCData : ScriptableObject
 {
 	[Header("Spawn Settings")]
