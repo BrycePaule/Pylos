@@ -14,6 +14,11 @@ public class MapSettings : ScriptableObject
 	public float Scale;
 	public float OffsetX;
 	public float OffsetY;
+	[Space]
+	public int BiomeSteps;
+	public float BiomeColourDiff;
+	public List<NoiseFreqAmp> TerrainNoiseSettings;
+	public List<NoiseFreqAmp> BiomeNoiseSettings;
 
 	[Header("Terrain Heights")]
 	[Range(0, 1f)] public float WaterMaxHeight;

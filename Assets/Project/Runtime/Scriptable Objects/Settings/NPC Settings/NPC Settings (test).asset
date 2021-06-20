@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: NPC Settings (test)
   m_EditorClassIdentifier: 
   OverrideSpawnCaps: 1
-  SpawnCap: 1
+  SpawnCap: 0
   OverrideNPCTypes: 1
   NPCType: 3
   OverrideNPCSpeeds: 1

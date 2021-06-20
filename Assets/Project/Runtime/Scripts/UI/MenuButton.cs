@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Events;
 
-[ExecuteAlways]
+[ExecuteInEditMode]
 public class MenuButton : MonoBehaviour
 {
 	[Header("References")]

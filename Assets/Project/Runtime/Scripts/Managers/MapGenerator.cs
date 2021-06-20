@@ -8,7 +8,8 @@ public class MapGenerator : MonoBehaviour
 {
 	[Header("References")]
 	public SettingsInjecter SettingsInjecter;
-	public Tilemap tilemap;
+	public ColourPalette ColourPalette;
+	public Tilemap Tilemap;
 
 	[Header("Container References")]
 	public GameObject TreeContainer;
@@ -35,59 +36,41 @@ public class MapGenerator : MonoBehaviour
 	public List<Sprite> DirtSpotSprites;
 
 	[Header("Tiles")]
-	public Tile BaseTile;
 	public GroundTileData GroundTileData;
 
 	[Header("Generation")]
-	public float Seed;
 	public Texture2D NoiseTexture;
+
+	private float[,] terrainMap;
+	private float[,] biomeMap;
+
+	private TerrainGenerator terrainGenerator;
 
 	private void Awake()
 	{
-		Seed = SettingsInjecter.MapSettings.Seed == 0f ? Random.Range(0f, 1f) : SettingsInjecter.MapSettings.Seed;
-		print("Seed: " + Seed);
+		terrainGenerator = GetComponent<TerrainGenerator>();
+		CreateMap();
+	}
+
+	public void CreateMap()
+	{
+		SettingsInjecter.MapSettings.Seed = SettingsInjecter.MapSettings.Seed == 0f ? Random.Range(0f, 1f) : SettingsInjecter.MapSettings.Seed;
+		print("Seed: " + SettingsInjecter.MapSettings.Seed);
 
 		SettingsInjecter.MapSettings.Tiles = new GroundTileData[SettingsInjecter.MapSettings.MapSize, SettingsInjecter.MapSettings.MapSize];
 
-		GenerateTexture(Seed);
-		Renderer renderer = GetComponent<Renderer>();
-		renderer.material.mainTexture = NoiseTexture;
-
+		terrainMap = terrainGenerator.GenerateHeightMap(SettingsInjecter.MapSettings.TerrainNoiseSettings);
+		biomeMap = terrainGenerator.GenerateHeightMap(SettingsInjecter.MapSettings.BiomeNoiseSettings);
 		PopulateTilemap();
+
+		Renderer renderer = GetComponent<Renderer>();
+		renderer.material.mainTexture = terrainGenerator.GenerateTextureBlend(terrainMap, biomeMap, ColourPalette);
+
 	}
 
-	private void GenerateTexture(float seed)
+	private float[,] GetHeightMap(float seed, List<NoiseFreqAmp> noiseSettings)
 	{
-		if (SettingsInjecter.MapSettings.UseTextureFromFile)
-		{
-			string filePath = Application.dataPath + "/../Assets/Project/TextureExports/" + SettingsInjecter.MapSettings.TextureName + ".png";
-
-			if (File.Exists(filePath)) {
-				print("Loaded Seed: " + SettingsInjecter.MapSettings.TextureName);
-				NoiseTexture = new Texture2D(2, 2);
-				NoiseTexture.LoadImage(File.ReadAllBytes(filePath));
-				return;
-			}
-
-		}
-
-		NoiseTexture = new Texture2D(SettingsInjecter.MapSettings.MapSize, SettingsInjecter.MapSettings.MapSize);
-
-		for (int y = 0; y < SettingsInjecter.MapSettings.MapSize; y++)
-		{
-			for (int x = 0; x < SettingsInjecter.MapSettings.MapSize; x++)
-			{
-				float xCoord = (float) x / SettingsInjecter.MapSettings.MapSize * SettingsInjecter.MapSettings.Scale + SettingsInjecter.MapSettings.OffsetX;
-				float yCoord = (float) y / SettingsInjecter.MapSettings.MapSize * SettingsInjecter.MapSettings.Scale + SettingsInjecter.MapSettings.OffsetY;
-				
-				float sample = Mathf.PerlinNoise(xCoord + SettingsInjecter.MapSettings.MapSize * seed, yCoord + SettingsInjecter.MapSettings.MapSize * seed);
-				
-				Color colour = new Color(sample, sample, sample);
-				NoiseTexture.SetPixel(x, y, colour);    
-			}
-		}
-
-		NoiseTexture.Apply();
+		return terrainGenerator.GenerateHeightMap(noiseSettings);
 	}
 
 	private void PopulateTilemap()
@@ -96,41 +79,47 @@ public class MapGenerator : MonoBehaviour
 		{
 			for (int x = 0; x < SettingsInjecter.MapSettings.MapSize; x++)
 			{
-				Vector3Int pos = new Vector3Int(x, y, 0);
-				float height = NoiseTexture.GetPixel(x, y).r;
+				Vector3Int pos = new Vector3Int(x, y, 1);
+				float terrainHeight = terrainMap[x, y];
 
 				GroundTileData tileData = Instantiate(GroundTileData);
-				SettingsInjecter.MapSettings.Tiles[x, y] = tileData;
 
-				if (height <= SettingsInjecter.MapSettings.WaterMaxHeight)
+				// water
+				if (terrainHeight <= SettingsInjecter.MapSettings.WaterMaxHeight)
 				{
-					tileData = SetTileData(tileData, height, walkable: false, swimmable: true);
-					tilemap.SetTile(pos, tileData.Tile);
+					tileData = SetTileData(tileData, terrainGenerator.GetTerrainColour(ColourPalette, terrainMap[x, y], biomeMap[x, y]), terrainHeight, walkable: false, swimmable: true);
+					Tilemap.SetTile(pos, tileData.Tile);
 				}
-				else if (height > SettingsInjecter.MapSettings.WaterMaxHeight && height <= SettingsInjecter.MapSettings.SandMaxHeight )
+				
+				// sand
+				else if (terrainHeight > SettingsInjecter.MapSettings.WaterMaxHeight && terrainHeight <= SettingsInjecter.MapSettings.SandMaxHeight )
 				{
-					tileData = SetTileData(tileData, height);
-					tilemap.SetTile(pos, tileData.Tile);
+					tileData = SetTileData(tileData, terrainGenerator.GetTerrainColour(ColourPalette, terrainMap[x, y], biomeMap[x, y]), terrainHeight);
+					Tilemap.SetTile(pos, tileData.Tile);
 
 					if (RandomChance.Roll(SettingsInjecter.MapSettings.SandSpotSpawnPercent))
 					{
 						InstantiateObject(ClutterPrefab, pos, "Sand", tileData, SandSpotContainer, SandSpotSprites);
 					}
 				}
-				else if (height > SettingsInjecter.MapSettings.SandMaxHeight && height <=  SettingsInjecter.MapSettings.DirtMaxHeight)
+
+				// dirt
+				else if (terrainHeight > SettingsInjecter.MapSettings.SandMaxHeight && terrainHeight <=  SettingsInjecter.MapSettings.DirtMaxHeight)
 				{
-					tileData = SetTileData(tileData, height);
-					tilemap.SetTile(pos, tileData.Tile);
+					tileData = SetTileData(tileData, terrainGenerator.GetTerrainColour(ColourPalette, terrainMap[x, y], biomeMap[x, y]), terrainHeight);
+					Tilemap.SetTile(pos, tileData.Tile);
 
 					if (RandomChance.Roll(SettingsInjecter.MapSettings.DirtSpotSpawnPercent))
 					{
 						InstantiateObject(ClutterPrefab, pos, "Dirt", tileData, DirtSpotContainer, DirtSpotSprites);
 					}
 				}
-				else if (height > SettingsInjecter.MapSettings.DirtMaxHeight && height <= SettingsInjecter.MapSettings.GrassMaxHeight)
+
+				// grass
+				else if (terrainHeight > SettingsInjecter.MapSettings.DirtMaxHeight && terrainHeight <= SettingsInjecter.MapSettings.GrassMaxHeight)
 				{
-					tileData = SetTileData(tileData, height);
-					tilemap.SetTile(pos, tileData.Tile);
+					tileData = SetTileData(tileData, terrainGenerator.GetTerrainColour(ColourPalette, terrainMap[x, y], biomeMap[x, y]), terrainHeight);
+					Tilemap.SetTile(pos, tileData.Tile);
 
 					if (RandomChance.Roll(SettingsInjecter.MapSettings.TreeSpawnPercent))
 					{
@@ -145,10 +134,12 @@ public class MapGenerator : MonoBehaviour
 						InstantiateObject(ClutterPrefab, pos, "Shrub", tileData, ShrubContainer, ShrubSprites);
 					}
 				}
-				else if (height > SettingsInjecter.MapSettings.GrassMaxHeight)
+
+				// stone
+				else if (terrainHeight > SettingsInjecter.MapSettings.GrassMaxHeight)
 				{
-					tileData = SetTileData(tileData, height);
-					tilemap.SetTile(pos, tileData.Tile);
+					tileData = SetTileData(tileData, terrainGenerator.GetTerrainColour(ColourPalette, terrainMap[x, y], biomeMap[x, y]), terrainHeight);
+					Tilemap.SetTile(pos, tileData.Tile);
 
 					if (RandomChance.Roll(SettingsInjecter.MapSettings.StoneSpawnPercent))
 					{
@@ -158,14 +149,15 @@ public class MapGenerator : MonoBehaviour
 						stone.GetComponent<ExhaustableContainer>().Put(ItemID.Stone, 10);
 					}
 				}
+				SettingsInjecter.MapSettings.Tiles[x, y] = tileData;
 			}
 		}
 	}
 
-	private GroundTileData SetTileData(GroundTileData tileData, float height, bool walkable = true, bool swimmable = false)
+	private GroundTileData SetTileData(GroundTileData tileData, Color baseColour, float height, bool walkable = true, bool swimmable = false)
 	{
-		tileData.GroundType = GetTileByHeight(height);
-		tileData.Tile.color = Colors.AlterColour(tileData.ColorLookup(tileData.GroundType), satChange: TileSaturationChangeStrength);
+		tileData.GroundType = GetGroundTypeByHeight(height);
+		tileData.Tile.color = Colors.AlterColour(baseColour, satChange: TileSaturationChangeStrength);
 		
 		if (walkable) { tileData.TravelType.Add(TileTravelType.Walkable); } 
 		if (swimmable) { tileData.TravelType.Add(TileTravelType.Swimmable); } 
@@ -192,7 +184,7 @@ public class MapGenerator : MonoBehaviour
 	}
 
 	// UTILS
-	private GroundType GetTileByHeight(float height)
+	private GroundType GetGroundTypeByHeight(float height)
 	{
 		if (height <= SettingsInjecter.MapSettings.WaterMaxHeight)
 			return GroundType.Water;
@@ -205,12 +197,4 @@ public class MapGenerator : MonoBehaviour
 		else
 			return GroundType.Stone;
 	}
-
-	public float ScaleValue(float OldMin, float OldMax, float NewMin, float NewMax, float OldValue)
-	{
-		float OldRange = (OldMax - OldMin);
-		float NewRange = (NewMax - NewMin);
-		return (((OldValue - OldMin) * NewRange) / OldRange) + NewMin;
-	}
-
 }

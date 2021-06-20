@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
-[CustomEditor(typeof(TerrainGenerator))]
+// [CustomEditor(typeof(TerrainGenerator))]
 public class TerrainGeneratorEditor : Editor
 {
 	public override void OnInspectorGUI() 
@@ -14,7 +14,7 @@ public class TerrainGeneratorEditor : Editor
 		
 		if (GUILayout.Button("Generate"))
 		{
-			terrainGenerator.GenerateWorldTexture();
+			// terrainGenerator.GenerateWorldTexture();
 		}
 		
 	}

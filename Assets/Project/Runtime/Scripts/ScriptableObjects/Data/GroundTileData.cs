@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 using UnityEditor;
 
+[System.Serializable]
 public class GroundTileData : TileBase
 {
 	public ColourPalette ColourPalette;

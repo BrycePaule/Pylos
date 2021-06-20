@@ -6,150 +6,148 @@ public class TerrainGenerator : MonoBehaviour
 {
 	[Header("References")]
 	public SettingsInjecter SettingsInjecter;
-	public ColourPalette ColourPalette;
 
-	[Header("Settings")]
-	public int BiomeSteps;
-	public float BiomeColourDiff;
-	public List<NoiseFreqAmp> TerrainNoiseSettings;
-	public List<NoiseFreqAmp> BiomeNoiseSettings;
-
-	private float[] biomeHeightSteps;
-
-	private Texture2D mapTexture;
-	private Texture2D terrainTexture;
-	private Texture2D biomeTexture;
-
-	private void Awake()
+	// HeightMap
+	public float[,] GenerateHeightMap(List<NoiseFreqAmp> settings)
 	{
-		mapTexture = new Texture2D(SettingsInjecter.MapSettings.MapSize, SettingsInjecter.MapSettings.MapSize);
-		terrainTexture = new Texture2D(SettingsInjecter.MapSettings.MapSize, SettingsInjecter.MapSettings.MapSize);
-		biomeTexture = new Texture2D(SettingsInjecter.MapSettings.MapSize, SettingsInjecter.MapSettings.MapSize);
-	}
-
-	public Texture2D GenerateWorldTexture()
-	{
-		float[] terrainHeights = new float[TerrainNoiseSettings.Count];
-		float[] biomeHeights = new float[BiomeNoiseSettings.Count];
-
-		SetBiomeHeightSteps(0f, 1.01f, BiomeSteps);
+		float[,] heightMap = new float[SettingsInjecter.MapSettings.MapSize, SettingsInjecter.MapSettings.MapSize];
 
 		for (int y = 0; y < SettingsInjecter.MapSettings.MapSize; y++)
 		{
 			for (int x = 0; x < SettingsInjecter.MapSettings.MapSize; x++)
 			{
-				for (int i = 0; i < Mathf.Max(TerrainNoiseSettings.Count, BiomeNoiseSettings.Count); i++)
+				float height = 0;
+				foreach (NoiseFreqAmp FA in settings)
 				{
-					if (i < TerrainNoiseSettings.Count)
-						terrainHeights[i] = Mathf.Clamp01(PerlinSample(x, y, TerrainNoiseSettings[i].Frequency, TerrainNoiseSettings[i].Amplitude));
-
-					if (i < BiomeNoiseSettings.Count)
-						biomeHeights[i] = Mathf.Clamp01(PerlinSample(x, y, BiomeNoiseSettings[i].Frequency, BiomeNoiseSettings[i].Amplitude));
+					height += Mathf.Clamp01(PerlinSample(x, y, FA.Frequency, FA.Amplitude));
 				}
 
-				float terrainHeight = 0;
-				foreach (float height in terrainHeights) { terrainHeight += height; }
-
-				float biomeHeight = 0;
-				foreach (float height in biomeHeights) { biomeHeight += height; }
-
-				mapTexture.SetPixel(x, y, GetTerrainColour(terrainHeight, biomeHeight, blend: true));
+				heightMap[x, y] = height;
 			}
 		}
 
-		mapTexture.Apply();
-
-		return mapTexture;
+		return heightMap;
 	}
 
-	public Texture2D GenerateBiomeTexture()
-	{
-		float[] biomeHeights = new float[BiomeNoiseSettings.Count];
-
-		SetBiomeHeightSteps(0f, 1.01f, BiomeSteps);
-
-		for (int y = 0; y < SettingsInjecter.MapSettings.MapSize; y++)
-		{
-			for (int x = 0; x < SettingsInjecter.MapSettings.MapSize; x++)
-			{
-				for (int i = 0; i < Mathf.Max(TerrainNoiseSettings.Count, BiomeNoiseSettings.Count); i++)
-				{
-					if (i < BiomeNoiseSettings.Count)
-						biomeHeights[i] = Mathf.Clamp01(PerlinSample(x, y, BiomeNoiseSettings[i].Frequency, BiomeNoiseSettings[i].Amplitude));
-				}
-
-				float biomeHeight = 0;
-				foreach (float height in biomeHeights) { biomeHeight += height; }
-
-				biomeTexture.SetPixel(x, y, DarkenColourByBiomeHeight(biomeHeight, Color.white));
-			}
-		}
-
-		biomeTexture.Apply();
-
-		return biomeTexture;
-	}
-
-	private float PerlinSample(int x, int y, float f, float a)
+	private float PerlinSample(int x, int y, float freq, float amp)
 	{
 		float xCoord = (float) x / SettingsInjecter.MapSettings.MapSize * SettingsInjecter.MapSettings.Scale + SettingsInjecter.MapSettings.OffsetX;
 		float yCoord = (float) y / SettingsInjecter.MapSettings.MapSize * SettingsInjecter.MapSettings.Scale + SettingsInjecter.MapSettings.OffsetY;
 
-		return Mathf.PerlinNoise((xCoord + SettingsInjecter.MapSettings.MapSize * SettingsInjecter.MapSettings.Seed) * f, (yCoord + SettingsInjecter.MapSettings.MapSize * SettingsInjecter.MapSettings.Seed) * f) * a;
+		return Mathf.PerlinNoise((xCoord + SettingsInjecter.MapSettings.MapSize * SettingsInjecter.MapSettings.Seed) * freq, (yCoord + SettingsInjecter.MapSettings.MapSize * SettingsInjecter.MapSettings.Seed) * freq) * amp;
 	}
-	
-	private Color DarkenColourByBiomeHeight(float height, Color colour)
+
+	//	Textures
+	public Texture2D GenerateTexture(float[,] heightMap, ColourPalette palette, bool greyscale = false)
 	{
-		Color baseColour = colour;
+		Texture2D tex = new Texture2D(SettingsInjecter.MapSettings.MapSize, SettingsInjecter.MapSettings.MapSize);
 
-		for (int i = 0; i < biomeHeightSteps.Length; i++)
+		for (int y = 0; y < SettingsInjecter.MapSettings.MapSize; y++)
 		{
-			if (height >= biomeHeightSteps[i])
-				colour = Colors.Darken(baseColour, BiomeColourDiff * i);
+			for (int x = 0; x < SettingsInjecter.MapSettings.MapSize; x++)
+			{
+				if (greyscale)
+				{
+					tex.SetPixel(x, y, GetTerrainColour(palette, heightMap[x, y], heightMap[x, y], greyscale: greyscale));
+				}
+				else
+				{
+					tex.SetPixel(x, y, GetTerrainColour(palette, heightMap[x, y], 0));
+				}
+			}
 		}
-		
-		return colour;
+
+		tex.Apply();
+		return tex;
 	}
 
-	private Color GetTerrainColour(float terrainHeight, float biomeHeight, bool blend = false)
+	public Texture2D GenerateTextureBlend(float[,] terrainMap, float[,] biomeMap, ColourPalette palette)
+	{
+		Texture2D tex = new Texture2D(SettingsInjecter.MapSettings.MapSize, SettingsInjecter.MapSettings.MapSize);
+
+		for (int y = 0; y < SettingsInjecter.MapSettings.MapSize; y++)
+		{
+			for (int x = 0; x < SettingsInjecter.MapSettings.MapSize; x++)
+			{
+				tex.SetPixel(x, y, GetTerrainColour(palette, terrainMap[x, y], biomeMap[x, y]));
+			}
+		}
+
+		tex.Apply();
+		return tex;
+	}
+
+	// Colours
+	public Color GetTerrainColour(ColourPalette palette, float terrainHeight, float biomeHeight, bool greyscale = false)
 	{
 		if (terrainHeight <= SettingsInjecter.MapSettings.WaterMaxHeight)
 		{
-			return ColourPalette.Water;
+			if (greyscale) { return Color.white; }
+			return palette.Water;
 		}
 		else if (terrainHeight > SettingsInjecter.MapSettings.WaterMaxHeight && terrainHeight <= SettingsInjecter.MapSettings.SandMaxHeight )
 		{
-			return ColourPalette.Sand;
+			if (greyscale) { return Color.white; }
+			return palette.Sand;
 		}
 		else if (terrainHeight > SettingsInjecter.MapSettings.SandMaxHeight && terrainHeight <=  SettingsInjecter.MapSettings.DirtMaxHeight)
 		{
-			Color colour = ColourPalette.Dirt;
+			Color colour;
+			if (greyscale)
+			{ 
+				colour =  Color.white; 
+			}
+			else
+			{
+				colour =  palette.Dirt; 
+			}
 
-			if (blend)
-				foreach (float step in biomeHeightSteps) { colour = DarkenColourByBiomeHeight(biomeHeight, colour); }
+			colour = DarkenColourByBiomeHeight(biomeHeight, colour); 
 
 			return colour;
 		}
 		else if (terrainHeight > SettingsInjecter.MapSettings.DirtMaxHeight && terrainHeight <= SettingsInjecter.MapSettings.GrassMaxHeight)
 		{
-			Color colour = ColourPalette.Grass;
+			Color colour;
+			if (greyscale)
+			{ 
+				colour =  Color.white; 
+			}
+			else
+			{
+				colour =  palette.Grass; 
+			}
 
-			if (blend)
-				foreach (float step in biomeHeightSteps) { colour = DarkenColourByBiomeHeight(biomeHeight, colour); }
+			colour = DarkenColourByBiomeHeight(biomeHeight, colour); 
 
 			return colour;
 		}
 		else if (terrainHeight > SettingsInjecter.MapSettings.GrassMaxHeight)
 		{
-			return ColourPalette.Stone;
+			if (greyscale) { return Color.white; }
+			return palette.Stone;
 		}
 
 		return Color.black;
 	}
 
-	private void SetBiomeHeightSteps(float lower, float upper, int steps)
+	private Color DarkenColourByBiomeHeight(float height, Color colour)
 	{
-		biomeHeightSteps = new float[steps];
+		Color baseColour = colour;
+		float[] biomeHeightSteps = GetBiomeColourSteps(SettingsInjecter.MapSettings.BiomeSteps);
+
+		for (int i = 0; i < biomeHeightSteps.Length; i++)
+		{
+			if (height >= biomeHeightSteps[i])
+				colour = Colors.Darken(baseColour, SettingsInjecter.MapSettings.BiomeColourDiff * i);
+		}
+		
+		return colour;
+	}
+
+	private float[] GetBiomeColourSteps(int steps, float lower = 0f, float upper = 1.01f)
+	{
+		float[] biomeHeightSteps = new float[steps];
 
 		for (int i = 0; i < steps; i++)
 		{
@@ -162,5 +160,8 @@ public class TerrainGenerator : MonoBehaviour
 				biomeHeightSteps[i] = lower + (((upper / lower) / (steps + 1)) * (i + 1));
 			}
 		}
+
+		return biomeHeightSteps;
 	}
 }
+

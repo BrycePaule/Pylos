@@ -60,4 +60,11 @@ public class GridHelpers : MonoBehaviour
 		return true;
 	}
 
+	public static float ScaleValue(float OldMin, float OldMax, float NewMin, float NewMax, float OldValue)
+	{
+		float OldRange = (OldMax - OldMin);
+		float NewRange = (NewMax - NewMin);
+		return (((OldValue - OldMin) * NewRange) / OldRange) + NewMin;
+	}
+
 }
