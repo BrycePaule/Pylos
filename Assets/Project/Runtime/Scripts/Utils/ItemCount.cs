@@ -13,4 +13,9 @@ public class ItemCount
 		ID = _id;
 		Count = _count;
 	}
+
+	public override string ToString()
+	{
+		return $"ItemCount(ID: {ID}, Count: {Count})";
+	}
 }

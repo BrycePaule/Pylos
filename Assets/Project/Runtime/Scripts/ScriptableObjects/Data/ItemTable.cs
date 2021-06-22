@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "Data Packs/Item/Item Table")]
+[CreateAssetMenu(fileName = "New Item Table", menuName = "Data Packs/Item/Item Table")]
 public class ItemTable : ScriptableObject
 {
 	public List<Item> Items = new List<Item>();

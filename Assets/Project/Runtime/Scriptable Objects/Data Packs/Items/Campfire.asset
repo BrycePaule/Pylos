@@ -18,5 +18,5 @@ MonoBehaviour:
   Icon: {fileID: 21300000, guid: d1d556d997f76834fb3d87f15a6f8920, type: 3}
   Recipe:
     ItemCosts:
-    - ItemID: 1
+    - ID: 1
       Count: 10

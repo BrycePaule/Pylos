@@ -8,7 +8,6 @@ public class Menu : MonoBehaviour
 	public SettingsInjecter SettingsInjecter;
 	public PlayerSelections PlayerSelections;
 	public CameraController CameraController;
-	public ItemTable ItemTable;
 	public Canvas UICanvas;
 	public GameObject NPCContainer;
 
@@ -110,8 +109,8 @@ public class Menu : MonoBehaviour
 		npcMovement.NPCMovementType = MovementType.Search;
 	}
 
-	public void SearchForWood() => SearchFor(ItemTable.GetByName("Wood").ID); 
-	public void SearchForStone() => SearchFor(ItemTable.GetByName("Stone").ID); 
-	public void CancelSearch() => SearchFor(ItemTable.GetByName("Item").ID); 
+	public void SearchForWood() => SearchFor(SettingsInjecter.ItemTable.GetByName("Wood").ID); 
+	public void SearchForStone() => SearchFor(SettingsInjecter.ItemTable.GetByName("Stone").ID); 
+	public void CancelSearch() => SearchFor(SettingsInjecter.ItemTable.GetByName("Item").ID); 
 
 }

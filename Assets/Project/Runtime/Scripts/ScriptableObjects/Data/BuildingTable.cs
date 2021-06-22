@@ -16,4 +16,14 @@ public class BuildingTable : ScriptableObject
 
 		return null;
 	}
+
+	public Building GetByName(string name)
+	{
+		foreach (Building building in Buildings)
+		{
+			if (building.Name == name) { return building; } 
+		}
+
+		return null;
+	}
 }

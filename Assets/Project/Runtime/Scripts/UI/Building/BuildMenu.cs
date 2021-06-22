@@ -75,8 +75,8 @@ public class BuildMenu : MonoBehaviour
 
 		if (building != null)
 		{
-			BuildGhost.UpdateCurrentGhost(building);
 			BuildGhost.Enable();
+			BuildGhost.UpdateCurrentGhost(building);
 		}
 	}
 

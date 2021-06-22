@@ -21,7 +21,7 @@ public class BuildMenuButton : MonoBehaviour
 	private void Update() 
 	{
 		Button.onClick.RemoveAllListeners();
-		Button.onClick.AddListener(() => { BuildMenu.Build(BuildingID); print("clicked"); });
+		Button.onClick.AddListener(() => { BuildMenu.Build(BuildingID);});
 		Image.sprite = BuildingTable.GetById(BuildingID).Icon;
 		gameObject.name = BuildingTable.GetById(BuildingID).Name;
 	}

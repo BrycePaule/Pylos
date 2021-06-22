@@ -36,6 +36,8 @@ public class BuildGhost : MonoBehaviour
 	public void Build(Vector3 mpos)
 	{
 		if (RayUtils.RaycastClick(mpos, SettingsInjecter.GameSettings.NonBuildableLayers)) { return; }
+		if (!CanAffordBuilding(currentGhost.ID)) { return; }
+		HandleBuildingCost(currentGhost.ID);
 
 		Vector3 worldPoint = Camera.main.ScreenToWorldPoint(mpos);
 		GameObject building = Instantiate(currentGhost.Prefab, TileConversion.TileToWorld3D(TileConversion.WorldToTile(worldPoint)), Quaternion.identity, BuildingContainer.transform);
@@ -63,16 +65,19 @@ public class BuildGhost : MonoBehaviour
 		}
 	}
 
-	private void HandleBuildingCost()
+	private void HandleBuildingCost(int buildingID)
 	{
-
+		foreach (ItemCount cost in SettingsInjecter.ItemTable.GetById(buildingID).Recipe.ItemCosts)
+		{
+			PlayerMaterials.Decrement(cost.ID, cost.Count);
+		}
 	}
 
 	private bool CanAffordBuilding(int buildingID)
 	{
 		foreach (ItemCount cost in SettingsInjecter.ItemTable.GetById(buildingID).Recipe.ItemCosts)
 		{
-			if (PlayerMaterials.GetValue(buildingID) < cost.Count) { return false;}
+			if (PlayerMaterials.GetValue(cost.ID) < cost.Count) { return false;}
 		}
 
 		return true;
