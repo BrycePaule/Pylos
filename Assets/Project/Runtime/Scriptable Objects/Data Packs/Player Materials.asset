@@ -12,5 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 002a02fbcb1a11840a0a393f9b56cbca, type: 3}
   m_Name: Player Materials
   m_EditorClassIdentifier: 
-  Wood: 0
-  Stone: 0
+  Materials:
+  - ItemID: 1
+    Count: 0
+  - ItemID: 2
+    Count: 0

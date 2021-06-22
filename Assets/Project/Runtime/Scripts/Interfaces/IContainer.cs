@@ -4,7 +4,7 @@ using UnityEngine;
 
 public interface IContainer
 {
-	bool Contains(ItemID id);
-	int Take(ItemID id, int count);
-	void Put(ItemID id, int count);
+	bool Contains(int id);
+	int Take(int id, int count);
+	void Put(int id, int count);
 }

@@ -6,6 +6,7 @@ public class BuildGhost : MonoBehaviour
 {
 	[Header("References")]
 	public SettingsInjecter SettingsInjecter;
+	public PlayerMaterials PlayerMaterials;
 	public GameObject BuildingContainer;
 
 	private SpriteRenderer sr;
@@ -34,12 +35,9 @@ public class BuildGhost : MonoBehaviour
 
 	public void Build(Vector3 mpos)
 	{
-		Ray ray = Camera.main.ScreenPointToRay(mpos);
-		RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction, 100f, SettingsInjecter.GameSettings.NonBuildableLayers);
-		if (hit) { return; }
+		if (RayUtils.RaycastClick(mpos, SettingsInjecter.GameSettings.NonBuildableLayers)) { return; }
 
-		Vector3 worldPoint = ray.GetPoint(0);
-
+		Vector3 worldPoint = Camera.main.ScreenToWorldPoint(mpos);
 		GameObject building = Instantiate(currentGhost.Prefab, TileConversion.TileToWorld3D(TileConversion.WorldToTile(worldPoint)), Quaternion.identity, BuildingContainer.transform);
 		building.name = currentGhost.Name;
 
@@ -63,6 +61,21 @@ public class BuildGhost : MonoBehaviour
 		{
 			SettingsInjecter.MapSettings.GetTile(TileConversion.WorldToTile(worldPoint)).TravelType.Add(currentGhost.TravelType);
 		}
+	}
+
+	private void HandleBuildingCost()
+	{
+
+	}
+
+	private bool CanAffordBuilding(int buildingID)
+	{
+		foreach (ItemCount cost in SettingsInjecter.ItemTable.GetById(buildingID).Recipe.ItemCosts)
+		{
+			if (PlayerMaterials.GetValue(buildingID) < cost.Count) { return false;}
+		}
+
+		return true;
 	}
 
 	public void Enable() => gameObject.SetActive(true);

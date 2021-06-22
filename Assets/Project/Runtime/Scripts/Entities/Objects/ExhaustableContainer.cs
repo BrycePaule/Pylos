@@ -18,7 +18,7 @@ public class ExhaustableContainer : Container, IExhaustableContainer
 		Destroy(gameObject);
 	}
 	
-	public override int Take(ItemID id, int count = 1)
+	public override int Take(int id, int count = 1)
 	{
 		base.Take(id, count);
 		if (count <= 0) { return 0; }

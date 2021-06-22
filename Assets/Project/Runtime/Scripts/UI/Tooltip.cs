@@ -142,12 +142,12 @@ public class Tooltip : MonoBehaviour
 		print(container.items.Count);
 		FieldInfo[] fields = new FieldInfo[container.items.Count + 1];
 		fields[0] = typeof(Container).GetField("TileLoc");
-		fields[1] = typeof(Dictionary<ItemID, int>).GetField("Key");
+		fields[1] = typeof(Container).GetField("Items");
 
 		CreateMissingProperties(fields.Length);
 
 		SetPropertyElement<Container>(propPool[0], fields[0], container);
-		SetPropertyElement<Dictionary<ItemID, int>>(propPool[1], fields[1], container.items);
+		SetPropertyElement<Container>(propPool[1], fields[1], container);
 
 		DisableUnusedProperties(fields.Length);
 		UpdateInfoBoxSize(fields.Length);

@@ -81,17 +81,17 @@ public class BuildMenu : MonoBehaviour
 	}
 
 	// SEARCHING
-	public void SearchFor(ItemID id)
+	public void SearchFor(int id)
 	{
 		if (PlayerSelections.SelectedObjects.Count == 0) { return; }
 		if (PlayerSelections.SelectedObjects[0].layer != Layer.NPC.GetHashCode()) { return; }
 
 		Movement npcMovement = PlayerSelections.SelectedObjects[0].GetComponentInChildren<Movement>();
-		npcMovement.searchingFor = id;
+		npcMovement.searchingForItemID = id;
 		npcMovement.NPCMovementType = MovementType.Search;
 	}
 
-	public void SearchForWood() => SearchFor(ItemID.Wood); 
-	public void SearchForStone() => SearchFor(ItemID.Stone); 
-	public void CancelSearch() => SearchFor(ItemID.Item); 
+	public void SearchForWood() => SearchFor(1); 
+	public void SearchForStone() => SearchFor(2); 
+	public void CancelSearch() => SearchFor(0); 
 }

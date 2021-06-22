@@ -127,7 +127,7 @@ public class MapGenerator : MonoBehaviour
 
 						tileData.TravelType.Add(TileTravelType.Impassable);
 						tree.GetComponent<Container>().TileLoc = new Vector2Int(pos.x, pos.y);
-						tree.GetComponent<ExhaustableContainer>().Put(ItemID.Wood, 10);
+						tree.GetComponent<ExhaustableContainer>().Put(1, 10);
 					}
 					else if (RandomChance.Roll(SettingsInjecter.MapSettings.ShrubSpawnPercent))
 					{
@@ -146,7 +146,7 @@ public class MapGenerator : MonoBehaviour
 						GameObject stone = InstantiateObject(StonePrefab, pos, "Stone", tileData, StoneContainer, StoneSprites, flipY: false);
 
 						stone.GetComponent<Container>().TileLoc = new Vector2Int(pos.x, pos.y);
-						stone.GetComponent<ExhaustableContainer>().Put(ItemID.Stone, 10);
+						stone.GetComponent<ExhaustableContainer>().Put(2, 10);
 					}
 				}
 				SettingsInjecter.MapSettings.Tiles[x, y] = tileData;

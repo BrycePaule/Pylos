@@ -19,7 +19,7 @@ public class Movement : NPCComponentBase
 	public int MeanderRange;
 
 	[Header("Searching")]
-	public ItemID searchingFor;
+	public int searchingForItemID;
 	public GameObject FoundObject;
 	public float SearchDelay;
 	public int SearchRange;
@@ -137,7 +137,8 @@ public class Movement : NPCComponentBase
 	{
 		searchTimer += Time.deltaTime;
 
-		if (searchingFor == ItemID.Item) { NPCMovementType = MovementType.Meander; }
+		// DIRT FIX FOR REPLACING ITEMID - NEEDS TO BE MADE BETTER LATER
+		if (searchingForItemID == 0) { NPCMovementType = MovementType.Meander; }
 
 		if (searchTimer >= SearchDelay && FoundObject == null)
 		{
@@ -149,10 +150,8 @@ public class Movement : NPCComponentBase
 		{
 			if (FoundObject != null)
 			{
-				int taken = FoundObject.GetComponent<Container>().Take(searchingFor, 1);
-
-				FieldInfo _itemField = typeof(PlayerMaterials).GetField(searchingFor.ToString());
-				_itemField.SetValue(PlayerMaterials, (int) _itemField.GetValue(PlayerMaterials) + taken);
+				int taken = FoundObject.GetComponent<Container>().Take(searchingForItemID, 1);
+				PlayerMaterials.Increment(searchingForItemID, taken);
 
 				if (FoundObject == null) 
 				{
@@ -198,7 +197,7 @@ public class Movement : NPCComponentBase
 
 	private GameObject FindSearchObject()
 	{
-		ObjectLocationPair objLocPair = GridHelpers.SpiralSearch(searchingFor, TileLoc, SearchRange, SettingsInjecter.MapSettings.Tiles);
+		ObjectLocationPair objLocPair = GridHelpers.SpiralSearch(searchingForItemID, TileLoc, SearchRange, SettingsInjecter.MapSettings.Tiles);
 		
 		if (objLocPair.obj != null) {
 			TargetLoc = objLocPair.loc;

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ffd0b259816813f4481fe3db34a47bc5, type: 3}
   m_Name: BuildingBase
   m_EditorClassIdentifier: 
-  ID: 0
+  ID: 100
   Name: Building Base
   TravelType: 0
   Sprite: {fileID: 21300000, guid: 65a64c5117d7480459963250cf3ef688, type: 3}

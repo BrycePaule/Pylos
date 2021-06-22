@@ -5,14 +5,14 @@ using UnityEngine;
 public class Container : MonoBehaviour, IContainer
 {
 	public Vector2Int TileLoc;
-	public Dictionary<ItemID, int> items;
+	public Dictionary<int, int> items;
 	
 	private void Awake() 
 	{
-		items = new Dictionary<ItemID, int>();	
+		items = new Dictionary<int, int>();	
 	}
 	
-	public virtual int Take(ItemID id, int count = 1)
+	public virtual int Take(int id, int count = 1)
 	{
 		if (count <= 0) { return 0; }
 
@@ -41,7 +41,7 @@ public class Container : MonoBehaviour, IContainer
 		}
 	}
 	
-	public void Put(ItemID id, int count = 1)
+	public void Put(int id, int count = 1)
 	{
 		if (items.ContainsKey(id))
 		{
@@ -57,7 +57,7 @@ public class Container : MonoBehaviour, IContainer
 		}
 	}
 
-	public bool Contains(ItemID id)
+	public bool Contains(int id)
 	{
 		return items.ContainsKey(id);
 	}

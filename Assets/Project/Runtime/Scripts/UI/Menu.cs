@@ -8,6 +8,7 @@ public class Menu : MonoBehaviour
 	public SettingsInjecter SettingsInjecter;
 	public PlayerSelections PlayerSelections;
 	public CameraController CameraController;
+	public ItemTable ItemTable;
 	public Canvas UICanvas;
 	public GameObject NPCContainer;
 
@@ -99,18 +100,18 @@ public class Menu : MonoBehaviour
 		}
 	}
 	
-	private void SearchFor(ItemID id)
+	private void SearchFor(int id)
 	{
 		if (PlayerSelections.SelectedObjects.Count == 0) { return; }
 		if (PlayerSelections.SelectedObjects[0].layer != Layer.NPC.GetHashCode()) { return; }
 
 		Movement npcMovement = PlayerSelections.SelectedObjects[0].GetComponentInChildren<Movement>();
-		npcMovement.searchingFor = id;
+		npcMovement.searchingForItemID = id;
 		npcMovement.NPCMovementType = MovementType.Search;
 	}
 
-	public void SearchForWood() => SearchFor(ItemID.Wood); 
-	public void SearchForStone() => SearchFor(ItemID.Stone); 
-	public void CancelSearch() => SearchFor(ItemID.Item); 
+	public void SearchForWood() => SearchFor(ItemTable.GetByName("Wood").ID); 
+	public void SearchForStone() => SearchFor(ItemTable.GetByName("Stone").ID); 
+	public void CancelSearch() => SearchFor(ItemTable.GetByName("Item").ID); 
 
 }

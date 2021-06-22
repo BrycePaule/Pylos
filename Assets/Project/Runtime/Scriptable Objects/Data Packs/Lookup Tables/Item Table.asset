@@ -13,15 +13,8 @@ MonoBehaviour:
   m_Name: Item Table
   m_EditorClassIdentifier: 
   Items:
-  - ID: 0
-    Name: Wood
-    Sprite: {fileID: 21300000, guid: eedaaa6285a6aee42bbdcc6ba789e2a2, type: 3}
-    Icon: {fileID: 21300000, guid: eedaaa6285a6aee42bbdcc6ba789e2a2, type: 3}
-    Recipe:
-      ItemCosts: []
-  - ID: 1
-    Name: Stone
-    Sprite: {fileID: 21300000, guid: ef1ee9895f3c56244847115d36afcd90, type: 3}
-    Icon: {fileID: 21300000, guid: ef1ee9895f3c56244847115d36afcd90, type: 3}
-    Recipe:
-      ItemCosts: []
+  - {fileID: 11400000, guid: 7d56e75252ec0d44ebb08db81752fb08, type: 2}
+  - {fileID: 11400000, guid: 9006b442af7756347a42331d1e9bff91, type: 2}
+  - {fileID: 11400000, guid: a1871180ae6185e4cb03918dc2814d56, type: 2}
+  - {fileID: 11400000, guid: 9ce4ac8a7f20d834fa62f90527c77e65, type: 2}
+  - {fileID: 11400000, guid: 641b85a9a55cdf443a9802a684e0acd2, type: 2}

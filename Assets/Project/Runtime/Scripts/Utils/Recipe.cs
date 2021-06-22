@@ -5,9 +5,9 @@ using UnityEngine;
 [System.Serializable]
 public class Recipe
 {
-	public List<ItemCost> ItemCosts;
+	public List<ItemCount> ItemCosts;
 
-	public Recipe(List<ItemCost> _itemCosts)
+	public Recipe(List<ItemCount> _itemCosts)
 	{
 		ItemCosts = _itemCosts;
 	}

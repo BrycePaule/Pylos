@@ -2,8 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[System.Serializable]
-public class Item
+[CreateAssetMenu(fileName = "New Item", menuName = "Data Packs/Items/Item")]
+public class Item : ScriptableObject
 {
 	public int ID;
 	public string Name;
