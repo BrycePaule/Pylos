@@ -14,7 +14,10 @@ public class Movement : NPCComponentBase
 	public Vector2Int TileLoc;
 	public Vector2Int TargetLoc;
 	public MovementType NPCMovementType;
+	public MovementState MovementState;
+	public List<TileTravelType> TravelTypes;
 	public float MoveDelay;
+	public float PathfindDelay;
 	public float TilesPerStep; 
 	public int MeanderRange;
 
@@ -24,15 +27,16 @@ public class Movement : NPCComponentBase
 	public float SearchDelay;
 	public int SearchRange;
 
-	private Rigidbody2D npcRB;
+	public Rigidbody2D npcRB;
 	private LineRenderer lineRenderer;
 	private float moveTimer;
+	private float pathfindTimer;
 	private float searchTimer;
+	public List<Node> Path;
 
-	private AStar aStar;
-	private Aggro npcAggro;
-	private Combat npcCombat;
-	private PathDrawer npcPathDrawer;
+	public Aggro npcAggro;
+	public Combat npcCombat;
+	public PathDrawer npcPathDrawer;
 
 	protected override void Awake() 
 	{
@@ -40,9 +44,6 @@ public class Movement : NPCComponentBase
 		npcBase.SubscribeComponent(NPCComponentType.Movement, this);
 
 		npcRB = GetComponentInParent<Rigidbody2D>();
-		aStar = GetComponent<AStar>();
-
-		if (!CheckHasMovementType()) { print(npcBase.name + " doesn't have a movement type"); }
 	}
 
 	private void Start() 
@@ -51,17 +52,7 @@ public class Movement : NPCComponentBase
 		npcCombat = (Combat) npcBase.GetNPCComponent(NPCComponentType.Combat);
 		npcPathDrawer = (PathDrawer) npcBase.GetNPCComponent(NPCComponentType.PathDrawer);
 
-		RandomTargetLocation(TileLoc);
-
-		switch (NPCMovementType)
-		{
-			case MovementType.Search:
-				FindSearchObject();
-				break;
-			default:
-				RandomTargetLocation(TileLoc);
-				break;
-		}
+		RandomiseTimers();
 	}
 
 	private void FixedUpdate() 
@@ -71,160 +62,36 @@ public class Movement : NPCComponentBase
 
 	private void Move()
 	{
+		print("move");
+
+		// update timer
 		moveTimer += Time.deltaTime;
-
-		switch (NPCMovementType)
-		{
-			case MovementType.Search:
-				MoveSearch();
-				break;
-			case MovementType.Chase:
-				MoveChase();
-				break;
-			default:
-				MoveMeander();
-				break;
-		}
-	}
-
-	private List<Node> FindPathToTarget(int maxAttempts, bool acceptNearest = false)
-	{
-		int attempts = 0;
-		int searchDistance = (int) Mathf.Max(Mathf.Abs(TargetLoc.x - TileLoc.x), Mathf.Abs(TargetLoc.y - TileLoc.y));
-
-		List<Node> path = new List<Node>();
-		while (path.Count == 0)
-		{
-			attempts++;
-			path = aStar.FindPath(TileLoc, TargetLoc, searchDistance * attempts, npcBase.TravelTypes, acceptNearest);
-
-			if (attempts >= maxAttempts) 
-			{ 
-				return new List<Node>();
-			}
-		}
-		return path;
-	}
-	
-	private void TakeStepAlongPath(List<Node> path)
-	{
-		if (path.Count == 0) 
-		{
-			moveTimer = 0;
-			return;
-		}
-
-		TileLoc = path[0].GlobalLoc;
-		npcRB.MovePosition(TileConversion.TileToWorld2D(path[0].GlobalLoc));
-		moveTimer = 0;
-
-		npcPathDrawer.UpdatePath(path);
-	}
-
-	// MOVEMENT TYPES
-	private void MoveMeander()
-	{
-		if (GridHelpers.IsAtLocation(TileLoc, TargetLoc)) { RandomTargetLocation(TileLoc); }
-
-		if (moveTimer >= MoveDelay)
-		{
-			List<Node> path = FindPathToTarget(maxAttempts: 3);
-			TakeStepAlongPath(path);
-		}
-	}
-
-	private void MoveSearch()
-	{
+		// pathfindTimer += Time.deltaTime;
 		searchTimer += Time.deltaTime;
 
-		// DIRT FIX FOR REPLACING ITEMID - NEEDS TO BE MADE BETTER LATER
-		if (searchingForItemID == 0) { NPCMovementType = MovementType.Meander; }
-
-		if (searchTimer >= SearchDelay && FoundObject == null)
+		// update target
+		TargetLoc = MovementState.FindTarget();
+		if (TargetLoc != new Vector2Int(-1, -1)) 
 		{
-			FoundObject = FindSearchObject();
-			searchTimer = 0f;
-		}
-
-		if (GridHelpers.IsWithinDistance(TileLoc, TargetLoc, 1))
-		{
-			if (FoundObject != null)
+			if (moveTimer >= MoveDelay)
 			{
-				int taken = FoundObject.GetComponent<Container>().Take(searchingForItemID, 1);
-				PlayerMaterials.Increment(searchingForItemID, taken);
+				// find path to target
+				Path = MovementState.FindPathToTarget(maxAttempts: 3, acceptNearest: false);
+				// pathfindTimer = 0;
 
-				if (FoundObject == null) 
-				{
-					FoundObject = null;
-					SettingsInjecter.MapSettings.GetTile(TargetLoc).ContainedObjects.Remove(FoundObject);
-					searchTimer += SearchDelay;
-				}
-			}
-			else
-			{
-				RandomTargetLocation(TileLoc);
+				// move on path
+				MovementState.Move();
+				npcPathDrawer.UpdatePath(Path);
+				moveTimer = 0;
 			}
 		}
 
-		if (moveTimer >= MoveDelay)
+		// if arrived, do something at the target
+		if (MovementState.Arrived())
 		{
-			List<Node> path = FindPathToTarget(maxAttempts: 3, acceptNearest: true);
-			TakeStepAlongPath(path);
+			bool actioned = MovementState.ActionAtTarget();
+			pathfindTimer += PathfindDelay;
 		}
-	}
-
-	private void MoveChase()
-	{
-		if (npcAggro.AggroList.Highest == null) 
-		{ 
-			npcAggro.StopAggro(); 
-			RandomTargetLocation(TileLoc);
-			return;
-		}
-
-		TargetLoc = npcAggro.AggroList.Highest.GetComponentInChildren<Movement>().TileLoc;
-
-		bool attacked = npcCombat.Attack(npcAggro.AggroList.Highest);
-		
-		if (moveTimer >= MoveDelay && !attacked)
-		{
-			List<Node> path = FindPathToTarget(maxAttempts: 3);
-			TakeStepAlongPath(path);
-		}
-	}
-
-	// LOCATION GETTERS
-
-	private GameObject FindSearchObject()
-	{
-		ObjectLocationPair objLocPair = GridHelpers.SpiralSearch(searchingForItemID, TileLoc, SearchRange, SettingsInjecter.MapSettings.Tiles);
-		
-		if (objLocPair.obj != null) {
-			TargetLoc = objLocPair.loc;
-			return objLocPair.obj;
-		}
-
-		return null;
-	}
-
-	public void RandomTargetLocation(Vector2Int currentLocation)
-	{
-		while (true)
-		{
-			// clamping means that on edges the units will just keep trying to path out of the map, meaning they stay on the edge
-			Vector2Int potentialTarget = new Vector2Int(
-				Mathf.Clamp(TileLoc.x + (int)Random.Range(-MeanderRange, MeanderRange), 0, SettingsInjecter.MapSettings.MapSize - 1),
-				Mathf.Clamp(TileLoc.y + (int)Random.Range(-MeanderRange, MeanderRange), 0, SettingsInjecter.MapSettings.MapSize - 1));
-
-			if (potentialTarget == currentLocation) { continue; }
-
-			if (SettingsInjecter.MapSettings.IsPathable(potentialTarget, npcBase.TravelTypes))
-			{
-				TargetLoc = potentialTarget;
-				break;
-			}
-		}
-		return;
 	}
 
 	// UTILS
@@ -233,21 +100,7 @@ public class Movement : NPCComponentBase
 	{
 		moveTimer += Random.Range(0, MoveDelay);
 		searchTimer += Random.Range(0, SearchDelay);
+		pathfindTimer += Random.Range(0, PathfindDelay);
 	}
 
-	private bool CheckHasMovementType()
-	{
-		if (npcBase.TravelTypes.Count >= 2)
-		{
-			return true;
-		} 
-		else if (npcBase.TravelTypes.Count == 1 && npcBase.TravelTypes[0] != TileTravelType.Impassable)
-		{
-			return true;
-		}
-		else 
-		{
-			return false;
-		}
-	}
 }

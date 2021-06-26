@@ -2,21 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AStar : MonoBehaviour
+public static class AStar
 {
-	[Header("References")]
-	public SettingsInjecter SettingsInjecter;
-
-	private Node[,] nodes;
-	private int searchGridSize;
-
-	public List<Node> FindPath(Vector2Int startLocGlobal, Vector2Int targetLocGlobal, int searchRadius, List<TileTravelType> travelTypes, bool acceptNearest = false)
+	public static List<Node> FindPath(SettingsInjecter settingsInjecter, Vector2Int starLocGlobal, Vector2Int targetLocGlobal, int searchRadius, List<TileTravelType> travelTypes, bool acceptNearest = false)
 	{
-		searchGridSize = (searchRadius * 2) + 1;
-		BuildNodeGrid(startLocGlobal, searchRadius, travelTypes);
+		int searchGridSize = (searchRadius * 2) + 1;
+		Node[,] nodes = BuildNodeGrid(starLocGlobal, searchRadius, travelTypes, searchGridSize, settingsInjecter.MapSettings.MapSize, settingsInjecter);
 
 		Vector2Int startLocLocal = new Vector2Int(searchRadius, searchRadius);
-		Vector2Int targetLocLocal = new Vector2Int(targetLocGlobal.x - startLocGlobal.x + searchRadius, targetLocGlobal.y - startLocGlobal.y + searchRadius);
+		Vector2Int targetLocLocal = new Vector2Int(targetLocGlobal.x - starLocGlobal.x + searchRadius, targetLocGlobal.y - starLocGlobal.y + searchRadius);
 
 		Node startNode = nodes[startLocLocal.x, startLocLocal.y];
 		Node targetNode = nodes[targetLocLocal.x, targetLocLocal.y];
@@ -44,7 +38,7 @@ public class AStar : MonoBehaviour
 				return RetracePath(startNode, targetNode);
 			}
 
-			foreach (Node neighbour in GetNeighbours(currentNode))
+			foreach (Node neighbour in GetNeighbours(nodes, currentNode, settingsInjecter.MapSettings.MapSize))
 			{
 				if (!neighbour.IsTravellable || closedSet.Contains(neighbour)) { continue; }
 
@@ -63,7 +57,7 @@ public class AStar : MonoBehaviour
 		if (acceptNearest)
 		{
 			Node nearTarget = null;
-			foreach (Node neighbour in GetNeighbours(targetNode))
+			foreach (Node neighbour in GetNeighbours(nodes, targetNode, settingsInjecter.MapSettings.MapSize))
 			{
 				if (nearTarget == null) 
 				{ 
@@ -87,7 +81,7 @@ public class AStar : MonoBehaviour
 		return new List<Node>();
 	}
 
-	private List<Node> RetracePath(Node startNode, Node endNode)
+	private static List<Node> RetracePath(Node startNode, Node endNode)
 	{
 		List<Node> path = new List<Node>();
 		if (startNode == endNode) { return path; }
@@ -104,7 +98,7 @@ public class AStar : MonoBehaviour
 		return path;
 	}
 
-	private List<Node> GetNeighbours(Node node)
+	private static List<Node> GetNeighbours(Node[,] nodes, Node node, int mapSize)
 	{
 		List<Node> neighbours = new List<Node>();
 
@@ -117,8 +111,8 @@ public class AStar : MonoBehaviour
 				Vector2Int checkGlobal = new Vector2Int(node.GlobalLoc.x + x, node.GlobalLoc.y + y);
 				Vector2Int checkLocal = new Vector2Int(node.LocalLoc.x + x, node.LocalLoc.y + y);
 
-				if (!InsideGlobalBounds(checkGlobal)) { continue; }
-				if (!InsideLocalBounds(checkLocal)) { continue; }
+				if (!InsideGlobalBounds(checkGlobal, mapSize)) { continue; }
+				if (!InsideLocalBounds(checkLocal, mapSize)) { continue; }
 
 				neighbours.Add(nodes[checkLocal.x, checkLocal.y]);
 			}
@@ -126,20 +120,24 @@ public class AStar : MonoBehaviour
 		return neighbours;
 	}
 
-	private void BuildNodeGrid(Vector2Int startLoc, int halfSize, List<TileTravelType> travelTypes)
+	private static Node[,] BuildNodeGrid(Vector2Int startLoc, int searchRadius, List<TileTravelType> travelTypes, int searchGridSize, int mapSize, SettingsInjecter SI)
 	{
-		nodes = new Node[searchGridSize, searchGridSize];
+		Node[,] nodes = new Node[searchGridSize, searchGridSize];
+
 		for (int localX = 0; localX < searchGridSize; localX++)
 		{
 			for (int localY = 0; localY < searchGridSize; localY++)
 			{
-				Vector2Int globalLoc = new Vector2Int(startLoc.x + localX - halfSize, startLoc.y + localY - halfSize);
+				Vector2Int globalLoc = new Vector2Int(startLoc.x + localX - searchRadius, startLoc.y + localY - searchRadius);
 
-				if (!InsideGlobalBounds(globalLoc)) { continue; }
+				if (!InsideGlobalBounds(globalLoc, mapSize)) { continue; }
 
-				nodes[localX, localY] = new Node(globalLoc, new Vector2Int(localX, localY), SettingsInjecter.MapSettings.IsPathable(globalLoc, travelTypes));
+				nodes[localX, localY] = new Node(globalLoc, new Vector2Int(localX, localY), SI.MapSettings.IsPathable(globalLoc, travelTypes));
 			}
 		}
+		
+		return nodes;
+
 	}
 
 	private static int DistanceScore(Node nodeA, Node nodeB)
@@ -150,14 +148,14 @@ public class AStar : MonoBehaviour
 		return (14 * Mathf.Min(distX, distY)) + (10 * (Mathf.Max(distX, distY) - Mathf.Min(distX, distY)));
 	}
 
-	public bool InsideGlobalBounds(Vector2Int loc)
+	private static bool InsideGlobalBounds(Vector2Int loc, int mapSize)
 	{
-		if (loc.x < 0 || loc.x >= SettingsInjecter.MapSettings.MapSize) { return false; }
-		if (loc.y < 0 || loc.y >= SettingsInjecter.MapSettings.MapSize) { return false; }
+		if (loc.x < 0 || loc.x >= mapSize) { return false; }
+		if (loc.y < 0 || loc.y >= mapSize) { return false; }
 		return true;
 	}
 
-	private bool InsideLocalBounds(Vector2Int loc)
+	private static bool InsideLocalBounds(Vector2Int loc, int searchGridSize)
 	{
 		if (loc.x < 0 || loc.x >= searchGridSize) { return false; }
 		if (loc.y < 0 || loc.y >= searchGridSize) { return false; }

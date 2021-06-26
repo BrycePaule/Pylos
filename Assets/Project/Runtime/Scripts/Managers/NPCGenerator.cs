@@ -105,18 +105,19 @@ public class NPCGenerator : MonoBehaviour
 
 		npcObj.name = npcType.ToString();
 
-		Vector2Int loc = SettingsInjecter.MapSettings.SelectRandomLocation(npcBase.TravelTypes);
+		Vector2Int loc = SettingsInjecter.MapSettings.SelectRandomLocation(npcMovement.TravelTypes);
 		npcObj.transform.position = TileConversion.TileToWorld3D(loc);
-		npcMovement.TileLoc = loc;
 
 		npcBase.Faction = _data.Faction;
 
+		npcMovement.TileLoc = loc;
 		npcMovement.MoveDelay = _data.MoveDelay;
+		npcMovement.PathfindDelay = _data.PathfindDelay;
 		npcMovement.TilesPerStep = _data.TilesPerStep;
+		npcMovement.TravelTypes = _data.TravelTypes;
 		npcMovement.MeanderRange = _data.MeanderRange;
 		npcMovement.SearchRange = _data.SearchRange;
-		npcMovement.RandomiseTimers();
-		npcMovement.RandomTargetLocation(npcMovement.TileLoc);
+		npcMovement.MovementState = new Meander(npcMovement);
 
 		npcCombat.Damage = _data.Damage;
 		npcCombat.AttackSpeed = _data.AttackSpeed;

@@ -17,6 +17,8 @@ MonoBehaviour:
   NPCType: 1
   Faction: 2
   MoveDelay: 1
+  PathfindDelay: 2
+  TravelTypes: 01000000
   TilesPerStep: 1
   MeanderRange: 20
   SearchRange: 15
@@ -24,3 +26,4 @@ MonoBehaviour:
   Damage: 3
   AttackSpeed: 2
   AttackRange: 1
+  DetectionRange: 0

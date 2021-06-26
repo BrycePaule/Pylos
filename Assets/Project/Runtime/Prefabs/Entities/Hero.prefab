@@ -56,7 +56,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   NPCType: 3
   Faction: 6
-  TravelTypes: 0100000002000000
 --- !u!212 &4793766673727784414
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -224,6 +223,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 4793766673727784415}
     m_Modifications:
+    - target: {fileID: 8332606288332731564, guid: e628355252d6733498c5965dc4994cdc, type: 3}
+      propertyPath: TravelTypes.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8332606288332731564, guid: e628355252d6733498c5965dc4994cdc, type: 3}
+      propertyPath: TravelTypes.Array.data[1]
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 8332606288332731566, guid: e628355252d6733498c5965dc4994cdc, type: 3}
       propertyPath: m_Name
       value: Movement

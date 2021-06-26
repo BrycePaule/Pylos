@@ -16,6 +16,8 @@ public class NPCData : ScriptableObject
 
 	[Header("Movement")]
 	public float MoveDelay;
+	public float PathfindDelay;
+	public List<TileTravelType> TravelTypes;
 	public int TilesPerStep;
 	public int MeanderRange;
 	public int SearchRange;

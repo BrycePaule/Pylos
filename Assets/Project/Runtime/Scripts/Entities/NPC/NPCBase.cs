@@ -7,7 +7,6 @@ public class NPCBase : MonoBehaviour
 	public NPCType NPCType;
 	public Faction Faction;
 
-	public List<TileTravelType> TravelTypes;
 	public Dictionary<NPCComponentType, NPCComponentBase> Components = new Dictionary<NPCComponentType, NPCComponentBase>();
 
 	public void SubscribeComponent(NPCComponentType componentType, NPCComponentBase component)
