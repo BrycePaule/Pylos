@@ -13,11 +13,9 @@ public class Movement : NPCComponentBase
 	[Header("Settings")]
 	public Vector2Int TileLoc;
 	public Vector2Int TargetLoc;
-	public MovementType NPCMovementType;
 	public MovementState MovementState;
 	public List<TileTravelType> TravelTypes;
 	public float MoveDelay;
-	public float PathfindDelay;
 	public float TilesPerStep; 
 	public int MeanderRange;
 
@@ -30,7 +28,6 @@ public class Movement : NPCComponentBase
 	public Rigidbody2D npcRB;
 	private LineRenderer lineRenderer;
 	private float moveTimer;
-	private float pathfindTimer;
 	private float searchTimer;
 	public List<Node> Path;
 
@@ -62,24 +59,21 @@ public class Movement : NPCComponentBase
 
 	private void Move()
 	{
-		print("move");
-
 		// update timer
 		moveTimer += Time.deltaTime;
-		// pathfindTimer += Time.deltaTime;
 		searchTimer += Time.deltaTime;
 
-		// update target
-		TargetLoc = MovementState.FindTarget();
-		if (TargetLoc != new Vector2Int(-1, -1)) 
+		if (moveTimer >= MoveDelay)
 		{
-			if (moveTimer >= MoveDelay)
-			{
-				// find path to target
-				Path = MovementState.FindPathToTarget(maxAttempts: 3, acceptNearest: false);
-				// pathfindTimer = 0;
+			// update target
+			MovementState.FindTarget();
 
-				// move on path
+			// find path to target
+			Path = MovementState.FindPathToTarget(maxAttempts: 3, acceptNearest: false);
+
+			// move on path
+			if (Path.Count > 0)
+			{
 				MovementState.Move();
 				npcPathDrawer.UpdatePath(Path);
 				moveTimer = 0;
@@ -90,7 +84,6 @@ public class Movement : NPCComponentBase
 		if (MovementState.Arrived())
 		{
 			bool actioned = MovementState.ActionAtTarget();
-			pathfindTimer += PathfindDelay;
 		}
 	}
 
@@ -100,7 +93,6 @@ public class Movement : NPCComponentBase
 	{
 		moveTimer += Random.Range(0, MoveDelay);
 		searchTimer += Random.Range(0, SearchDelay);
-		pathfindTimer += Random.Range(0, PathfindDelay);
 	}
 
 }

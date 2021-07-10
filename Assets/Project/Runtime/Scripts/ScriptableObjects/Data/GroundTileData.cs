@@ -2,8 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
-using UnityEditor;
 
+[CreateAssetMenu(menuName = "Data Packs/GroundTileData")]
 public class GroundTileData : TileBase
 {
 	public ColourPalette ColourPalette;
@@ -12,15 +12,6 @@ public class GroundTileData : TileBase
     public GroundType GroundType;
 	public List<TileTravelType> TravelType;
     public List<GameObject> ContainedObjects;
-
-    [MenuItem("Assets/Create/Tiles/GroundTileData")]
-    public static void CreateGroundTile(MenuCommand menuCommand)
-    {
-        string path = EditorUtility.SaveFilePanelInProject("Save GroundTileData", "New GroundTileData", "Asset", "Save GroundTileData", "Assets/Create/Tiles");
-        if (path == "")
-            return;
-        AssetDatabase.CreateAsset(ScriptableObject.CreateInstance<GroundTileData>(), path);
-    }
 
 	public Color ColorLookup(GroundType type)
 	{

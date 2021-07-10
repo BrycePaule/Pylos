@@ -162,7 +162,9 @@ public class Tooltip : MonoBehaviour
 
 	private void CreateMissingProperties(int fieldCount)
 	{
-		for (int i = 0; i < fieldCount - propPool.Count; i++)
+		int poolCount = propPool.Count;
+
+		for (int i = 0; i < fieldCount - poolCount; i++)
 		{
 			propPool.Add(Instantiate(PropertyElementPrefab, new Vector3(0, 0, 0), Quaternion.identity, InfoBox.transform).GetComponent<PropertyElement>());
 		}

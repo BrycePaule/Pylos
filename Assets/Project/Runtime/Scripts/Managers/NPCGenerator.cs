@@ -15,7 +15,7 @@ public class NPCGenerator : MonoBehaviour
 	[Header("Settings")]
 	public int SpawnCheckDelay;
 
-	private float _spawnCheckTimer;
+	private float spawnCheckTimer;
 
 	private Dictionary<NPCType, NPCData> npcData = new Dictionary<NPCType, NPCData>();
 
@@ -57,11 +57,11 @@ public class NPCGenerator : MonoBehaviour
 
 	private void FixedUpdate() 
 	{
-		if (SettingsInjecter.NPCSettings.OverrideSpawnCaps || SettingsInjecter.NPCSettings.OverrideNPCTypes || SettingsInjecter.NPCSettings.OverrideNPCSpeeds)
+		if (SettingsInjecter.NPCSettings.OverrideSpawnCaps || SettingsInjecter.NPCSettings.OverrideNPCTypes)
 			return;
 
-		_spawnCheckTimer += Time.deltaTime;
-		if (_spawnCheckTimer > SpawnCheckDelay)
+		spawnCheckTimer += Time.deltaTime;
+		if (spawnCheckTimer >= SpawnCheckDelay)
 		{
 			foreach (NPCType npc in System.Enum.GetValues(typeof(NPCType)))
 			{
@@ -80,7 +80,7 @@ public class NPCGenerator : MonoBehaviour
 					Spawn(npc, npcData[npc].SpawnCount, container);
 				}
 			}
-			_spawnCheckTimer = 0;
+			spawnCheckTimer = 0;
 		}
 	}
 
@@ -112,7 +112,6 @@ public class NPCGenerator : MonoBehaviour
 
 		npcMovement.TileLoc = loc;
 		npcMovement.MoveDelay = _data.MoveDelay;
-		npcMovement.PathfindDelay = _data.PathfindDelay;
 		npcMovement.TilesPerStep = _data.TilesPerStep;
 		npcMovement.TravelTypes = _data.TravelTypes;
 		npcMovement.MeanderRange = _data.MeanderRange;

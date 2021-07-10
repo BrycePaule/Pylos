@@ -7,19 +7,24 @@ public abstract class MovementState
 {
 	protected Movement npcMovement; 
 
+	public bool TargetNeedsUpdating;
+
 	public MovementState(Movement _npcMovement)
 	{
 		npcMovement = _npcMovement;
+		TargetNeedsUpdating = true;
 	}
 
 	public virtual void Move()
 	{
-		npcMovement.npcRB.MovePosition(TileConversion.TileToWorld2D(npcMovement.Path[0].GlobalLoc));
+		Vector2Int tileLoc = npcMovement.Path[0].GlobalLoc;
+		npcMovement.npcRB.MovePosition(TileConversion.TileToWorld2D(tileLoc));
+		npcMovement.TileLoc = tileLoc;
 	}
 
-	public virtual Vector2Int FindTarget()
+	public virtual void FindTarget()
 	{
-		if (!Arrived()) { return npcMovement.TargetLoc; }
+		if (!TargetNeedsUpdating) { return; }
 
 		while (true)
 		{
@@ -31,7 +36,9 @@ public abstract class MovementState
 			if (potentialTarget == npcMovement.TileLoc) { continue; }
 			if (!npcMovement.SettingsInjecter.MapSettings.IsPathable(potentialTarget, npcMovement.TravelTypes)) { continue; }
 
-			return potentialTarget;
+			npcMovement.TargetLoc = potentialTarget;
+			TargetNeedsUpdating = false;
+			return;
 		}
 	}
 
@@ -46,10 +53,7 @@ public abstract class MovementState
 			attempts++;
 			path = AStar.FindPath(npcMovement.SettingsInjecter, npcMovement.TileLoc, npcMovement.TargetLoc, searchDistance * attempts, npcMovement.TravelTypes, acceptNearest);
 
-			if (attempts >= maxAttempts) 
-			{ 
-				return new List<Node>();
-			}
+			if (attempts >= maxAttempts) { return new List<Node>(); }
 		}
 
 		return path;
@@ -57,7 +61,14 @@ public abstract class MovementState
 
 	public virtual bool Arrived()
 	{
-		return GridHelpers.IsAtLocation(npcMovement.TileLoc, npcMovement.TargetLoc);
+		bool arrived = GridHelpers.IsAtLocation(npcMovement.TileLoc, npcMovement.TargetLoc);
+
+		if (arrived)
+		{
+			TargetNeedsUpdating = true;
+		}
+
+		return arrived;
 	}
 
 	public virtual bool ActionAtTarget()

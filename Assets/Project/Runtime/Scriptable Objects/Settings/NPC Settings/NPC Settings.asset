@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b13c5c5e18f1fd04b93ed929248f0dfe, type: 3}
   m_Name: NPC Settings
   m_EditorClassIdentifier: 
-  OverrideSpawnCaps: 1
+  OverrideSpawnCaps: 0
   SpawnCap: 1
-  OverrideNPCTypes: 1
+  OverrideNPCTypes: 0
   NPCType: 0
-  OverrideNPCSpeeds: 1
-  MoveDelay: 1
+  OverrideNPCSpeeds: 0
+  MoveDelay: 0

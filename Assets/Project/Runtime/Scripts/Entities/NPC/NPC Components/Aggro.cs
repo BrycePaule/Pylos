@@ -58,14 +58,14 @@ public class Aggro : NPCComponentBase
 		IsAggro = true;
 		npcMovement = (Movement) npcBase.GetNPCComponent(NPCComponentType.Movement);
 		npcMovement.TargetLoc = ((Movement) AggroList.Highest.GetNPCComponent(NPCComponentType.Movement)).TileLoc;
-		npcMovement.NPCMovementType = MovementType.Chase;
+		npcMovement.MovementState = new Chase(npcMovement);
 	}
 
 	public void StopAggro()
 	{
 		if (IsAggro)
 		{
-			npcMovement.NPCMovementType = MovementType.Meander;
+			npcMovement.MovementState = new Meander(npcMovement);
 		}
 		IsAggro = false;
 	}

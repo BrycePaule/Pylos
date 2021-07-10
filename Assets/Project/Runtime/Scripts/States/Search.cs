@@ -10,13 +10,22 @@ public class Search : MovementState
 
 	}
 
+	public override void FindTarget()
+	{
+		if (npcMovement.searchingForItemID == 0) { npcMovement.MovementState = new Meander(npcMovement); }
+	}
 
-	// public override Vector2Int FindTarget(Movement npcMovement)
-	// {
-	// 	if (npcMovement.searchingForItemID == 0) { npcMovement.MovementState = new Meander(); }
+	public override bool ActionAtTarget()
+	{
+		return base.ActionAtTarget();
+	}
 
+	public override bool Arrived()
+	{
+		return base.Arrived();
+	}
 
-	// }
+	
 
 	// private void MoveSearch()
 	// {
@@ -55,7 +64,7 @@ public class Search : MovementState
 	// private GameObject FindSearchObject()
 	// {
 	// 	ObjectLocationPair objLocPair = GridHelpers.SpiralSearch(searchingForItemID, TileLoc, SearchRange, SettingsInjecter.MapSettings.Tiles);
-		
+
 	// 	if (objLocPair.obj != null) {
 	// 		TargetLoc = objLocPair.loc;
 	// 		return objLocPair.obj;

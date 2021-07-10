@@ -4,16 +4,16 @@ using UnityEngine;
 
 public static class AStar
 {
-	public static List<Node> FindPath(SettingsInjecter settingsInjecter, Vector2Int starLocGlobal, Vector2Int targetLocGlobal, int searchRadius, List<TileTravelType> travelTypes, bool acceptNearest = false)
+	public static List<Node> FindPath(SettingsInjecter settingsInjecter, Vector2Int startGlobal, Vector2Int targetGlobal, int searchRadius, List<TileTravelType> travelTypes, bool acceptNearest = false)
 	{
 		int searchGridSize = (searchRadius * 2) + 1;
-		Node[,] nodes = BuildNodeGrid(starLocGlobal, searchRadius, travelTypes, searchGridSize, settingsInjecter.MapSettings.MapSize, settingsInjecter);
+		Node[,] nodes = BuildNodeGrid(startGlobal, searchRadius, travelTypes, searchGridSize, settingsInjecter.MapSettings.MapSize, settingsInjecter);
 
-		Vector2Int startLocLocal = new Vector2Int(searchRadius, searchRadius);
-		Vector2Int targetLocLocal = new Vector2Int(targetLocGlobal.x - starLocGlobal.x + searchRadius, targetLocGlobal.y - starLocGlobal.y + searchRadius);
+		Vector2Int startLocal = new Vector2Int(searchRadius, searchRadius);
+		Vector2Int targetLocal = new Vector2Int(targetGlobal.x - startGlobal.x + searchRadius, targetGlobal.y - startGlobal.y + searchRadius);
 
-		Node startNode = nodes[startLocLocal.x, startLocLocal.y];
-		Node targetNode = nodes[targetLocLocal.x, targetLocLocal.y];
+		Node startNode = nodes[startLocal.x, startLocal.y];
+		Node targetNode = nodes[targetLocal.x, targetLocal.y];
 
 		List<Node> openSet = new List<Node>();
 		List<Node> closedSet = new List<Node>();
@@ -38,7 +38,7 @@ public static class AStar
 				return RetracePath(startNode, targetNode);
 			}
 
-			foreach (Node neighbour in GetNeighbours(nodes, currentNode, settingsInjecter.MapSettings.MapSize))
+			foreach (Node neighbour in GetNeighbours(nodes, currentNode, settingsInjecter.MapSettings.MapSize, searchGridSize))
 			{
 				if (!neighbour.IsTravellable || closedSet.Contains(neighbour)) { continue; }
 
@@ -57,7 +57,7 @@ public static class AStar
 		if (acceptNearest)
 		{
 			Node nearTarget = null;
-			foreach (Node neighbour in GetNeighbours(nodes, targetNode, settingsInjecter.MapSettings.MapSize))
+			foreach (Node neighbour in GetNeighbours(nodes, targetNode, settingsInjecter.MapSettings.MapSize, searchGridSize))
 			{
 				if (nearTarget == null) 
 				{ 
@@ -98,7 +98,7 @@ public static class AStar
 		return path;
 	}
 
-	private static List<Node> GetNeighbours(Node[,] nodes, Node node, int mapSize)
+	private static List<Node> GetNeighbours(Node[,] nodes, Node node, int mapSize, int searchGridSize)
 	{
 		List<Node> neighbours = new List<Node>();
 
@@ -111,8 +111,8 @@ public static class AStar
 				Vector2Int checkGlobal = new Vector2Int(node.GlobalLoc.x + x, node.GlobalLoc.y + y);
 				Vector2Int checkLocal = new Vector2Int(node.LocalLoc.x + x, node.LocalLoc.y + y);
 
-				if (!InsideGlobalBounds(checkGlobal, mapSize)) { continue; }
-				if (!InsideLocalBounds(checkLocal, mapSize)) { continue; }
+				if (!InsideSquareBounds(checkGlobal, mapSize)) { continue; }
+				if (!InsideSquareBounds(checkLocal, searchGridSize)) { continue; }
 
 				neighbours.Add(nodes[checkLocal.x, checkLocal.y]);
 			}
@@ -130,7 +130,7 @@ public static class AStar
 			{
 				Vector2Int globalLoc = new Vector2Int(startLoc.x + localX - searchRadius, startLoc.y + localY - searchRadius);
 
-				if (!InsideGlobalBounds(globalLoc, mapSize)) { continue; }
+				if (!InsideSquareBounds(globalLoc, mapSize)) { continue; }
 
 				nodes[localX, localY] = new Node(globalLoc, new Vector2Int(localX, localY), SI.MapSettings.IsPathable(globalLoc, travelTypes));
 			}
@@ -148,17 +148,10 @@ public static class AStar
 		return (14 * Mathf.Min(distX, distY)) + (10 * (Mathf.Max(distX, distY) - Mathf.Min(distX, distY)));
 	}
 
-	private static bool InsideGlobalBounds(Vector2Int loc, int mapSize)
+	public static bool InsideSquareBounds(Vector2Int loc, int boundSize)
 	{
-		if (loc.x < 0 || loc.x >= mapSize) { return false; }
-		if (loc.y < 0 || loc.y >= mapSize) { return false; }
-		return true;
-	}
-
-	private static bool InsideLocalBounds(Vector2Int loc, int searchGridSize)
-	{
-		if (loc.x < 0 || loc.x >= searchGridSize) { return false; }
-		if (loc.y < 0 || loc.y >= searchGridSize) { return false; }
+		if (loc.x < 0 || loc.x >= boundSize) { return false; }
+		if (loc.y < 0 || loc.y >= boundSize) { return false; }
 		return true;
 	}
 }

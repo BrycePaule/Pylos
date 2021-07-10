@@ -88,7 +88,7 @@ public class BuildMenu : MonoBehaviour
 
 		Movement npcMovement = PlayerSelections.SelectedObjects[0].GetComponentInChildren<Movement>();
 		npcMovement.searchingForItemID = id;
-		npcMovement.NPCMovementType = MovementType.Search;
+		npcMovement.MovementState = new Search(npcMovement);
 	}
 
 	public void SearchForWood() => SearchFor(1); 

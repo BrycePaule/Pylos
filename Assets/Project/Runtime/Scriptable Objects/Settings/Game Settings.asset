@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 49c0f152f0bca2d4490ed8c953d1cd4d, type: 3}
   m_Name: Game Settings
   m_EditorClassIdentifier: 
-  ShowPaths: 1
+  ShowPaths: 0
   ShowDetectionRadius: 0
   MenuIsOpen: 0
   BuildMenuIsOpen: 0

@@ -9,6 +9,7 @@ public class Node
 
 	public Node Parent;
 	public Vector2Int GlobalLoc;
+
 	public Vector2Int LocalLoc;
 	public bool IsTravellable;
 

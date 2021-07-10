@@ -10,16 +10,27 @@ public class Chase : MovementState
 
 	}
 
-	public override Vector2Int FindTarget()
+	public override void FindTarget()
 	{
-		Vector2Int TargetLoc = npcMovement.npcAggro.AggroList.Highest.GetComponentInChildren<Movement>().TileLoc;
-		return TargetLoc;
+		NPCBase target = npcMovement.npcAggro.AggroList.Highest;
+		
+		if (target != null)
+		{
+			npcMovement.TargetLoc = target.GetComponentInChildren<Movement>().TileLoc;
+		}
 	}
 
 	public override bool ActionAtTarget()
 	{
-		npcMovement.TargetLoc = npcMovement.npcAggro.AggroList.Highest.GetComponentInChildren<Movement>().TileLoc;
-		return npcMovement.npcCombat.Attack(npcMovement.npcAggro.AggroList.Highest);
+		NPCBase target = npcMovement.npcAggro.AggroList.Highest;
+
+		if (target != null)
+		{
+			npcMovement.TargetLoc = target.GetComponentInChildren<Movement>().TileLoc;
+			return npcMovement.npcCombat.Attack(npcMovement.npcAggro.AggroList.Highest);
+		}
+
+		return false;
 	}
 
 	public override bool Arrived()
