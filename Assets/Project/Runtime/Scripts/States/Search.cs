@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class Search : MovementState
 {
-	
 	public Search(Movement _npcMovement) : base(_npcMovement)
 	{
 
@@ -12,65 +11,58 @@ public class Search : MovementState
 
 	public override void FindTarget()
 	{
-		if (npcMovement.searchingForItemID == 0) { npcMovement.MovementState = new Meander(npcMovement); }
+		if (npcMovement.SearchItemID == 0) { npcMovement.MovementState = new Meander(npcMovement); }
+		if (!TargetNeedsUpdating) { return; }
+
+		Vector2Int found = GridHelpers.SpiralSearch(npcMovement.SearchItemID, npcMovement.TileLoc, npcMovement.SearchRange, npcMovement.SettingsInjecter.MapSettings.Tiles);
+		if (found != new Vector2Int(-1, -1))
+		{
+			npcMovement.TargetLoc = found;
+			TargetNeedsUpdating = false;
+		}
+		else
+		{
+			if (TargetNeedsUpdating)
+			{
+				base.FindTarget();
+			}
+		}
 	}
 
 	public override bool ActionAtTarget()
 	{
-		return base.ActionAtTarget();
+		int x = npcMovement.TargetLoc.x;
+		int y = npcMovement.TargetLoc.y;
+
+		Container container;
+		foreach (GameObject obj in npcMovement.SettingsInjecter.MapSettings.Tiles[x, y].ContainedObjects)
+		{
+			container = obj.GetComponent<Container>();
+			if (container != null)
+			{
+				if (container.Contains(npcMovement.SearchItemID))
+				{
+					int taken = container.TakeAll(npcMovement.SearchItemID);
+					Debug.Log(taken);
+					npcMovement.PlayerMaterials.Increment(npcMovement.SearchItemID, taken);
+					return true;
+				}
+			}
+		}
+
+		return false;
 	}
 
 	public override bool Arrived()
 	{
-		return base.Arrived();
+		bool arrived =  GridHelpers.IsWithinDistance(npcMovement.TileLoc, npcMovement.TargetLoc, 1);
+
+		if (arrived)
+		{
+			TargetNeedsUpdating = true;
+		}
+
+		return arrived;
 	}
-
-	
-
-	// private void MoveSearch()
-	// {
-	// 	if (searchTimer >= SearchDelay && FoundObject == null)
-	// 	{
-	// 		FoundObject = FindSearchObject();
-	// 		searchTimer = 0f;
-	// 	}
-
-	// 	if (GridHelpers.IsWithinDistance(TileLoc, TargetLoc, 1))
-	// 	{
-	// 		if (FoundObject != null)
-	// 		{
-	// 			int taken = FoundObject.GetComponent<Container>().Take(searchingForItemID, 1);
-	// 			PlayerMaterials.Increment(searchingForItemID, taken);
-
-	// 			if (FoundObject == null) 
-	// 			{
-	// 				FoundObject = null;
-	// 				SettingsInjecter.MapSettings.GetTile(TargetLoc).ContainedObjects.Remove(FoundObject);
-	// 				searchTimer += SearchDelay;
-	// 			}
-	// 		}
-	// 		else
-	// 		{
-	// 			// RandomTargetLocation(TileLoc);
-	// 		}
-	// 	}
-
-	// 	if (moveTimer >= MoveDelay)
-	// 	{
-	// 		Path = MovementState.FindPathToTarget(this, maxAttempts: 3, acceptNearest: true);
-	// 	}
-	// }
-
-	// private GameObject FindSearchObject()
-	// {
-	// 	ObjectLocationPair objLocPair = GridHelpers.SpiralSearch(searchingForItemID, TileLoc, SearchRange, SettingsInjecter.MapSettings.Tiles);
-
-	// 	if (objLocPair.obj != null) {
-	// 		TargetLoc = objLocPair.loc;
-	// 		return objLocPair.obj;
-	// 	}
-
-	// 	return null;
-	// }
 
 }

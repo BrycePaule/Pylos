@@ -35,6 +35,13 @@ public class Chase : MovementState
 
 	public override bool Arrived()
 	{
-		return GridHelpers.IsWithinDistance(npcMovement.TileLoc, npcMovement.TargetLoc, 1);
+		bool arrived =  GridHelpers.IsWithinDistance(npcMovement.TileLoc, npcMovement.TargetLoc, 1);
+
+		if (arrived)
+		{
+			TargetNeedsUpdating = true;
+		}
+
+		return arrived;
 	}
 }

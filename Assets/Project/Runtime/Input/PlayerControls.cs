@@ -332,6 +332,14 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""NextHero"",
+                    ""type"": ""Button"",
+                    ""id"": ""58bbccf7-0866-475a-b293-8c8652c72987"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -950,6 +958,17 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                     ""action"": ""ToggleBuildMenu"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b14eb0d2-f64d-441a-9bb3-3e203b6e9ced"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""NextHero"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -977,6 +996,7 @@ public class @PlayerControls : IInputActionCollection, IDisposable
         m_HotKeys_SnapToLocationMarker = m_HotKeys.FindAction("Snap To Location Marker", throwIfNotFound: true);
         m_HotKeys_ToggleMenu = m_HotKeys.FindAction("ToggleMenu", throwIfNotFound: true);
         m_HotKeys_ToggleBuildMenu = m_HotKeys.FindAction("ToggleBuildMenu", throwIfNotFound: true);
+        m_HotKeys_NextHero = m_HotKeys.FindAction("NextHero", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -1177,6 +1197,7 @@ public class @PlayerControls : IInputActionCollection, IDisposable
     private readonly InputAction m_HotKeys_SnapToLocationMarker;
     private readonly InputAction m_HotKeys_ToggleMenu;
     private readonly InputAction m_HotKeys_ToggleBuildMenu;
+    private readonly InputAction m_HotKeys_NextHero;
     public struct HotKeysActions
     {
         private @PlayerControls m_Wrapper;
@@ -1185,6 +1206,7 @@ public class @PlayerControls : IInputActionCollection, IDisposable
         public InputAction @SnapToLocationMarker => m_Wrapper.m_HotKeys_SnapToLocationMarker;
         public InputAction @ToggleMenu => m_Wrapper.m_HotKeys_ToggleMenu;
         public InputAction @ToggleBuildMenu => m_Wrapper.m_HotKeys_ToggleBuildMenu;
+        public InputAction @NextHero => m_Wrapper.m_HotKeys_NextHero;
         public InputActionMap Get() { return m_Wrapper.m_HotKeys; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1206,6 +1228,9 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                 @ToggleBuildMenu.started -= m_Wrapper.m_HotKeysActionsCallbackInterface.OnToggleBuildMenu;
                 @ToggleBuildMenu.performed -= m_Wrapper.m_HotKeysActionsCallbackInterface.OnToggleBuildMenu;
                 @ToggleBuildMenu.canceled -= m_Wrapper.m_HotKeysActionsCallbackInterface.OnToggleBuildMenu;
+                @NextHero.started -= m_Wrapper.m_HotKeysActionsCallbackInterface.OnNextHero;
+                @NextHero.performed -= m_Wrapper.m_HotKeysActionsCallbackInterface.OnNextHero;
+                @NextHero.canceled -= m_Wrapper.m_HotKeysActionsCallbackInterface.OnNextHero;
             }
             m_Wrapper.m_HotKeysActionsCallbackInterface = instance;
             if (instance != null)
@@ -1222,6 +1247,9 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                 @ToggleBuildMenu.started += instance.OnToggleBuildMenu;
                 @ToggleBuildMenu.performed += instance.OnToggleBuildMenu;
                 @ToggleBuildMenu.canceled += instance.OnToggleBuildMenu;
+                @NextHero.started += instance.OnNextHero;
+                @NextHero.performed += instance.OnNextHero;
+                @NextHero.canceled += instance.OnNextHero;
             }
         }
     }
@@ -1250,5 +1278,6 @@ public class @PlayerControls : IInputActionCollection, IDisposable
         void OnSnapToLocationMarker(InputAction.CallbackContext context);
         void OnToggleMenu(InputAction.CallbackContext context);
         void OnToggleBuildMenu(InputAction.CallbackContext context);
+        void OnNextHero(InputAction.CallbackContext context);
     }
 }

@@ -319,6 +319,14 @@
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
+                },
+                {
+                    "name": "NextHero",
+                    "type": "Button",
+                    "id": "58bbccf7-0866-475a-b293-8c8652c72987",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
                 }
             ],
             "bindings": [
@@ -935,6 +943,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "ToggleBuildMenu",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "b14eb0d2-f64d-441a-9bb3-3e203b6e9ced",
+                    "path": "<Keyboard>/space",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "NextHero",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

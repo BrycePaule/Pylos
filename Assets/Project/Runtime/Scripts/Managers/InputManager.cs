@@ -23,6 +23,9 @@ public class InputManager : MonoBehaviour
 	public RectTransform SelectionBox;
 	public BuildGhost BuildGhost;
 
+	[Header("References")]
+	public Transform HeroContainer;
+
 	[Header("Camera")]
 	public CameraController CameraController;
 
@@ -39,6 +42,7 @@ public class InputManager : MonoBehaviour
 	private InputAction _playerRightClick;
 	private InputAction _toggleMenu;
 	private InputAction _toggleBuildMenu;
+	private InputAction _nextHero;
 	private InputAction _cameraZoom;
 	private InputAction _cameraBoost;
 	private InputAction _locationSave;
@@ -87,13 +91,10 @@ public class InputManager : MonoBehaviour
 		_locationSnap = _playerControls.HotKeys.SnapToLocationMarker;
 		_locationSnap.performed += ctx => OnLocationSnap((int) ctx.ReadValue<float>());
 
-		ppu = UIcanvas.GetComponent<CanvasScaler>().referencePixelsPerUnit;
-	}
+		_nextHero = _playerControls.HotKeys.NextHero;
+		_nextHero.performed += ctx => OnNextHero();
 
-	private void Start() 
-	{
-		SelectionBox.gameObject.SetActive(false);
-		PlayerSelections.DeselectAll();
+		ppu = UIcanvas.GetComponent<CanvasScaler>().referencePixelsPerUnit;
 	}
 
 	private void Update() 
@@ -119,6 +120,45 @@ public class InputManager : MonoBehaviour
 	private void FixedUpdate() 
 	{
 		CameraController.Move(_playerMovement.ReadValue<Vector2>());
+	}
+
+	// PLAYER
+
+	private void OnNextHero()
+	{
+		if (HeroContainer.childCount == 0) { return; }
+
+		GameObject toSelect = null;
+
+		if (PlayerSelections.SelectedObjects.Count >= 1)
+		{
+			GameObject currentSelected = PlayerSelections.SelectedObjects[0];
+			for (int i = 0; i < HeroContainer.childCount; i++)
+			{
+				if (HeroContainer.GetChild(i).gameObject == currentSelected)
+				{
+					// if more, get next
+					if (HeroContainer.childCount >= 2)
+					{
+						toSelect = HeroContainer.GetChild((i + 1) % HeroContainer.childCount).gameObject;
+						break;
+					}
+					// if not more, return
+					else
+					{
+						return;
+					}
+				}
+			}
+		}
+		else
+		{
+			toSelect = HeroContainer.GetChild(0).gameObject;
+		}
+
+		PlayerSelections.DeselectAll();
+		PlayerSelections.Select(toSelect);
+		CameraController.SetCameraFollow(toSelect);
 	}
 
 	// CAMERA
@@ -182,6 +222,9 @@ public class InputManager : MonoBehaviour
 
 	private void OnRightClick(Vector3 mpos, InputAction.CallbackContext context)
 	{
+		PlayerSelections.DeselectAll();
+		SelectionBox.gameObject.SetActive(false);
+
 		if (SettingsInjecter.GameSettings.IsBuilding)
 		{
 			BuildGhost.Disable();
@@ -197,12 +240,23 @@ public class InputManager : MonoBehaviour
 		Vector3 worldPoint = ray.GetPoint(0);
 		Vector2Int tileLoc = TileConversion.WorldToTile(worldPoint);
 
-		PlayerSelections.DeselectAll();
-		SelectionBox.gameObject.SetActive(false);
+		// PRINT TRAVEL TYPES
+		// foreach (TileTravelType type in SettingsInjecter.MapSettings.GetTile(tileLoc).TravelType)
+		// {
+		// 	print(type);
+		// }
 
-		foreach (TileTravelType type in SettingsInjecter.MapSettings.GetTile(tileLoc).TravelType)
+		// PRINT ITEMS IN CONTAINER
+		foreach (GameObject obj in SettingsInjecter.MapSettings.GetTile(tileLoc).ContainedObjects)
 		{
-			print(type);
+			Container container = obj.GetComponent<Container>();
+			if (container != null)
+			{
+				foreach (var item in container.items)
+				{
+					print(SettingsInjecter.ItemTable.GetById(item.Key) + ": " + item.Value);
+				}
+			}
 		}
 	}
 

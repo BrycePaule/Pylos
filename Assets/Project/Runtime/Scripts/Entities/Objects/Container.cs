@@ -23,17 +23,12 @@ public class Container : MonoBehaviour, IContainer
 				items[id] -= count;
 				return count;
 			}
-			else if (items[id] < count)
+			else
 			{
 				int amount = items[id];
 				items.Remove(id);
 				return amount;
 			} 
-			else 
-			{
-				items.Remove(id);
-				return count;
-			}
 		}
 		else
 		{
@@ -41,6 +36,20 @@ public class Container : MonoBehaviour, IContainer
 		}
 	}
 	
+	public virtual int TakeAll(int id)
+	{
+		if (items.ContainsKey(id))
+		{
+			int amount = items[id];
+			items.Remove(id);
+			return amount;
+		}
+		else
+		{
+			return 0;
+		}
+	}
+
 	public void Put(int id, int count = 1)
 	{
 		if (items.ContainsKey(id))
@@ -50,10 +59,7 @@ public class Container : MonoBehaviour, IContainer
 		else
 		{
 			items.Add(id, 0);
-			for (int i = 0; i < count; i++)
-			{
-				items[id] += count;
-			}
+			items[id] += count;
 		}
 	}
 

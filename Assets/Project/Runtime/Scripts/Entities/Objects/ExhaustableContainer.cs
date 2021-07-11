@@ -11,43 +11,24 @@ public class ExhaustableContainer : Container, IExhaustableContainer
 	{
 		return items.Count == 0;
 	}
+	
+	public override int Take(int id, int count = 1)
+	{
+		int taken = base.Take(id, count);
+		if (IsEmpty()) { Exhaust(); }
+		return taken;
+	}
+
+	public override int TakeAll(int id)
+	{
+		int taken = base.TakeAll(id);
+		if (IsEmpty()) { Exhaust(); }
+		return taken;
+	}
 
 	public void Exhaust()
 	{
 		SettingsInjecter.MapSettings.GetTile(TileLoc).ContainedObjects.Remove(gameObject);
 		Destroy(gameObject);
-	}
-	
-	public override int Take(int id, int count = 1)
-	{
-		base.Take(id, count);
-		if (count <= 0) { return 0; }
-
-		if (items.ContainsKey(id))
-		{
-			if (items[id] > count) 
-			{ 
-				items[id] -= count;
-				return count;
-			}
-			else if (items[id] < count)
-			{
-				int amount = items[id];
-				items.Remove(id);
-				if (IsEmpty()) { Exhaust(); }
-				return amount;
-			} 
-			else 
-			{
-				items.Remove(id);
-				if (IsEmpty()) { Exhaust(); }
-				return count;
-			}
-		}
-		else
-		{
-			if (IsEmpty()) { Exhaust(); }
-			return 0;
-		}
 	}
 }

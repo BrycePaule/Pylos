@@ -87,7 +87,7 @@ public class BuildMenu : MonoBehaviour
 		if (PlayerSelections.SelectedObjects[0].layer != Layer.NPC.GetHashCode()) { return; }
 
 		Movement npcMovement = PlayerSelections.SelectedObjects[0].GetComponentInChildren<Movement>();
-		npcMovement.searchingForItemID = id;
+		npcMovement.SearchItemID = id;
 		npcMovement.MovementState = new Search(npcMovement);
 	}
 

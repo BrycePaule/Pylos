@@ -15,6 +15,6 @@ MonoBehaviour:
   OverrideSpawnCaps: 0
   SpawnCap: 1
   OverrideNPCTypes: 0
-  NPCType: 0
+  NPCType: 3
   OverrideNPCSpeeds: 0
-  MoveDelay: 0
+  MoveDelay: 1

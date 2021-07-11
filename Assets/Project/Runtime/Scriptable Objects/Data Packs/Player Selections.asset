@@ -12,5 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 59c237ca959ff8a4bb09a31e7626e334, type: 3}
   m_Name: Player Selections
   m_EditorClassIdentifier: 
-  SelectedObjects: []
+  SelectedObjects:
+  - {fileID: 0}
   HoveredObjects: []

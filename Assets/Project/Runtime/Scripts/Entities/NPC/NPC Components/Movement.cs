@@ -20,8 +20,7 @@ public class Movement : NPCComponentBase
 	public int MeanderRange;
 
 	[Header("Searching")]
-	public int searchingForItemID;
-	public GameObject FoundObject;
+	public int SearchItemID;
 	public float SearchDelay;
 	public int SearchRange;
 

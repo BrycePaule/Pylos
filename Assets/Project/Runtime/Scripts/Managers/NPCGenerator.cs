@@ -35,8 +35,7 @@ public class NPCGenerator : MonoBehaviour
 					if (npc != settings.NPCType)
 						continue;
 
-				Transform container = new GameObject(npc.ToString() + "Container").transform;
-				container.SetParent(NPCContainer);
+				Transform container = NPCContainer.Find(npc.ToString() + " Container");
 
 				int count = npcData[npc].SpawnCount;
 				if (settings.OverrideSpawnCaps)
@@ -49,8 +48,7 @@ public class NPCGenerator : MonoBehaviour
 	
 		foreach (NPCType npc in System.Enum.GetValues(typeof(NPCType)))
 		{
-			Transform container = new GameObject(npc.ToString() + "Container").transform;
-			container.SetParent(NPCContainer);
+			Transform container = NPCContainer.Find(npc.ToString() + " Container");
 			Spawn(npc, npcData[npc].SpawnCount, container);
 		}
 	}
@@ -65,19 +63,13 @@ public class NPCGenerator : MonoBehaviour
 		{
 			foreach (NPCType npc in System.Enum.GetValues(typeof(NPCType)))
 			{
-				Transform container = transform.Find(npc.ToString() + "Container");
+				Transform container = NPCContainer.Find(npc.ToString() + " Container");
 				if (container)
 				{
 					if (container.transform.childCount < npcData[npc].SpawnCount)
 					{
 						Spawn(npc, npcData[npc].SpawnCount - container.transform.childCount, container);
 					}
-				}
-				else
-				{
-					container = new GameObject(npc.ToString() + "Container").transform;
-					container.SetParent(transform);
-					Spawn(npc, npcData[npc].SpawnCount, container);
 				}
 			}
 			spawnCheckTimer = 0;
