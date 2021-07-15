@@ -49,7 +49,6 @@ public class Search : MovementState
 				}
 			}
 		}
-
 		return false;
 	}
 

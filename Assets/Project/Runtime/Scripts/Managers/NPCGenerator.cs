@@ -16,7 +16,6 @@ public class NPCGenerator : MonoBehaviour
 	public int SpawnCheckDelay;
 
 	private float spawnCheckTimer;
-
 	private Dictionary<NPCType, NPCData> npcData = new Dictionary<NPCType, NPCData>();
 
 	private void Awake() 
