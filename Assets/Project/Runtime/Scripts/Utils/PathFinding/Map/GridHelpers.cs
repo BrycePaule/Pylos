@@ -16,7 +16,7 @@ public class GridHelpers : MonoBehaviour
 		return loc1 == loc2;
 	}
 
-	public static Vector2Int SpiralSearch(int itemID, Vector2Int currentLoc, int searchDistance, GroundTileData[,] Tiles)
+	public static Vector2Int SpiralSearch(int itemID, Vector2Int currentLoc, int searchDistance, GroundTile[,] Tiles)
 	{
 		// searches a searchDistance x searchDistance square around the location for something of type obj
 		// does this by expanding rings around the currentLoc - starting with the smallest 3x3 ring around the location, out to searchDistance range

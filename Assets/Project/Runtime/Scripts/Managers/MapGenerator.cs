@@ -36,7 +36,7 @@ public class MapGenerator : MonoBehaviour
 	public List<Sprite> DirtSpotSprites;
 
 	[Header("Tiles")]
-	public GroundTileData GroundTileData;
+	public GroundTile GroundTileData;
 
 	[Header("Generation")]
 	public Texture2D NoiseTexture;
@@ -54,10 +54,10 @@ public class MapGenerator : MonoBehaviour
 
 	public void CreateMap()
 	{
-		SettingsInjecter.MapSettings.Seed = SettingsInjecter.MapSettings.Seed == 0f ? Random.Range(0f, 1f) : SettingsInjecter.MapSettings.Seed;
+		SettingsInjecter.MapSettings.Seed = SettingsInjecter.MapSettings.RandomiseSeed ? Random.Range(0f, 1f) : SettingsInjecter.MapSettings.Seed;
 		print("Seed: " + SettingsInjecter.MapSettings.Seed);
 
-		SettingsInjecter.MapSettings.Tiles = new GroundTileData[SettingsInjecter.MapSettings.MapSize, SettingsInjecter.MapSettings.MapSize];
+		SettingsInjecter.MapSettings.Tiles = new GroundTile[SettingsInjecter.MapSettings.MapSize, SettingsInjecter.MapSettings.MapSize];
 
 		terrainMap = terrainGenerator.GenerateHeightMap(SettingsInjecter.MapSettings.TerrainNoiseSettings);
 		biomeMap = terrainGenerator.GenerateHeightMap(SettingsInjecter.MapSettings.BiomeNoiseSettings);
@@ -65,7 +65,6 @@ public class MapGenerator : MonoBehaviour
 
 		Renderer renderer = GetComponent<Renderer>();
 		renderer.material.mainTexture = terrainGenerator.GenerateTextureBlend(terrainMap, biomeMap, ColourPalette);
-
 	}
 
 	private float[,] GetHeightMap(float seed, List<NoiseFreqAmp> noiseSettings)
@@ -82,7 +81,7 @@ public class MapGenerator : MonoBehaviour
 				Vector3Int pos = new Vector3Int(x, y, 1);
 				float terrainHeight = terrainMap[x, y];
 
-				GroundTileData tileData = Instantiate(GroundTileData);
+				GroundTile tileData = Instantiate(GroundTileData);
 
 				// water
 				if (terrainHeight <= SettingsInjecter.MapSettings.WaterMaxHeight)
@@ -154,7 +153,7 @@ public class MapGenerator : MonoBehaviour
 		}
 	}
 
-	private GroundTileData SetTileData(GroundTileData tileData, Color baseColour, float height, bool walkable = true, bool swimmable = false)
+	private GroundTile SetTileData(GroundTile tileData, Color baseColour, float height, bool walkable = true, bool swimmable = false)
 	{
 		tileData.GroundType = GetGroundTypeByHeight(height);
 		tileData.Tile.color = Colors.AlterColour(baseColour, satChange: TileSaturationChangeStrength);
@@ -165,7 +164,7 @@ public class MapGenerator : MonoBehaviour
 		return tileData;
 	}
 
-	private GameObject InstantiateObject(GameObject prefab, Vector3 pos, string name, GroundTileData tileData, GameObject container, List<Sprite> sprites,  bool flipX = true, bool flipY = true)
+	private GameObject InstantiateObject(GameObject prefab, Vector3 pos, string name, GroundTile tileData, GameObject container, List<Sprite> sprites,  bool flipX = true, bool flipY = true)
 	{
 		GameObject obj = Instantiate(prefab, new Vector3(pos.x + 0.5f, pos.y + 0.5f, 0), Quaternion.identity, container.transform);
 

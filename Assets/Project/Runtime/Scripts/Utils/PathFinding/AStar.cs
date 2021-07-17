@@ -42,11 +42,11 @@ public static class AStar
 			{
 				if (!neighbour.IsTravellable || closedSet.Contains(neighbour)) { continue; }
 
-				int newGCost = currentNode.GCost + DistanceScore(currentNode, neighbour);
+				int newGCost = currentNode.GCost + CalculateDistanceScore(currentNode, neighbour);
 				if (newGCost < neighbour.GCost || !openSet.Contains(neighbour))
 				{
 					neighbour.GCost = newGCost;
-					neighbour.HCost = DistanceScore(neighbour, targetNode);
+					neighbour.HCost = CalculateDistanceScore(neighbour, targetNode);
 					neighbour.Parent = currentNode;
 
 					if (!openSet.Contains(neighbour)) { openSet.Add(neighbour); }
@@ -140,11 +140,10 @@ public static class AStar
 
 	}
 
-	private static int DistanceScore(Node nodeA, Node nodeB)
+	private static int CalculateDistanceScore(Node nodeA, Node nodeB)
 	{
 		int distX = Mathf.Abs(nodeA.GlobalLoc.x - nodeB.GlobalLoc.x);
 		int distY = Mathf.Abs(nodeA.GlobalLoc.y - nodeB.GlobalLoc.y);
-
 		return (14 * Mathf.Min(distX, distY)) + (10 * (Mathf.Max(distX, distY) - Mathf.Min(distX, distY)));
 	}
 

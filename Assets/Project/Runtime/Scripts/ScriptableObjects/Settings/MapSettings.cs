@@ -5,6 +5,8 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Settings/Map Settings")]
 public class MapSettings : ScriptableObject
 {
+	[Header("Presets")]
+	public bool RandomiseSeed;
 	public float Seed;
 	public int MapSize;
 
@@ -33,9 +35,8 @@ public class MapSettings : ScriptableObject
 	[Range(0, 100)] public int DirtSpotSpawnPercent; 
 	[Range(0, 100)] public int StoneSpawnPercent; 
 
-	public GroundTileData[,] Tiles;
-
-	public GroundTileData GetTile(Vector2Int loc) => Tiles[loc.x, loc.y];
+	public GroundTile[,] Tiles;
+	public GroundTile GetTile(Vector2Int loc) => Tiles[loc.x, loc.y];
 
 	// Pathing
 	public bool IsWithinBounds(Vector2Int loc)
