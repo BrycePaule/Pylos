@@ -7,7 +7,7 @@ public static class AStar
 	public static List<Node> FindPath(SettingsInjecter settingsInjecter, Vector2Int startGlobal, Vector2Int targetGlobal, int searchRadius, List<TileTravelType> travelTypes, bool acceptNearest = false)
 	{
 		int searchGridSize = (searchRadius * 2) + 1;
-		Node[,] nodes = BuildNodeGrid(startGlobal, searchRadius, travelTypes, searchGridSize, settingsInjecter.MapSettings.MapSize, settingsInjecter);
+		Node[,] nodes = BuildNodeGrid(startGlobal, searchRadius, travelTypes, searchGridSize, settingsInjecter);
 
 		Vector2Int startLocal = new Vector2Int(searchRadius, searchRadius);
 		Vector2Int targetLocal = new Vector2Int(targetGlobal.x - startGlobal.x + searchRadius, targetGlobal.y - startGlobal.y + searchRadius);
@@ -38,7 +38,7 @@ public static class AStar
 				return RetracePath(startNode, targetNode);
 			}
 
-			foreach (Node neighbour in GetNeighbours(nodes, currentNode, settingsInjecter.MapSettings.MapSize, searchGridSize))
+			foreach (Node neighbour in GetNeighbours(nodes, currentNode, searchGridSize))
 			{
 				if (!neighbour.IsTravellable || closedSet.Contains(neighbour)) { continue; }
 
@@ -57,7 +57,7 @@ public static class AStar
 		if (acceptNearest)
 		{
 			Node nearTarget = null;
-			foreach (Node neighbour in GetNeighbours(nodes, targetNode, settingsInjecter.MapSettings.MapSize, searchGridSize))
+			foreach (Node neighbour in GetNeighbours(nodes, targetNode, searchGridSize))
 			{
 				if (nearTarget == null) 
 				{ 
@@ -98,7 +98,7 @@ public static class AStar
 		return path;
 	}
 
-	private static List<Node> GetNeighbours(Node[,] nodes, Node node, int mapSize, int searchGridSize)
+	private static List<Node> GetNeighbours(Node[,] nodes, Node node, int searchGridSize)
 	{
 		List<Node> neighbours = new List<Node>();
 
@@ -111,7 +111,7 @@ public static class AStar
 				Vector2Int checkGlobal = new Vector2Int(node.GlobalLoc.x + x, node.GlobalLoc.y + y);
 				Vector2Int checkLocal = new Vector2Int(node.LocalLoc.x + x, node.LocalLoc.y + y);
 
-				if (!InsideSquareBounds(checkGlobal, mapSize)) { continue; }
+				if (!InsideSquareBounds(checkGlobal, MapBoard.Instance.MapSize)) { continue; }
 				if (!InsideSquareBounds(checkLocal, searchGridSize)) { continue; }
 
 				neighbours.Add(nodes[checkLocal.x, checkLocal.y]);
@@ -120,7 +120,7 @@ public static class AStar
 		return neighbours;
 	}
 
-	private static Node[,] BuildNodeGrid(Vector2Int startLoc, int searchRadius, List<TileTravelType> travelTypes, int searchGridSize, int mapSize, SettingsInjecter SI)
+	private static Node[,] BuildNodeGrid(Vector2Int startLoc, int searchRadius, List<TileTravelType> travelTypes, int searchGridSize, SettingsInjecter SI)
 	{
 		Node[,] nodes = new Node[searchGridSize, searchGridSize];
 
@@ -130,9 +130,9 @@ public static class AStar
 			{
 				Vector2Int globalLoc = new Vector2Int(startLoc.x + localX - searchRadius, startLoc.y + localY - searchRadius);
 
-				if (!InsideSquareBounds(globalLoc, mapSize)) { continue; }
+				if (!InsideSquareBounds(globalLoc, MapBoard.Instance.MapSize)) { continue; }
 
-				nodes[localX, localY] = new Node(globalLoc, new Vector2Int(localX, localY), SI.MapSettings.IsPathable(globalLoc, travelTypes));
+				nodes[localX, localY] = new Node(globalLoc, new Vector2Int(localX, localY), MapBoard.Instance.IsPathable(globalLoc, travelTypes));
 			}
 		}
 		

@@ -15,6 +15,8 @@ public class InputManager : MonoBehaviour
 	public LocationMarkers LocationMarkers;
 	public EventSystem EventSystem;
 
+	private MapBoard MapBoard;
+
 	[Header("UI References")]
 	public Canvas UIcanvas;
 	public Tooltip Tooltip;
@@ -58,6 +60,8 @@ public class InputManager : MonoBehaviour
 
 	private void Awake()
 	{
+		MapBoard = MapBoard.Instance;
+
 		PlayerControls _playerControls = new PlayerControls();
 		_playerControls.Enable();
 
@@ -241,13 +245,13 @@ public class InputManager : MonoBehaviour
 		Vector2Int tileLoc = TileConversion.WorldToTile(worldPoint);
 
 		// PRINT TRAVEL TYPES
-		// foreach (TileTravelType type in SettingsInjecter.MapSettings.GetTile(tileLoc).TravelType)
+		// foreach (TileTravelType type in MapBoard.Instance.GetTile(tileLoc).TravelType)
 		// {
 		// 	print(type);
 		// }
 
 		// PRINT ITEMS IN CONTAINER
-		foreach (GameObject obj in SettingsInjecter.MapSettings.GetTile(tileLoc).ContainedObjects)
+		foreach (GameObject obj in MapBoard.GetTile(tileLoc).ContainedObjects)
 		{
 			Container container = obj.GetComponent<Container>();
 			if (container != null)
@@ -356,7 +360,7 @@ public class InputManager : MonoBehaviour
 	// 	Vector3 worldPoint = ray.GetPoint(0);
 	// 	Vector2Int mposInWorld = TileConversion.WorldToTile(worldPoint);
 
-	// 	if (mposInWorld.x < 0 || mposInWorld.x >= SettingsInjecter.MapSettings.MapSize || mposInWorld.y < 0 || mposInWorld.y >= SettingsInjecter.MapSettings.MapSize)  
+	// 	if (mposInWorld.x < 0 || mposInWorld.x >= MapBoard.Instance.MapSize || mposInWorld.y < 0 || mposInWorld.y >= MapBoard.Instance.MapSize)  
 	// 	{ 
 	// 		tileCursor.SetActive(false);
 	// 		return; 

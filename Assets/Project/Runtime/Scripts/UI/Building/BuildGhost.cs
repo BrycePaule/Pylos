@@ -9,12 +9,14 @@ public class BuildGhost : MonoBehaviour
 	public PlayerMaterials PlayerMaterials;
 	public GameObject BuildingContainer;
 
+	private MapBoard MapBoard;
 	private SpriteRenderer sr;
 	private Building currentGhost;
 
 	private void Awake()
 	{
 		sr = GetComponent<SpriteRenderer>();
+		MapBoard = MapBoard.Instance;
 		Disable();
 	}
 	
@@ -56,12 +58,12 @@ public class BuildGhost : MonoBehaviour
 		SpriteRenderer bSR = building.GetComponent<SpriteRenderer>();
 		bSR.sprite = currentGhost.Sprite;
 
-		SettingsInjecter.MapSettings.GetTile(TileConversion.WorldToTile(worldPoint)).ContainedObjects.Add(building);
+		MapBoard.GetTile(TileConversion.WorldToTile(worldPoint)).ContainedObjects.Add(building);
 
-		List<TileTravelType> tileTT = SettingsInjecter.MapSettings.GetTile(TileConversion.WorldToTile(worldPoint)).TravelType;
+		List<TileTravelType> tileTT = MapBoard.GetTile(TileConversion.WorldToTile(worldPoint)).TravelType;
 		if (!tileTT.Contains(currentGhost.TravelType))
 		{
-			SettingsInjecter.MapSettings.GetTile(TileConversion.WorldToTile(worldPoint)).TravelType.Add(currentGhost.TravelType);
+			MapBoard.GetTile(TileConversion.WorldToTile(worldPoint)).TravelType.Add(currentGhost.TravelType);
 		}
 	}
 

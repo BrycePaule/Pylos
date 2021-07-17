@@ -57,7 +57,8 @@ public class MapGenerator : MonoBehaviour
 		SettingsInjecter.MapSettings.Seed = SettingsInjecter.MapSettings.RandomiseSeed ? Random.Range(0f, 1f) : SettingsInjecter.MapSettings.Seed;
 		print("Seed: " + SettingsInjecter.MapSettings.Seed);
 
-		SettingsInjecter.MapSettings.Tiles = new GroundTile[SettingsInjecter.MapSettings.MapSize, SettingsInjecter.MapSettings.MapSize];
+		MapBoard.Instance.MapSize = SettingsInjecter.MapSettings.MapSize;
+		MapBoard.Instance.Tiles = new GroundTile[MapBoard.Instance.MapSize, MapBoard.Instance.MapSize];
 
 		terrainMap = terrainGenerator.GenerateHeightMap(SettingsInjecter.MapSettings.TerrainNoiseSettings);
 		biomeMap = terrainGenerator.GenerateHeightMap(SettingsInjecter.MapSettings.BiomeNoiseSettings);
@@ -74,81 +75,81 @@ public class MapGenerator : MonoBehaviour
 
 	private void PopulateTilemap()
 	{
-		for (int y = 0; y < SettingsInjecter.MapSettings.MapSize; y++)
+		for (int y = 0; y < MapBoard.Instance.MapSize; y++)
 		{
-			for (int x = 0; x < SettingsInjecter.MapSettings.MapSize; x++)
+			for (int x = 0; x < MapBoard.Instance.MapSize; x++)
 			{
 				Vector3Int pos = new Vector3Int(x, y, 1);
 				float terrainHeight = terrainMap[x, y];
 
-				GroundTile tileData = Instantiate(GroundTileData);
+				GroundTile groundTile = Instantiate(GroundTileData);
 
 				// water
 				if (terrainHeight <= SettingsInjecter.MapSettings.WaterMaxHeight)
 				{
-					tileData = SetTileData(tileData, terrainGenerator.GetTerrainColour(ColourPalette, terrainMap[x, y], biomeMap[x, y]), terrainHeight, walkable: false, swimmable: true);
-					Tilemap.SetTile(pos, tileData.Tile);
+					groundTile = SetTileData(groundTile, terrainGenerator.GetTerrainColour(ColourPalette, terrainMap[x, y], biomeMap[x, y]), terrainHeight, walkable: false, swimmable: true);
+					Tilemap.SetTile(pos, groundTile.Tile);
 				}
 				
 				// sand
 				else if (terrainHeight > SettingsInjecter.MapSettings.WaterMaxHeight && terrainHeight <= SettingsInjecter.MapSettings.SandMaxHeight )
 				{
-					tileData = SetTileData(tileData, terrainGenerator.GetTerrainColour(ColourPalette, terrainMap[x, y], biomeMap[x, y]), terrainHeight);
-					Tilemap.SetTile(pos, tileData.Tile);
+					groundTile = SetTileData(groundTile, terrainGenerator.GetTerrainColour(ColourPalette, terrainMap[x, y], biomeMap[x, y]), terrainHeight);
+					Tilemap.SetTile(pos, groundTile.Tile);
 
 					if (RandomChance.Roll(SettingsInjecter.MapSettings.SandSpotSpawnPercent))
 					{
-						InstantiateObject(ClutterPrefab, pos, "Sand", tileData, SandSpotContainer, SandSpotSprites);
+						InstantiateObject(ClutterPrefab, pos, "Sand", groundTile, SandSpotContainer, SandSpotSprites);
 					}
 				}
 
 				// dirt
 				else if (terrainHeight > SettingsInjecter.MapSettings.SandMaxHeight && terrainHeight <=  SettingsInjecter.MapSettings.DirtMaxHeight)
 				{
-					tileData = SetTileData(tileData, terrainGenerator.GetTerrainColour(ColourPalette, terrainMap[x, y], biomeMap[x, y]), terrainHeight);
-					Tilemap.SetTile(pos, tileData.Tile);
+					groundTile = SetTileData(groundTile, terrainGenerator.GetTerrainColour(ColourPalette, terrainMap[x, y], biomeMap[x, y]), terrainHeight);
+					Tilemap.SetTile(pos, groundTile.Tile);
 
 					if (RandomChance.Roll(SettingsInjecter.MapSettings.DirtSpotSpawnPercent))
 					{
-						InstantiateObject(ClutterPrefab, pos, "Dirt", tileData, DirtSpotContainer, DirtSpotSprites);
+						InstantiateObject(ClutterPrefab, pos, "Dirt", groundTile, DirtSpotContainer, DirtSpotSprites);
 					}
 				}
 
 				// grass
 				else if (terrainHeight > SettingsInjecter.MapSettings.DirtMaxHeight && terrainHeight <= SettingsInjecter.MapSettings.GrassMaxHeight)
 				{
-					tileData = SetTileData(tileData, terrainGenerator.GetTerrainColour(ColourPalette, terrainMap[x, y], biomeMap[x, y]), terrainHeight);
-					Tilemap.SetTile(pos, tileData.Tile);
+					groundTile = SetTileData(groundTile, terrainGenerator.GetTerrainColour(ColourPalette, terrainMap[x, y], biomeMap[x, y]), terrainHeight);
+					Tilemap.SetTile(pos, groundTile.Tile);
 
 					if (RandomChance.Roll(SettingsInjecter.MapSettings.TreeSpawnPercent))
 					{
-						GameObject tree = InstantiateObject(TreePrefab, pos, "Tree", tileData, TreeContainer, TreeSprites, flipY: false);
+						GameObject tree = InstantiateObject(TreePrefab, pos, "Tree", groundTile, TreeContainer, TreeSprites, flipY: false);
 
-						tileData.TravelType.Add(TileTravelType.Impassable);
+						groundTile.TravelType.Add(TileTravelType.Impassable);
 						tree.GetComponent<Container>().TileLoc = new Vector2Int(pos.x, pos.y);
 						tree.GetComponent<Container>().Put(1, 10);
 					}
 					else if (RandomChance.Roll(SettingsInjecter.MapSettings.ShrubSpawnPercent))
 					{
-						InstantiateObject(ClutterPrefab, pos, "Shrub", tileData, ShrubContainer, ShrubSprites);
+						InstantiateObject(ClutterPrefab, pos, "Shrub", groundTile, ShrubContainer, ShrubSprites);
 					}
 				}
 
 				// stone
 				else if (terrainHeight > SettingsInjecter.MapSettings.GrassMaxHeight)
 				{
-					tileData = SetTileData(tileData, terrainGenerator.GetTerrainColour(ColourPalette, terrainMap[x, y], biomeMap[x, y]), terrainHeight);
-					Tilemap.SetTile(pos, tileData.Tile);
+					groundTile = SetTileData(groundTile, terrainGenerator.GetTerrainColour(ColourPalette, terrainMap[x, y], biomeMap[x, y]), terrainHeight);
+					Tilemap.SetTile(pos, groundTile.Tile);
 
 					if (RandomChance.Roll(SettingsInjecter.MapSettings.StoneSpawnPercent))
 					{
-						GameObject stone = InstantiateObject(StonePrefab, pos, "Stone", tileData, StoneContainer, StoneSprites, flipY: false);
+						GameObject stone = InstantiateObject(StonePrefab, pos, "Stone", groundTile, StoneContainer, StoneSprites, flipY: false);
 
 						stone.GetComponent<Container>().TileLoc = new Vector2Int(pos.x, pos.y);
 						stone.GetComponent<Container>().Put(2, 10);
 					}
 				}
-				SettingsInjecter.MapSettings.Tiles[x, y] = tileData;
+				MapBoard.Instance.Tiles[x, y] = groundTile;
 			}
 		}
 	}

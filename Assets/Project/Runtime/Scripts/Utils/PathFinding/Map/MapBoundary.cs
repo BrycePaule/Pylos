@@ -11,9 +11,9 @@ public class MapBoundary : MonoBehaviour
 	[SerializeField] private GameObject leftBorder; 
 	[SerializeField] private GameObject rightBorder;
 
-	private void Awake() 
+	private void Start() 
 	{
-		int size = SettingsInjecter.MapSettings.MapSize;
+		int size = MapBoard.Instance.MapSize;
 
 		topBorder.transform.position = new Vector3(size / 2, size + 1.5f, 0);
 		topBorder.transform.localScale = new Vector3(size + 6, 3, 1);

@@ -96,7 +96,7 @@ public class NPCGenerator : MonoBehaviour
 
 		npcObj.name = npcType.ToString();
 
-		Vector2Int loc = SettingsInjecter.MapSettings.SelectRandomLocation(npcMovement.TravelTypes);
+		Vector2Int loc = MapBoard.Instance.SelectRandomLocation(npcMovement.TravelTypes);
 		npcObj.transform.position = TileConversion.TileToWorld3D(loc);
 
 		npcBase.Faction = _data.Faction;

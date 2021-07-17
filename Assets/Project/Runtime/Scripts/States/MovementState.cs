@@ -30,11 +30,11 @@ public abstract class MovementState
 		{
 			// clamping means that on edges the units will just keep trying to path out of the map, meaning they stay on the edge
 			Vector2Int potentialTarget = new Vector2Int(
-				Mathf.Clamp(npcMovement.TileLoc.x + (int)Random.Range(-npcMovement.MeanderRange, npcMovement.MeanderRange), 0, npcMovement.SettingsInjecter.MapSettings.MapSize - 1),
-				Mathf.Clamp(npcMovement.TileLoc.y + (int)Random.Range(-npcMovement.MeanderRange, npcMovement.MeanderRange), 0, npcMovement.SettingsInjecter.MapSettings.MapSize - 1));
+				Mathf.Clamp(npcMovement.TileLoc.x + (int)Random.Range(-npcMovement.MeanderRange, npcMovement.MeanderRange), 0, MapBoard.Instance.MapSize - 1),
+				Mathf.Clamp(npcMovement.TileLoc.y + (int)Random.Range(-npcMovement.MeanderRange, npcMovement.MeanderRange), 0, MapBoard.Instance.MapSize - 1));
 
 			if (potentialTarget == npcMovement.TileLoc) { continue; }
-			if (!npcMovement.SettingsInjecter.MapSettings.IsPathable(potentialTarget, npcMovement.TravelTypes)) { continue; }
+			if (!MapBoard.Instance.IsPathable(potentialTarget, npcMovement.TravelTypes)) { continue; }
 
 			npcMovement.TargetLoc = potentialTarget;
 			TargetNeedsUpdating = false;

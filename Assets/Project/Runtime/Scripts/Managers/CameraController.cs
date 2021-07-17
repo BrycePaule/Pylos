@@ -23,7 +23,7 @@ public class CameraController : MonoBehaviour
 
 	private void Start()
 	{
-		transform.position = TileConversion.TileToWorld3D(new Vector2Int(SettingsInjecter.MapSettings.MapSize / 2, SettingsInjecter.MapSettings.MapSize / 2));
+		transform.position = TileConversion.TileToWorld3D(new Vector2Int(MapBoard.Instance.MapSize / 2, MapBoard.Instance.MapSize / 2));
 		Zoom(0);
 	}
 

@@ -14,7 +14,7 @@ public class Search : MovementState
 		if (npcMovement.SearchItemID == 0) { npcMovement.MovementState = new Meander(npcMovement); }
 		if (!TargetNeedsUpdating) { return; }
 
-		Vector2Int found = GridHelpers.SpiralSearch(npcMovement.SearchItemID, npcMovement.TileLoc, npcMovement.SearchRange, npcMovement.SettingsInjecter.MapSettings.Tiles);
+		Vector2Int found = GridHelpers.SpiralSearch(npcMovement.SearchItemID, npcMovement.TileLoc, npcMovement.SearchRange);
 		if (found != new Vector2Int(-1, -1))
 		{
 			npcMovement.TargetLoc = found;
@@ -35,7 +35,7 @@ public class Search : MovementState
 		int y = npcMovement.TargetLoc.y;
 
 		Container container;
-		foreach (GameObject obj in npcMovement.SettingsInjecter.MapSettings.Tiles[x, y].ContainedObjects)
+		foreach (GameObject obj in MapBoard.Instance.Tiles[x, y].ContainedObjects)
 		{
 			container = obj.GetComponent<Container>();
 			if (container != null)

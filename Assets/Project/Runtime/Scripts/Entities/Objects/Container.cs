@@ -6,10 +6,13 @@ public class Container : MonoBehaviour, IContainer
 {
 	public Vector2Int TileLoc;
 	public Dictionary<int, int> items;
+
+	protected MapBoard MapBoard;
 	
 	private void Awake() 
 	{
 		items = new Dictionary<int, int>();	
+		MapBoard = MapBoard.Instance;
 	}
 	
 	public virtual int Take(int id, int count = 1)

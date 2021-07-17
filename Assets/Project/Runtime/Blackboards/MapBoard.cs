@@ -2,10 +2,25 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[CreateAssetMenu(menuName = "Blackboards/MapBoard")]
 public class MapBoard : Blackboard
 {
+	private static MapBoard _instance;
+
 	public int MapSize;
 	public GroundTile[,] Tiles;
+
+	public static MapBoard Instance
+	{
+		get
+		{
+			if (!_instance)
+				_instance = FindObjectOfType<MapBoard>();
+			if (!_instance)
+				_instance = CreateInstance<MapBoard>();
+			return _instance;
+		}
+	}
 
 	// Pathing
 	public GroundTile GetTile(Vector2Int loc)

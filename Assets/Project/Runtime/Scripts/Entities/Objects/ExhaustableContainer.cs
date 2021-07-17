@@ -28,7 +28,7 @@ public class ExhaustableContainer : Container, IExhaustableContainer
 
 	public void Exhaust()
 	{
-		SettingsInjecter.MapSettings.GetTile(TileLoc).ContainedObjects.Remove(gameObject);
+		MapBoard.GetTile(TileLoc).ContainedObjects.Remove(gameObject);
 		Destroy(gameObject);
 	}
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
+[SerializeField]
 [CreateAssetMenu(menuName = "Data Packs/GroundTile")]
 public class GroundTile : TileBase
 {
