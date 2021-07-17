@@ -4,27 +4,18 @@ using UnityEngine;
 
 public class Node
 {
-    public int GCost;
-    public int HCost;
-
+	public Vector2Int Loc;
+	public List<TileTravelType> TravelTypes;
 	public Node Parent;
-	public Vector2Int GlobalLoc;
 
-	public Vector2Int LocalLoc;
-	public bool IsTravellable;
+	public int GCost;
+	public int HCost;
+	public int FCost { get { return GCost + HCost; } }
 
-	public Node(Vector2Int _global, Vector2Int _local, bool _travellable)
+	public Node(Vector2Int _loc, List<TileTravelType> _travelTypes)
 	{
-		GlobalLoc = _global;
-		LocalLoc = _local;
-		IsTravellable = _travellable;
+		Loc = _loc;
+		TravelTypes = _travelTypes;
 	}
-
-	public int FCost
-	{
-		get {
-			return GCost + HCost;
-		}
-	}
-
+	
 }

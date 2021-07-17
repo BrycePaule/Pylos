@@ -58,7 +58,8 @@ public class MapGenerator : MonoBehaviour
 		print("Seed: " + SettingsInjecter.MapSettings.Seed);
 
 		MapBoard.Instance.MapSize = SettingsInjecter.MapSettings.MapSize;
-		MapBoard.Instance.Tiles = new GroundTile[MapBoard.Instance.MapSize, MapBoard.Instance.MapSize];
+		MapBoard.Instance.Initialise(MapBoard.Instance.MapSize);
+		Pathfinder.Instance.Initialise(MapBoard.Instance.MapSize);
 
 		terrainMap = terrainGenerator.GenerateHeightMap(SettingsInjecter.MapSettings.TerrainNoiseSettings);
 		biomeMap = terrainGenerator.GenerateHeightMap(SettingsInjecter.MapSettings.BiomeNoiseSettings);
@@ -125,7 +126,7 @@ public class MapGenerator : MonoBehaviour
 					{
 						GameObject tree = InstantiateObject(TreePrefab, pos, "Tree", groundTile, TreeContainer, TreeSprites, flipY: false);
 
-						groundTile.TravelType.Add(TileTravelType.Impassable);
+						groundTile.TravelTypes.Add(TileTravelType.Impassable);
 						tree.GetComponent<Container>().TileLoc = new Vector2Int(pos.x, pos.y);
 						tree.GetComponent<Container>().Put(1, 10);
 					}
@@ -159,8 +160,8 @@ public class MapGenerator : MonoBehaviour
 		tileData.GroundType = GetGroundTypeByHeight(height);
 		tileData.Tile.color = Colors.AlterColour(baseColour, satChange: TileSaturationChangeStrength);
 		
-		if (walkable) { tileData.TravelType.Add(TileTravelType.Walkable); } 
-		if (swimmable) { tileData.TravelType.Add(TileTravelType.Swimmable); } 
+		if (walkable) { tileData.TravelTypes.Add(TileTravelType.Walkable); } 
+		if (swimmable) { tileData.TravelTypes.Add(TileTravelType.Swimmable); } 
 
 		return tileData;
 	}

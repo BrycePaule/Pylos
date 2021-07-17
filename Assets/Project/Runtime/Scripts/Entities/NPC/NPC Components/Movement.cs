@@ -66,9 +66,12 @@ public class Movement : NPCComponentBase
 		{
 			// update target
 			MovementState.FindTarget();
+			// print("Current:" + TileLoc);
+			// print("Target:" + TargetLoc);
 
 			// find path to target
 			Path = MovementState.FindPathToTarget(maxAttempts: 3, acceptNearest: false);
+			// print("Path Length: " + Path.Count);
 
 			// move on path
 			if (Path.Count > 0)
@@ -93,5 +96,4 @@ public class Movement : NPCComponentBase
 		moveTimer += Random.Range(0, MoveDelay);
 		searchTimer += Random.Range(0, SearchDelay);
 	}
-
 }

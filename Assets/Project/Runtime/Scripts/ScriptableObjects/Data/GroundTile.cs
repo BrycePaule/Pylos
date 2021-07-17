@@ -11,7 +11,7 @@ public class GroundTile : TileBase
 
     public Tile Tile;
     public GroundType GroundType;
-	public List<TileTravelType> TravelType;
+	public List<TileTravelType> TravelTypes;
     public List<GameObject> ContainedObjects;
 
 	public Color ColorLookup(GroundType type)

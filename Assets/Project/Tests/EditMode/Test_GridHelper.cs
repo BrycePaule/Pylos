@@ -6,7 +6,6 @@ using UnityEngine.TestTools;
 
 public class Test_GridHelper
 {
-	
 	[Test]
 	public void is_at_location_passes_for_same_positive_vectors()
 	{

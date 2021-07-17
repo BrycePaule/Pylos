@@ -41,7 +41,7 @@ public class PathDrawer : NPCComponentBase
 		Vector3[] pathArray = new Vector3[path.Count];
 		for (int i = 0; i < path.Count; i++)
 		{
-			pathArray[i] = TileConversion.TileToWorld3D(path[i].GlobalLoc);
+			pathArray[i] = TileConversion.TileToWorld3D(path[i].Loc);
 		}
 
 		npcAggro = (Aggro) npcBase.GetNPCComponent(NPCComponentType.Aggro);

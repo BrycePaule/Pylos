@@ -6,6 +6,7 @@ using UnityEngine;
 public abstract class MovementState
 {
 	protected Movement npcMovement; 
+	protected MapBoard mapBoard;
 
 	public bool TargetNeedsUpdating;
 
@@ -13,11 +14,12 @@ public abstract class MovementState
 	{
 		npcMovement = _npcMovement;
 		TargetNeedsUpdating = true;
+		mapBoard = MapBoard.Instance;
 	}
 
 	public virtual void Move()
 	{
-		Vector2Int tileLoc = npcMovement.Path[0].GlobalLoc;
+		Vector2Int tileLoc = npcMovement.Path[0].Loc;
 		npcMovement.npcRB.MovePosition(TileConversion.TileToWorld2D(tileLoc));
 		npcMovement.TileLoc = tileLoc;
 	}
@@ -30,11 +32,11 @@ public abstract class MovementState
 		{
 			// clamping means that on edges the units will just keep trying to path out of the map, meaning they stay on the edge
 			Vector2Int potentialTarget = new Vector2Int(
-				Mathf.Clamp(npcMovement.TileLoc.x + (int)Random.Range(-npcMovement.MeanderRange, npcMovement.MeanderRange), 0, MapBoard.Instance.MapSize - 1),
-				Mathf.Clamp(npcMovement.TileLoc.y + (int)Random.Range(-npcMovement.MeanderRange, npcMovement.MeanderRange), 0, MapBoard.Instance.MapSize - 1));
+				Mathf.Clamp(npcMovement.TileLoc.x + (int) Random.Range(-npcMovement.MeanderRange, npcMovement.MeanderRange), 0, mapBoard.MapSize - 1),
+				Mathf.Clamp(npcMovement.TileLoc.y + (int) Random.Range(-npcMovement.MeanderRange, npcMovement.MeanderRange), 0, mapBoard.MapSize - 1));
 
 			if (potentialTarget == npcMovement.TileLoc) { continue; }
-			if (!MapBoard.Instance.IsPathable(potentialTarget, npcMovement.TravelTypes)) { continue; }
+			if (!mapBoard.IsPathable(potentialTarget, npcMovement.TravelTypes)) { continue; }
 
 			npcMovement.TargetLoc = potentialTarget;
 			TargetNeedsUpdating = false;
@@ -51,7 +53,7 @@ public abstract class MovementState
 		while (path.Count == 0)
 		{
 			attempts++;
-			path = AStar.FindPath(npcMovement.SettingsInjecter, npcMovement.TileLoc, npcMovement.TargetLoc, searchDistance * attempts, npcMovement.TravelTypes, acceptNearest);
+			path = Pathfinder.Instance.FindPath(npcMovement.TileLoc, npcMovement.TargetLoc, searchDistance * attempts, npcMovement.TravelTypes, acceptNearest);
 
 			if (attempts >= maxAttempts) { return new List<Node>(); }
 		}

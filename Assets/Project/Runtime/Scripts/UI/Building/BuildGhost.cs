@@ -60,10 +60,10 @@ public class BuildGhost : MonoBehaviour
 
 		MapBoard.GetTile(TileConversion.WorldToTile(worldPoint)).ContainedObjects.Add(building);
 
-		List<TileTravelType> tileTT = MapBoard.GetTile(TileConversion.WorldToTile(worldPoint)).TravelType;
+		List<TileTravelType> tileTT = MapBoard.GetTile(TileConversion.WorldToTile(worldPoint)).TravelTypes;
 		if (!tileTT.Contains(currentGhost.TravelType))
 		{
-			MapBoard.GetTile(TileConversion.WorldToTile(worldPoint)).TravelType.Add(currentGhost.TravelType);
+			MapBoard.GetTile(TileConversion.WorldToTile(worldPoint)).TravelTypes.Add(currentGhost.TravelType);
 		}
 	}
 
