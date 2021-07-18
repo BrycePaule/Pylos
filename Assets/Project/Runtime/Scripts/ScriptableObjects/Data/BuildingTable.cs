@@ -7,6 +7,20 @@ public class BuildingTable : ScriptableObject
 {
 	public List<Building> Buildings = new List<Building>();
 
+	private static BuildingTable _instance;
+
+	public static BuildingTable Instance
+	{
+		get
+		{
+			if (!_instance)
+				_instance = FindObjectOfType<BuildingTable>();
+			if (!_instance)
+				_instance = CreateInstance<BuildingTable>();
+			return _instance;
+		}
+	}
+
 	public Building GetById(int id)
 	{
 		foreach (Building entry in Buildings)

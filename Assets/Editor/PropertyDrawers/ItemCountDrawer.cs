@@ -1,45 +1,43 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
 [CustomPropertyDrawer(typeof(ItemCount))]
-public class ItemCountDrawer : PropertyDrawer
+public class ItemCountDrawer : PropertyDrawer 
 {
-	public int lines = 1;
-	public int lineHeight = 20;
-	public int lineSpace = 1;
-	public int wordSpace = 5;
+	int fieldWidth = 40;
+	int labelWidth = 40;
+	int lineSpace = 3;
 
 	Rect pos;
 
 	public override void OnGUI(Rect position, SerializedProperty property, GUIContent label) 
 	{
-		EditorGUI.BeginProperty(position, label, property);
-		position = EditorGUI.PrefixLabel(position, GUIUtility.GetControlID(FocusType.Passive), label);
-
-		var indent = EditorGUI.indentLevel;
-		EditorGUI.indentLevel = 0;
-
 		pos = position;
-		var itemIDRect = new Rect(position.x, position.y, PropWidth(.3f), lineHeight);
-		var countRect = new Rect(position.x + position.width * 0.3f, position.y, PropWidth(0.7f), lineHeight);
 
-		EditorGUI.PropertyField(itemIDRect, property.FindPropertyRelative("ID"), GUIContent.none);
-		EditorGUI.PropertyField(countRect, property.FindPropertyRelative("Count"), GUIContent.none);
+		EditorGUI.BeginProperty(position, label, property);
 
-		EditorGUI.indentLevel = indent;
+			position = EditorGUI.PrefixLabel(position, new GUIContent(Resources.Load<ItemTable>("Tables/Item Table").Lookup(property.FindPropertyRelative("ID").intValue).ToString()));
+
+			int indent = EditorGUI.indentLevel;
+			EditorGUI.indentLevel = 0;
+
+			var IDLabelRect = new Rect(position.x, position.y, labelWidth, position.height - lineSpace);
+			var IDRect = new Rect(position.x + position.width * 0.1f, position.y, fieldWidth, position.height - lineSpace);
+			var CountLabelRect = new Rect(position.xMax - position.width * 0.4f, position.y, labelWidth, position.height - lineSpace);
+			var CountRect = new Rect(position.xMax - position.width * 0.2f, position.y, fieldWidth, position.height - lineSpace);
+
+			EditorGUI.LabelField(IDLabelRect, "ID");
+			EditorGUI.PropertyField(IDRect, property.FindPropertyRelative("ID"), GUIContent.none);
+			EditorGUI.LabelField(CountLabelRect, "Count");
+			EditorGUI.PropertyField(CountRect, property.FindPropertyRelative("Count"), GUIContent.none);
+
+			EditorGUI.indentLevel = indent;
+
 		EditorGUI.EndProperty();
 	}
 
 	public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
 	{
-		return base.GetPropertyHeight(property, label) * lines + (lines * lineSpace * 2);
+		return base.GetPropertyHeight(property, label) + lineSpace;
 	}
-
-	public float PropWidth(float percentage)
-	{
-		return pos.width * percentage - wordSpace;
-	}
-
 }

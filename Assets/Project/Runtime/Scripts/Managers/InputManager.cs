@@ -21,6 +21,7 @@ public class InputManager : MonoBehaviour
 	public Canvas UIcanvas;
 	public Tooltip Tooltip;
 	public Menu Menu;
+	public MainMenu MainMenu;
 	public BuildMenu BuildMenu;
 	public RectTransform SelectionBox;
 	public BuildGhost BuildGhost;
@@ -43,6 +44,7 @@ public class InputManager : MonoBehaviour
 	private InputAction _playerLeftClickHold;
 	private InputAction _playerRightClick;
 	private InputAction _toggleMenu;
+	private InputAction _toggleMainMenu;
 	private InputAction _toggleBuildMenu;
 	private InputAction _nextHero;
 	private InputAction _cameraZoom;
@@ -82,6 +84,9 @@ public class InputManager : MonoBehaviour
 		_cameraBoost = _playerControls.Camera.Boost;
 		_cameraBoost.started += ctx => OnCameraBoostDown(ctx);
 		_cameraBoost.canceled += ctx => OnCameraBoostUp(ctx);
+
+		_toggleMainMenu = _playerControls.HotKeys.ToggleMainMenu;
+		_toggleMainMenu.performed += ctx => OnToggleMainMenu();
 
 		_toggleMenu = _playerControls.HotKeys.ToggleMenu;
 		_toggleMenu.performed += ctx => OnToggleMenu();
@@ -371,6 +376,12 @@ public class InputManager : MonoBehaviour
 	// }
 
 	// MENU
+
+	private void OnToggleMainMenu()
+	{
+		MainMenu.ToggleMainMenu();
+	}
+
 	private void OnToggleMenu()
 	{
 		Menu.ToggleMenu();
@@ -383,6 +394,7 @@ public class InputManager : MonoBehaviour
 
 	private void TurnOffMenus()
 	{
+		if (SettingsInjecter.GameSettings.MainMenuIsOpen) { MainMenu.Disable(); }
 		if (SettingsInjecter.GameSettings.MenuIsOpen) { Menu.TweenOutMenu(); }
 		if (SettingsInjecter.GameSettings.BuildMenuIsOpen) { BuildMenu.TweenOutMenu(); }
 	}

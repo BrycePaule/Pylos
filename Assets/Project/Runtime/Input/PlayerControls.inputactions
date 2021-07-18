@@ -313,6 +313,14 @@
                     "interactions": ""
                 },
                 {
+                    "name": "ToggleMainMenu",
+                    "type": "Button",
+                    "id": "df8b0d29-fb29-42cf-91d6-b0849489e79b",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
                     "name": "ToggleBuildMenu",
                     "type": "Button",
                     "id": "6c6b6ed6-1132-4f23-9765-ae859c669f68",
@@ -927,7 +935,7 @@
                 {
                     "name": "",
                     "id": "c02d827f-8ab3-4977-997b-e59ba51798b6",
-                    "path": "<Keyboard>/escape",
+                    "path": "<Keyboard>/backquote",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -954,6 +962,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "NextHero",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "2d36f605-ca58-4f5e-aebf-5296b6385579",
+                    "path": "<Keyboard>/escape",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ToggleMainMenu",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

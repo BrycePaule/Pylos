@@ -91,7 +91,7 @@ public class BuildMenu : MonoBehaviour
 		npcMovement.SetMovementState(new Search(npcMovement));
 	}
 
-	public void SearchForWood() => SearchFor(1); 
-	public void SearchForStone() => SearchFor(2); 
-	public void CancelSearch() => SearchFor(0); 
+	public void SearchForWood() => SearchFor(1);
+	public void SearchForStone() => SearchFor(2);
+	public void CancelSearch() => SearchFor(0);
 }

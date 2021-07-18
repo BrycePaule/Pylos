@@ -8,7 +8,6 @@ public class Menu : MonoBehaviour
 	public SettingsInjecter SettingsInjecter;
 	public PlayerSelections PlayerSelections;
 	public CameraController CameraController;
-	public Canvas UICanvas;
 	public GameObject NPCContainer;
 
 	[Header("Settings")]

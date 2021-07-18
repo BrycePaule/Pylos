@@ -8,6 +8,7 @@ public class GameSettings : ScriptableObject
 	[Header("Debug")]
 	public bool ShowPaths;
 	public bool ShowDetectionRadius;
+	public bool MainMenuIsOpen;
 	public bool MenuIsOpen;
 	public bool BuildMenuIsOpen;
 
