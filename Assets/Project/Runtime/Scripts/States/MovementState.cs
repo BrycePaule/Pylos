@@ -32,11 +32,11 @@ public abstract class MovementState
 		{
 			// clamping means that on edges the units will just keep trying to path out of the map, meaning they stay on the edge
 			Vector2Int potentialTarget = new Vector2Int(
-				Mathf.Clamp(npcMovement.TileLoc.x + (int) Random.Range(-npcMovement.MeanderRange, npcMovement.MeanderRange), 0, mapBoard.MapSize - 1),
-				Mathf.Clamp(npcMovement.TileLoc.y + (int) Random.Range(-npcMovement.MeanderRange, npcMovement.MeanderRange), 0, mapBoard.MapSize - 1));
+				Mathf.Clamp(npcMovement.TileLoc.x + (int) Random.Range(-npcMovement.npcBase.NPCStatAsset.MeanderRange, npcMovement.npcBase.NPCStatAsset.MeanderRange), 0, mapBoard.MapSize - 1),
+				Mathf.Clamp(npcMovement.TileLoc.y + (int) Random.Range(-npcMovement.npcBase.NPCStatAsset.MeanderRange, npcMovement.npcBase.NPCStatAsset.MeanderRange), 0, mapBoard.MapSize - 1));
 
 			if (potentialTarget == npcMovement.TileLoc) { continue; }
-			if (!mapBoard.IsPathable(potentialTarget, npcMovement.TravelTypes)) { continue; }
+			if (!mapBoard.IsPathable(potentialTarget, npcMovement.npcBase.NPCStatAsset.TravelTypes)) { continue; }
 
 			npcMovement.TargetLoc = potentialTarget;
 			TargetNeedsUpdating = false;
@@ -53,7 +53,7 @@ public abstract class MovementState
 		while (path.Count == 0)
 		{
 			attempts++;
-			path = Pathfinder.Instance.FindPath(npcMovement.TileLoc, npcMovement.TargetLoc, searchDistance * attempts, npcMovement.TravelTypes, acceptNearest);
+			path = Pathfinder.Instance.FindPath(npcMovement.TileLoc, npcMovement.TargetLoc, searchDistance * attempts, npcMovement.npcBase.NPCStatAsset.TravelTypes, acceptNearest);
 
 			if (attempts >= maxAttempts) { return new List<Node>(); }
 		}

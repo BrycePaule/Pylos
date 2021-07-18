@@ -14,19 +14,25 @@ public class NPCGenerator : MonoBehaviour
 
 	[Header("Settings")]
 	public int SpawnCheckDelay;
+	public int OverrideAssetUpdateDelay;
 
 	private float spawnCheckTimer;
-	private Dictionary<NPCType, NPCData> npcData = new Dictionary<NPCType, NPCData>();
+	private float overrideAssetUpdateTimer;
+	private Dictionary<NPCType, NPCData> npcDataLookup = new Dictionary<NPCType, NPCData>();
+	private Dictionary<NPCType, NPCData> npcOverrideDataLookup = new Dictionary<NPCType, NPCData>();
 
 	private void Awake() 
 	{
-		BuildNPCDictionary();
+		BuildAssetDictionary();
+
+		if (SettingsInjecter.NPCSettings.OverrideNPCMoveDelays)
+			BuildOverrideAssetDictionary();
 	}
 
 	private void Start() 
 	{
 		NPCSettings settings = SettingsInjecter.NPCSettings;
-		if (settings.OverrideSpawnCaps || settings.OverrideNPCTypes || settings.OverrideNPCSpeeds)
+		if (settings.OverrideSpawnCaps || settings.OverrideNPCTypes || settings.OverrideNPCMoveDelays)
 		{
 			foreach (NPCType npc in System.Enum.GetValues(typeof(NPCType)))
 			{
@@ -36,7 +42,7 @@ public class NPCGenerator : MonoBehaviour
 
 				Transform container = NPCContainer.Find(npc.ToString() + " Container");
 
-				int count = npcData[npc].SpawnCount;
+				int count = npcDataLookup[npc].SpawnCount;
 				if (settings.OverrideSpawnCaps)
 					count = settings.SpawnCap;
 
@@ -48,12 +54,25 @@ public class NPCGenerator : MonoBehaviour
 		foreach (NPCType npc in System.Enum.GetValues(typeof(NPCType)))
 		{
 			Transform container = NPCContainer.Find(npc.ToString() + " Container");
-			Spawn(npc, npcData[npc].SpawnCount, container);
+			Spawn(npc, npcDataLookup[npc].SpawnCount, container);
 		}
 	}
 
 	private void FixedUpdate() 
 	{
+		if (SettingsInjecter.NPCSettings.OverrideNPCMoveDelays)
+		{
+			overrideAssetUpdateTimer += Time.deltaTime;
+			if (overrideAssetUpdateTimer >= OverrideAssetUpdateDelay) 
+			{
+				foreach (NPCData asset in npcOverrideDataLookup.Values)
+				{
+					asset.MoveDelay = SettingsInjecter.NPCSettings.MoveDelay;
+				}
+				overrideAssetUpdateTimer = 0f;
+			}
+		}
+
 		if (SettingsInjecter.NPCSettings.OverrideSpawnCaps || SettingsInjecter.NPCSettings.OverrideNPCTypes)
 			return;
 
@@ -65,9 +84,9 @@ public class NPCGenerator : MonoBehaviour
 				Transform container = NPCContainer.Find(npc.ToString() + " Container");
 				if (container)
 				{
-					if (container.transform.childCount < npcData[npc].SpawnCount)
+					if (container.transform.childCount < npcDataLookup[npc].SpawnCount)
 					{
-						Spawn(npc, npcData[npc].SpawnCount - container.transform.childCount, container);
+						Spawn(npc, npcDataLookup[npc].SpawnCount - container.transform.childCount, container);
 					}
 				}
 			}
@@ -80,14 +99,18 @@ public class NPCGenerator : MonoBehaviour
 		print("Spawning " + count + " " + npc.ToString() + "(s)");
 		for (int i = 0; i < count; i++)
 		{
-			GameObject newNPC = Instantiate(npcData[npc].Prefab, Vector3.zero, Quaternion.identity, container);
-			BuildNPC(newNPC, npc);
+			GameObject newNPC = Instantiate(npcDataLookup[npc].Prefab, Vector3.zero, Quaternion.identity, container);
+
+			NPCData dataAsset = npcDataLookup[npc];
+			if (SettingsInjecter.NPCSettings.OverrideNPCMoveDelays)
+				dataAsset = npcOverrideDataLookup[npc];
+
+			InitialiseNPC(newNPC, npc, dataAsset);
 		}
 	}
 
-	private void BuildNPC(GameObject npcObj, NPCType npcType)
+	private void InitialiseNPC(GameObject npcObj, NPCType npcType, NPCData dataAsset)
 	{
-		NPCData _data = npcData[npcType];
 		NPCBase npcBase = npcObj.GetComponentInChildren<NPCBase>();
 
 		Movement npcMovement = (Movement) npcBase.GetNPCComponent(NPCComponentType.Movement);
@@ -96,33 +119,32 @@ public class NPCGenerator : MonoBehaviour
 
 		npcObj.name = npcType.ToString();
 
-		Vector2Int loc = MapBoard.Instance.SelectRandomLocation(npcMovement.TravelTypes);
+		Vector2Int loc = MapBoard.Instance.SelectRandomLocation(dataAsset.TravelTypes);
 		npcObj.transform.position = TileConversion.TileToWorld3D(loc);
 
-		npcBase.Faction = _data.Faction;
+		npcBase.Faction = dataAsset.Faction;
+		npcBase.NPCStatAsset = dataAsset;
 
 		npcMovement.TileLoc = loc;
-		npcMovement.MoveDelay = _data.MoveDelay;
-		npcMovement.TilesPerStep = _data.TilesPerStep;
-		npcMovement.TravelTypes = _data.TravelTypes;
-		npcMovement.MeanderRange = _data.MeanderRange;
-		npcMovement.SearchRange = _data.SearchRange;
 		npcMovement.MovementState = new Meander(npcMovement);
-
-		npcCombat.Damage = _data.Damage;
-		npcCombat.AttackSpeed = _data.AttackSpeed;
-		npcCombat.AttackRange = _data.AttackRange;
-
-		npcHealth.MaxHealth = _data.MaxHealth;
-
-		if (SettingsInjecter.NPCSettings.OverrideNPCSpeeds) { npcMovement.MoveDelay = SettingsInjecter.NPCSettings.MoveDelay; }
 	}
 
-	private void BuildNPCDictionary()
+	private void BuildAssetDictionary()
 	{
 		foreach (NPCData asset in NPCDataAssets)
 		{
-			npcData.Add(asset.NPCType, asset);
+			npcDataLookup.Add(asset.NPCType, asset);
+		}
+	}
+
+	private void BuildOverrideAssetDictionary()
+	{
+		foreach (var item in npcDataLookup)
+		{
+			NPCData newAsset = Instantiate(item.Value);
+			newAsset.MoveDelay = SettingsInjecter.NPCSettings.MoveDelay;
+
+			npcOverrideDataLookup.Add(item.Key, newAsset);
 		}
 	}
 

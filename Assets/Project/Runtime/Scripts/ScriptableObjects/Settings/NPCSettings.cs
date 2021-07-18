@@ -8,9 +8,11 @@ public class NPCSettings : ScriptableObject
 	public bool OverrideSpawnCaps;
 	public int SpawnCap;
 
+	[Space]
 	public bool OverrideNPCTypes;
 	public NPCType NPCType;
 
-	public bool OverrideNPCSpeeds;
+	[Space]
+	public bool OverrideNPCMoveDelays;
 	public float MoveDelay;
 }

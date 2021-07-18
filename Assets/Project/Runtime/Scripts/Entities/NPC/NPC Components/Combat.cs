@@ -4,11 +4,6 @@ using UnityEngine;
 
 public class Combat : NPCComponentBase
 {
-	[Header("Settings")]
-	public float Damage;
-	public float AttackSpeed;
-	public int AttackRange;
-
 	private float attackTimer;
 
 	private Movement npcMovement;
@@ -35,9 +30,9 @@ public class Combat : NPCComponentBase
 	{
 		npcMovement.TargetLoc = npcAggro.AggroList.Highest.GetComponentInChildren<Movement>().TileLoc;
 
-		if (GridHelpers.IsWithinDistance(npcMovement.TileLoc, npcMovement.TargetLoc, AttackRange) && attackTimer >= AttackSpeed) 
+		if (GridHelpers.IsWithinDistance(npcMovement.TileLoc, npcMovement.TargetLoc, npcBase.NPCStatAsset.AttackRange) && attackTimer >= npcBase.NPCStatAsset.AttackSpeed) 
 		{
-			target.GetComponentInChildren<Health>().Damage(Damage, npcBase);
+			target.GetComponentInChildren<Health>().Damage(npcBase.NPCStatAsset.Damage, npcBase);
 			attackTimer = 0f;
 			return true;
 		} else

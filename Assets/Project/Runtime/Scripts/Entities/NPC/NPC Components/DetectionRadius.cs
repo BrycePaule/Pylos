@@ -7,9 +7,6 @@ public class DetectionRadius : NPCComponentBase
 	[Header("References")]
 	public SettingsInjecter SettingsInjecter;
 
-	[Header("Settings")]
-	public int detectionRadius;
-
 	private SpriteRenderer sr;
 
 	private Movement npcMovement;
@@ -20,7 +17,7 @@ public class DetectionRadius : NPCComponentBase
 		base.Awake();
 		npcBase.SubscribeComponent(NPCComponentType.DetectionRadius, this);
 
-		GetComponent<CircleCollider2D>().radius = detectionRadius;
+		GetComponent<CircleCollider2D>().radius = npcBase.NPCStatAsset.DetectionRange;
 		sr = GetComponent<SpriteRenderer>();
 	}
 

@@ -56,7 +56,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   NPCType: 2
   Faction: 5
-  TravelTypes: 01000000
+  NPCStatAsset: {fileID: 11400000, guid: 943d1f383f506ac429a33d367e8fe515, type: 2}
 --- !u!212 &8747744546245116285
 SpriteRenderer:
   m_ObjectHideFlags: 0

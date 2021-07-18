@@ -11,7 +11,6 @@ public class Health : NPCComponentBase, IDamageable<float>
 	public ParticleSystem OnDeathSplatter;
 
 	[Header("Settings")]
-	public float MaxHealth;
 	public float CurrentHealth;
 	public Canvas HealthBarCanvas;
 	public GameObject HealthBar;
@@ -38,7 +37,7 @@ public class Health : NPCComponentBase, IDamageable<float>
 
 	private void Update()
 	{
-		if (CurrentHealth == MaxHealth)
+		if (CurrentHealth == npcBase.NPCStatAsset.MaxHealth)
 		{
 			DisableHealthBar();
 		}
@@ -62,7 +61,7 @@ public class Health : NPCComponentBase, IDamageable<float>
 
 	public void Heal(float value, GameObject healedBy)
 	{
-		CurrentHealth = Mathf.Clamp(CurrentHealth + value, 0, MaxHealth);
+		CurrentHealth = Mathf.Clamp(CurrentHealth + value, 0, npcBase.NPCStatAsset.MaxHealth);
 		UpdateHealthBarSlider();
 	}
 
@@ -78,7 +77,7 @@ public class Health : NPCComponentBase, IDamageable<float>
 
 	private void UpdateHealthBarSlider()
 	{
-		slider.value = CurrentHealth / MaxHealth;
+		slider.value = CurrentHealth / npcBase.NPCStatAsset.MaxHealth;
 	}
 
 	public void Kill() 
@@ -89,7 +88,7 @@ public class Health : NPCComponentBase, IDamageable<float>
 
 	public void ResetHealth()
 	{
-		CurrentHealth = MaxHealth;
+		CurrentHealth = npcBase.NPCStatAsset.MaxHealth;
 		slider.value = CurrentHealth;
 	}
 

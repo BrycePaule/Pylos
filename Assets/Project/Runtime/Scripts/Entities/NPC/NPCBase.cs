@@ -6,6 +6,7 @@ public class NPCBase : MonoBehaviour
 {
 	public NPCType NPCType;
 	public Faction Faction;
+	public NPCData NPCStatAsset;
 
 	public Dictionary<NPCComponentType, NPCComponentBase> Components = new Dictionary<NPCComponentType, NPCComponentBase>();
 

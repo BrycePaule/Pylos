@@ -14,7 +14,7 @@ public class Search : MovementState
 		if (npcMovement.SearchItemID == 0) { npcMovement.MovementState = new Meander(npcMovement); }
 		if (!TargetNeedsUpdating) { return; }
 
-		Vector2Int found = GridHelpers.SpiralSearch(npcMovement.SearchItemID, npcMovement.TileLoc, npcMovement.SearchRange);
+		Vector2Int found = GridHelpers.SpiralSearch(npcMovement.SearchItemID, npcMovement.TileLoc, npcMovement.npcBase.NPCStatAsset.SearchRange);
 		if (found != new Vector2Int(-1, -1))
 		{
 			npcMovement.TargetLoc = found;

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class NPCComponentBase : MonoBehaviour
 {
-	protected NPCBase npcBase;
+	public NPCBase npcBase;
 
 	protected virtual void Awake() 
 	{

@@ -119,19 +119,19 @@ public class Tooltip : MonoBehaviour
 		FieldInfo[] fields = new FieldInfo[6];
 		fields[0] = typeof(Movement).GetField("TileLoc");
 		fields[1] = typeof(NPCBase).GetField("Faction");
-		fields[2] = typeof(Movement).GetField("MoveDelay");
-		fields[3] = typeof(Combat).GetField("Damage");
-		fields[4] = typeof(Combat).GetField("AttackRange");
-		fields[5] = typeof(Combat).GetField("AttackSpeed");
+		fields[2] = typeof(NPCData).GetField("MoveDelay");
+		fields[3] = typeof(NPCData).GetField("Damage");
+		fields[4] = typeof(NPCData).GetField("AttackRange");
+		fields[5] = typeof(NPCData).GetField("AttackSpeed");
 
 		CreateMissingProperties(fields.Length);
 
 		SetPropertyElement<Movement>(propPool[0], fields[0], (Movement) npc.GetNPCComponent(NPCComponentType.Movement));
 		SetPropertyElement<NPCBase>(propPool[1], fields[1], npc);
-		SetPropertyElement<Movement>(propPool[2], fields[2], (Movement) npc.GetNPCComponent(NPCComponentType.Movement));
-		SetPropertyElement<Combat>(propPool[3], fields[3], (Combat) npc.GetNPCComponent(NPCComponentType.Combat));
-		SetPropertyElement<Combat>(propPool[4], fields[4], (Combat) npc.GetNPCComponent(NPCComponentType.Combat));
-		SetPropertyElement<Combat>(propPool[5], fields[5], (Combat) npc.GetNPCComponent(NPCComponentType.Combat));
+		SetPropertyElement<NPCData>(propPool[2], fields[2], npc.NPCStatAsset);
+		SetPropertyElement<NPCData>(propPool[3], fields[3], npc.NPCStatAsset);
+		SetPropertyElement<NPCData>(propPool[4], fields[4], npc.NPCStatAsset);
+		SetPropertyElement<NPCData>(propPool[5], fields[5], npc.NPCStatAsset);
 
 		DisableUnusedProperties(fields.Length);
 		UpdateInfoBoxSize(fields.Length);
@@ -195,9 +195,9 @@ public class Tooltip : MonoBehaviour
 		{
 			HealthBar.SetActive(true);
 			Health objHealth = obj.GetComponentInChildren<Health>();
-			slider.value = objHealth.CurrentHealth / objHealth.MaxHealth;
+			slider.value = objHealth.CurrentHealth / objHealth.npcBase.NPCStatAsset.MaxHealth;
 			HealthBarValues.CurrentHealth = objHealth.CurrentHealth;
-			HealthBarValues.MaxHealth = objHealth.MaxHealth;
+			HealthBarValues.MaxHealth = objHealth.npcBase.NPCStatAsset.MaxHealth;
 		}
 		else
 		{

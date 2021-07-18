@@ -20,6 +20,7 @@ public class NPCData : ScriptableObject
 	public int TilesPerStep;
 	public int MeanderRange;
 	public int SearchRange;
+	public float SearchDelay;
 	
 	[Header("Combat")]
 	public float MaxHealth;

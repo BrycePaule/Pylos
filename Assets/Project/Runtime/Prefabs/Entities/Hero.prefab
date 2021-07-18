@@ -56,6 +56,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   NPCType: 3
   Faction: 6
+  NPCStatAsset: {fileID: 11400000, guid: f972c37ef7f332d4586d6b3ef3ce37b9, type: 2}
 --- !u!212 &4793766673727784414
 SpriteRenderer:
   m_ObjectHideFlags: 0
