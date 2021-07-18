@@ -4,13 +4,11 @@ using UnityEngine;
 
 public class MaterialElement : MonoBehaviour
 {
-	public PlayerMaterials PlayerMaterials;
-
 	public TMPro.TMP_Text ValueText;
 	public int ID;
 
 	private void FixedUpdate() 
 	{
-		ValueText.text = PlayerMaterials.GetValue(ID).ToString();
+		ValueText.text = PlayerResourcesBoard.Instance.GetValue(ID).ToString();
 	}
 }

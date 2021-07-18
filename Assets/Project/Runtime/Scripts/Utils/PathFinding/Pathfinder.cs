@@ -173,6 +173,8 @@ public class Pathfinder : ScriptableObject
 
 	private static bool NodeContainsValidTravelType(Node node, List<TileTravelType> validTravelTypes)
 	{
+		if (node.TravelTypes.Contains(TileTravelType.Impassable)) { return false; }
+
 		foreach (TileTravelType travelType in node.TravelTypes)
 		{
 			if (validTravelTypes.Contains(travelType)) { return true; }

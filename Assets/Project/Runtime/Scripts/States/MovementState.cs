@@ -20,7 +20,7 @@ public abstract class MovementState
 	public virtual void Move()
 	{
 		Vector2Int tileLoc = npcMovement.Path[0].Loc;
-		npcMovement.npcRB.MovePosition(TileConversion.TileToWorld2D(tileLoc));
+		npcMovement.npcBase.transform.position = TileConversion.TileToWorld2D(tileLoc);
 		npcMovement.TileLoc = tileLoc;
 	}
 
@@ -44,7 +44,7 @@ public abstract class MovementState
 		}
 	}
 
-	public virtual List<Node> FindPathToTarget(int maxAttempts, bool acceptNearest = false)
+	public virtual List<Node> FindPathToTarget(int maxAttempts)
 	{
 		int attempts = 0;
 		int searchDistance = (int) Mathf.Max(Mathf.Abs(npcMovement.TargetLoc.x - npcMovement.TileLoc.x), Mathf.Abs(npcMovement.TargetLoc.y - npcMovement.TileLoc.y));
@@ -53,7 +53,7 @@ public abstract class MovementState
 		while (path.Count == 0)
 		{
 			attempts++;
-			path = Pathfinder.Instance.FindPath(npcMovement.TileLoc, npcMovement.TargetLoc, searchDistance * attempts, npcMovement.npcBase.NPCStatAsset.TravelTypes, acceptNearest);
+			path = Pathfinder.Instance.FindPath(npcMovement.TileLoc, npcMovement.TargetLoc, searchDistance * attempts, npcMovement.npcBase.NPCStatAsset.TravelTypes, acceptNearest: false);
 
 			if (attempts >= maxAttempts) { return new List<Node>(); }
 		}
@@ -78,4 +78,9 @@ public abstract class MovementState
 		return false;
 	}
 	
+	public virtual void UpdatePathColour()
+	{
+		npcMovement.npcPathDrawer.UpdateColour(Color.cyan);
+	}
+
 }

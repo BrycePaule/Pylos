@@ -6,12 +6,12 @@ public class Search : MovementState
 {
 	public Search(Movement _npcMovement) : base(_npcMovement)
 	{
-
+		_npcMovement.ResetSearchTimer();
 	}
 
 	public override void FindTarget()
 	{
-		if (npcMovement.SearchItemID == 0) { npcMovement.MovementState = new Meander(npcMovement); }
+		if (npcMovement.SearchItemID == 0) { npcMovement.SetMovementState(new Meander(npcMovement)); }
 		if (!TargetNeedsUpdating) { return; }
 
 		Vector2Int found = GridHelpers.SpiralSearch(npcMovement.SearchItemID, npcMovement.TileLoc, npcMovement.npcBase.NPCStatAsset.SearchRange);
@@ -29,6 +29,23 @@ public class Search : MovementState
 		}
 	}
 
+	public override List<Node> FindPathToTarget(int maxAttempts)
+	{
+		int attempts = 0;
+		int searchDistance = (int) Mathf.Max(Mathf.Abs(npcMovement.TargetLoc.x - npcMovement.TileLoc.x), Mathf.Abs(npcMovement.TargetLoc.y - npcMovement.TileLoc.y));
+
+		List<Node> path = new List<Node>();
+		while (path.Count == 0)
+		{
+			attempts++;
+			path = Pathfinder.Instance.FindPath(npcMovement.TileLoc, npcMovement.TargetLoc, searchDistance * attempts, npcMovement.npcBase.NPCStatAsset.TravelTypes, acceptNearest: true);
+
+			if (attempts >= maxAttempts) { return new List<Node>(); }
+		}
+
+		return path;
+	}
+
 	public override bool ActionAtTarget()
 	{
 		int x = npcMovement.TargetLoc.x;
@@ -43,8 +60,7 @@ public class Search : MovementState
 				if (container.Contains(npcMovement.SearchItemID))
 				{
 					int taken = container.TakeAll(npcMovement.SearchItemID);
-					Debug.Log(taken);
-					npcMovement.PlayerMaterials.Increment(npcMovement.SearchItemID, taken);
+					PlayerResourcesBoard.Instance.Increment(npcMovement.SearchItemID, taken);
 					return true;
 				}
 			}
@@ -62,6 +78,11 @@ public class Search : MovementState
 		}
 
 		return arrived;
+	}
+
+	public override void UpdatePathColour()
+	{
+		npcMovement.npcPathDrawer.UpdateColour(Color.yellow);
 	}
 
 }

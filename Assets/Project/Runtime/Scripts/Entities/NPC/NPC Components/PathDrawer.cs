@@ -9,7 +9,7 @@ public class PathDrawer : NPCComponentBase
 
 	private LineRenderer lineRenderer;
 
-	private Aggro npcAggro;
+	private Movement npcMovement;
 
 	protected override void Awake() 
 	{
@@ -21,7 +21,7 @@ public class PathDrawer : NPCComponentBase
 
 	private void Start()
 	{
-		npcAggro = (Aggro) npcBase.GetNPCComponent(NPCComponentType.Aggro);
+		npcMovement = (Movement) npcBase.GetNPCComponent(NPCComponentType.Movement);
 	}
 
 	private void FixedUpdate() 
@@ -44,11 +44,13 @@ public class PathDrawer : NPCComponentBase
 			pathArray[i] = TileConversion.TileToWorld3D(path[i].Loc);
 		}
 
-		npcAggro = (Aggro) npcBase.GetNPCComponent(NPCComponentType.Aggro);
-		lineRenderer.startColor = (npcAggro.IsAggro) ? Color.red : Color.cyan;
-		lineRenderer.endColor = (npcAggro.IsAggro) ? Color.red : Color.cyan;
-
 		lineRenderer.positionCount = path.Count;
 		lineRenderer.SetPositions(pathArray);
+	}
+
+	public void UpdateColour(Color color)
+	{
+		lineRenderer.startColor = color;
+		lineRenderer.endColor = color;
 	}
 }

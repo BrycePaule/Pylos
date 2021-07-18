@@ -126,7 +126,6 @@ public class NPCGenerator : MonoBehaviour
 		npcBase.NPCStatAsset = dataAsset;
 
 		npcMovement.TileLoc = loc;
-		npcMovement.MovementState = new Meander(npcMovement);
 	}
 
 	private void BuildAssetDictionary()

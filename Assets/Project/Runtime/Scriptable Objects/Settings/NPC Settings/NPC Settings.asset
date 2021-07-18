@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: NPC Settings
   m_EditorClassIdentifier: 
   OverrideSpawnCaps: 0
-  SpawnCap: 10
+  SpawnCap: 1
   OverrideNPCTypes: 0
   NPCType: 3
   OverrideNPCMoveDelays: 0
-  MoveDelay: 1
+  MoveDelay: 0

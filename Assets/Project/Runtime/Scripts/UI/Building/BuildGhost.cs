@@ -6,7 +6,6 @@ public class BuildGhost : MonoBehaviour
 {
 	[Header("References")]
 	public SettingsInjecter SettingsInjecter;
-	public PlayerMaterials PlayerMaterials;
 	public GameObject BuildingContainer;
 
 	private MapBoard MapBoard;
@@ -71,7 +70,7 @@ public class BuildGhost : MonoBehaviour
 	{
 		foreach (ItemCount cost in SettingsInjecter.ItemTable.GetById(buildingID).Recipe.ItemCosts)
 		{
-			PlayerMaterials.Decrement(cost.ID, cost.Count);
+			PlayerResourcesBoard.Instance.Decrement(cost.ID, cost.Count);
 		}
 	}
 
@@ -79,7 +78,7 @@ public class BuildGhost : MonoBehaviour
 	{
 		foreach (ItemCount cost in SettingsInjecter.ItemTable.GetById(buildingID).Recipe.ItemCosts)
 		{
-			if (PlayerMaterials.GetValue(cost.ID) < cost.Count) { return false;}
+			if (PlayerResourcesBoard.Instance.GetValue(cost.ID) < cost.Count) { return false;}
 		}
 
 		return true;

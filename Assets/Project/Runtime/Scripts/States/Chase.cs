@@ -44,4 +44,9 @@ public class Chase : MovementState
 
 		return arrived;
 	}
+
+	public override void UpdatePathColour()
+	{
+		npcMovement.npcPathDrawer.UpdateColour(Color.red);
+	}
 }

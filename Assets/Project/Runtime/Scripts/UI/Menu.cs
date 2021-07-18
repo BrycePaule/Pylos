@@ -106,7 +106,7 @@ public class Menu : MonoBehaviour
 
 		Movement npcMovement = PlayerSelections.SelectedObjects[0].GetComponentInChildren<Movement>();
 		npcMovement.SearchItemID = id;
-		npcMovement.MovementState = new Search(npcMovement);
+		npcMovement.SetMovementState(new Search(npcMovement));
 	}
 
 	public void SearchForWood() => SearchFor(SettingsInjecter.ItemTable.GetByName("Wood").ID); 

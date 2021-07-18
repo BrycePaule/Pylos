@@ -28,9 +28,7 @@ public class Combat : NPCComponentBase
 
 	public bool Attack(NPCBase target)
 	{
-		npcMovement.TargetLoc = npcAggro.AggroList.Highest.GetComponentInChildren<Movement>().TileLoc;
-
-		if (GridHelpers.IsWithinDistance(npcMovement.TileLoc, npcMovement.TargetLoc, npcBase.NPCStatAsset.AttackRange) && attackTimer >= npcBase.NPCStatAsset.AttackSpeed) 
+		if (attackTimer >= npcBase.NPCStatAsset.AttackSpeed && GridHelpers.IsWithinDistance(npcMovement.TileLoc, npcMovement.TargetLoc, npcBase.NPCStatAsset.AttackRange))
 		{
 			target.GetComponentInChildren<Health>().Damage(npcBase.NPCStatAsset.Damage, npcBase);
 			attackTimer = 0f;

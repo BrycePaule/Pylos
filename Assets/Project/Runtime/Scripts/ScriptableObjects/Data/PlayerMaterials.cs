@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "Data Packs/Player Materials")]
+// [CreateAssetMenu(menuName = "Data Packs/Player Materials")]
 public class PlayerMaterials : ScriptableObject
 {
 	public List<ItemCount> Materials;

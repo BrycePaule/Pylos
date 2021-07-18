@@ -21,8 +21,9 @@ MonoBehaviour:
   TilesPerStep: 1
   MeanderRange: 20
   SearchRange: 10
+  SearchDelay: 0
   MaxHealth: 200
   Damage: 5
   AttackSpeed: 1
   AttackRange: 1
-  DetectionRange: 0
+  DetectionRange: 10
