@@ -1,0 +1,64 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!78 &1
+TagManager:
+  serializedVersion: 2
+  tags: []
+  layers:
+  - Default
+  - TransparentFX
+  - Ignore Raycast
+  - 
+  - Water
+  - UI
+  - 
+  - 
+  - Ground
+  - Clutter
+  - Objects
+  - Buildings
+  - 
+  - NPC
+  - NPCComponent
+  - AttackRadius
+  - DetectionRadius
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - Player
+  - PlayerComponent
+  - 
+  - 
+  - 
+  - 
+  - 
+  - OnTop
+  m_SortingLayers:
+  - name: Default
+    uniqueID: 0
+    locked: 0
+  - name: Ground
+    uniqueID: 248467921
+    locked: 0
+  - name: OnGround
+    uniqueID: 4135916333
+    locked: 0
+  - name: Objects
+    uniqueID: 1618873285
+    locked: 0
+  - name: Buildings
+    uniqueID: 3710094095
+    locked: 0
+  - name: NPC
+    uniqueID: 2631441523
+    locked: 0
+  - name: NPCComponent
+    uniqueID: 3111919641
+    locked: 0
+  - name: OnTop
+    uniqueID: 2617397881
+    locked: 0
