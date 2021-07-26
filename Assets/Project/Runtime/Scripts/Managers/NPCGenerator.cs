@@ -126,6 +126,7 @@ public class NPCGenerator : MonoBehaviour
 		npcBase.NPCStatAsset = dataAsset;
 
 		npcMovement.TileLoc = loc;
+		// MapBoard.Instance.GetTile(loc).TravelTypes.Add(TileTravelType.Impassable);
 	}
 
 	private void BuildAssetDictionary()

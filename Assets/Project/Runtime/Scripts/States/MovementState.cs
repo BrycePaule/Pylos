@@ -19,9 +19,11 @@ public abstract class MovementState
 
 	public virtual void Move()
 	{
+		// MapBoard.Instance.GetTile(npcMovement.TileLoc).TravelTypes.Remove(TileTravelType.Impassable);
 		Vector2Int tileLoc = npcMovement.Path[0].Loc;
 		npcMovement.npcBase.transform.position = TileConversion.TileToWorld2D(tileLoc);
 		npcMovement.TileLoc = tileLoc;
+		// MapBoard.Instance.GetTile(npcMovement.TileLoc).TravelTypes.Add(TileTravelType.Impassable);
 	}
 
 	public virtual void FindTarget()

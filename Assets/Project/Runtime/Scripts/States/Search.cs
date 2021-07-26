@@ -60,7 +60,7 @@ public class Search : MovementState
 				if (container.Contains(npcMovement.SearchItemID))
 				{
 					int taken = container.TakeAll(npcMovement.SearchItemID);
-					PlayerResourcesBoard.Instance.Increment(npcMovement.SearchItemID, taken);
+					npcMovement.OnResourceGatherEvent.Raise(npcMovement.SearchItemID, taken);
 					return true;
 				}
 			}

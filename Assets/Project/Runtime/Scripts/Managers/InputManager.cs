@@ -9,6 +9,9 @@ using System;
 
 public class InputManager : MonoBehaviour
 {
+	[Header("TESTING")]
+	public GameEvent Event;
+
 	[Header("References")]
 	public SettingsInjecter SettingsInjecter;
 	public PlayerSelections PlayerSelections;
@@ -231,6 +234,10 @@ public class InputManager : MonoBehaviour
 
 	private void OnRightClick(Vector3 mpos, InputAction.CallbackContext context)
 	{
+		//------------------------- 
+		Event?.Raise();
+		//------------------------- 
+
 		PlayerSelections.DeselectAll();
 		SelectionBox.gameObject.SetActive(false);
 

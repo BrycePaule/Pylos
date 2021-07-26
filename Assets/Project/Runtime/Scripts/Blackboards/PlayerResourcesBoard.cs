@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[System.Serializable]
 [CreateAssetMenu(menuName = "Blackboards/PlayerResourcesBoard")]
 public class PlayerResourcesBoard : Blackboard
 {
@@ -33,37 +34,41 @@ public class PlayerResourcesBoard : Blackboard
 		return 0;
 	}
 
-	public void Increment(int ID, int value)
+	public void Increment(int ID, int count)
 	{
 		foreach (ItemCount itemCount in Resources)
 		{
 			if (itemCount.ID == ID)
 			{
-				itemCount.Count += value;
+				itemCount.Count += count;
 				return;
 			}
 		}
 
-		Resources.Add(new ItemCount(ID, value));
+		Resources.Add(new ItemCount(ID, count));
 	}
 
-	public void Decrement(int ID, int value)
+	public void Decrement(int ID, int count)
 	{
 		foreach (ItemCount itemCount in Resources)
 		{
 			if (itemCount.ID == ID)
 			{
-				if (value > itemCount.Count)
+				if (count > itemCount.Count)
 				{
 					itemCount.Count = 0;
 				}
 				else
 				{
-					itemCount.Count -= value;
+					itemCount.Count -= count;
 				}
 				return;
 			}
 		}
 	}
 
+	private void OnResourceGather(int ID, int count)
+	{
+		Increment(ID, count);
+	}
 }

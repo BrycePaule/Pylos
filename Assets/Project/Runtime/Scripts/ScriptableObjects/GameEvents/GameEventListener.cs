@@ -3,22 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
+[System.Serializable]
 public class GameEventListener : MonoBehaviour
 {
 	public GameEvent Event;
 	public UnityEvent Response;
 
-	private void OnEnable()
-	{
-		Event.RegisterListener(this);
-	}
+	public virtual void OnEnable() => Event.RegisterListener(this);
+	public virtual void OnDisable() => Event.RegisterListener(this);
 	
-	private void OnDisable()
-	{
-		Event.UnregisterListener(this);
-	}
-
-	public void OnEventRaised()
+	public virtual void OnEventRaised()
 	{
 		Response.Invoke();
 	}
