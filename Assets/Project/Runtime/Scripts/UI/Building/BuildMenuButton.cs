@@ -6,7 +6,6 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using UnityEditor;
 
-[ExecuteInEditMode]
 public class BuildMenuButton : MonoBehaviour
 {
 	[Header("References")]
@@ -18,7 +17,7 @@ public class BuildMenuButton : MonoBehaviour
 	public Image Image;
 	public int BuildingID;
 
-	private void Update() 
+	private void OnValidate()
 	{
 		Button.onClick.RemoveAllListeners();
 		Button.onClick.AddListener(() => { BuildMenu.Build(BuildingID);});

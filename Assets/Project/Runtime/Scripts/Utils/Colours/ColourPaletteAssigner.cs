@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-[ExecuteInEditMode]
 public class ColourPaletteAssigner : MonoBehaviour
 {
 	[Header("References")]
@@ -20,7 +19,7 @@ public class ColourPaletteAssigner : MonoBehaviour
 	public List<TMPro.TMP_Text> TextPrimary = new List<TMPro.TMP_Text>();
 	public List<TMPro.TMP_Text> TextSecondary = new List<TMPro.TMP_Text>();
 
-	private void Update()
+	private void OnValidate()
 	{
 		foreach (Image image in UIBase) { image.color = palette.UIBase; }
 		foreach (Image image in UILight) { image.color = palette.UILight; }

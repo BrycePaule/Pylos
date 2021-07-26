@@ -4,7 +4,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Events;
 
-[ExecuteInEditMode]
 public class MenuButton : MonoBehaviour
 {
 	[Header("References")]
@@ -17,7 +16,7 @@ public class MenuButton : MonoBehaviour
 	public Color ButtonClickColor;
 	public Sprite IconSprite;
 
-	private void Update()
+	private void OnValidate()
 	{
 		this.gameObject.name = TitleText;
 		Title.text = TitleText;

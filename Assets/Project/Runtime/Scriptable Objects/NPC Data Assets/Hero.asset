@@ -23,7 +23,7 @@ MonoBehaviour:
   SearchRange: 10
   SearchDelay: 0
   MaxHealth: 200
-  Damage: 5
+  Damage: 500
   AttackSpeed: 1
   AttackRange: 1
   DetectionRange: 10

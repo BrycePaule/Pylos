@@ -4,7 +4,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Events;
 
-[ExecuteInEditMode]
 public class MenuButtonGroup : MonoBehaviour
 {
 	[Header("References")]
@@ -14,7 +13,7 @@ public class MenuButtonGroup : MonoBehaviour
 	[Header("Settings")]
 	public string TitleText;
 
-	private void Update()
+	private void OnValidate()
 	{
 		Title.text = TitleText;
 		this.gameObject.name = TitleText;

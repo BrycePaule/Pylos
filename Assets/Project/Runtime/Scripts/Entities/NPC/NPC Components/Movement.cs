@@ -16,9 +16,11 @@ public class Movement : NPCComponentBase
 
 	[Header("Searching")]
 	public int SearchItemID;
+	public GameEventResourceGather OnResourceGatherEvent;
 
 	public List<Node> Path;
 
+	[Header("NPC Components")]
 	public Aggro npcAggro;
 	public Combat npcCombat;
 	public PathDrawer npcPathDrawer;
