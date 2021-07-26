@@ -2,16 +2,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "Events/GameEventResourceGather")]
+[System.Serializable]
+[CreateAssetMenu(menuName = "Events/GameEvent ResourceGather")]
 public class GameEventResourceGather : GameEvent
 {
-	protected new readonly List<GameEventResourceGatherListener> listeners = new List<GameEventResourceGatherListener>();
+	HashSet<GameEventResourceGatherListener> resourceGatherListeners = new HashSet<GameEventResourceGatherListener>();
 
 	public void Raise(int ID, int count)
 	{
-		for (int i = listeners.Count - 1; i >= 0; i--)
+		foreach (GameEventResourceGatherListener listener in resourceGatherListeners)
 		{
-			listeners[i].OnEventRaised(ID, count);
+			listener.OnGatherEventRaised(ID, count);
 		}
 	}
+
+	public void RegisterListener(GameEventResourceGatherListener listener) => resourceGatherListeners.Add(listener);
+	public void UnregisterListener(GameEventResourceGatherListener listener) => resourceGatherListeners.Remove(listener);
 }

@@ -2,26 +2,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[System.Serializable]
 [CreateAssetMenu(menuName = "Events/GameEvent")]
 public class GameEvent : ScriptableObject
 {
-	protected readonly List<GameEventListener> listeners = new List<GameEventListener>();
+	protected readonly HashSet<GameEventListener> listeners = new HashSet<GameEventListener>();
 
 	public virtual void Raise()
 	{
-		for (int i = listeners.Count - 1; i >= 0; i--)
+		foreach (GameEventListener listener in listeners)
 		{
-			listeners[i].OnEventRaised();
+			listener.OnEventRaised();
 		}
 	}
 
-	public void RegisterListener(GameEventListener listener)
-	{
-		listeners.Add(listener);
-	}
-
-	public void UnregisterListener(GameEventListener listener)
-	{
-		listeners.Remove(listener);
-	}
+	public virtual void RegisterListener(GameEventListener listener) => listeners.Add(listener);
+	public virtual void UnregisterListener(GameEventListener listener) => listeners.Remove(listener);
 }

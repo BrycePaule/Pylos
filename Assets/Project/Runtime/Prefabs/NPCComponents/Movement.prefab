@@ -48,6 +48,7 @@ MonoBehaviour:
   TileLoc: {x: 0, y: 0}
   TargetLoc: {x: 0, y: 0}
   SearchItemID: 0
+  OnResourceGatherEvent: {fileID: 11400000, guid: 9a33d9b933f9df149af72a5cb6afdb28, type: 2}
   npcAggro: {fileID: 0}
   npcCombat: {fileID: 0}
   npcPathDrawer: {fileID: 0}

@@ -3,13 +3,17 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
+[System.Serializable]
 public class GameEventResourceGatherListener : GameEventListener
 {
-	public new GameEventResourceGather Event;
-	public new UnityEventResourceGather Response;
+	public GameEventResourceGather GatherEvent;
+	public UnityEventResourceGather GatherResponse;
 
-	public void OnEventRaised(int ID, int count)
+	public override void OnEnable() => GatherEvent.RegisterListener(this);
+	public override void OnDisable() => GatherEvent.RegisterListener(this);
+
+	public void OnGatherEventRaised(int ID, int count)
 	{
-		Response.Invoke(ID, count);
+		GatherResponse.Invoke(ID, count);
 	}
 }
