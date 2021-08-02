@@ -401,7 +401,7 @@ MonoBehaviour:
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
     m_HighlightedColor: {r: 1, g: 1, b: 1, a: 1}
-    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_PressedColor: {r: 0, g: 0, b: 0, a: 0}
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
     m_ColorMultiplier: 1
@@ -450,7 +450,7 @@ MonoBehaviour:
   Button: {fileID: 6110998596042861043}
   Icon: {fileID: 3088009415107463647}
   TitleText: Button
-  TitleTextColor: {r: 0.6792453, g: 0.568973, b: 0.4261303, a: 1}
+  ButtonClickColor: {r: 0, g: 0, b: 0, a: 0}
   IconSprite: {fileID: 21300000, guid: 863ca224a1f49f34282ab8a469169d07, type: 3}
 --- !u!1 &6572227987270936250
 GameObject:

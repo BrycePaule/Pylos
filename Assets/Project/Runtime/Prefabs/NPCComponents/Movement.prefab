@@ -103,17 +103,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b9a2f34c3ee37de4499f13a5ffbd5a25, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  npcBase: {fileID: 0}
   SettingsInjecter: {fileID: 11400000, guid: 92354eb417464bf45b76fccfef2d1549, type: 2}
-  PlayerMaterials: {fileID: 11400000, guid: 6d73b3d588f6ffe4ebfe575cf22a7f0c, type: 2}
   TileLoc: {x: 0, y: 0}
   TargetLoc: {x: 0, y: 0}
-  NPCMovementType: 0
-  MovementState: {fileID: 0}
-  TravelTypes: 01000000
-  MoveDelay: 1.5
-  TilesPerStep: 1
-  MeanderRange: 0
-  searchingForItemID: 0
-  FoundObject: {fileID: 0}
-  SearchDelay: 3
-  SearchRange: 0
+  SearchItemID: 0
+  OnResourceGatherEvent: {fileID: 11400000, guid: a1a9da26c9e3eec4bb99a1720c6bf513, type: 2}
+  npcAggro: {fileID: 0}
+  npcCombat: {fileID: 0}
+  npcPathDrawer: {fileID: 0}

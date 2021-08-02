@@ -99,7 +99,7 @@ MonoBehaviour:
   fitType: 0
   Rows: 1
   Columns: 1
-  CellSize: {x: 153.33333, y: 16.25}
+  CellSize: {x: -3.3333333, y: 0}
   Spacing: {x: 0, y: 0}
   FitX: 1
   FitY: 1
@@ -393,7 +393,7 @@ MonoBehaviour:
   fitType: 3
   Rows: 1
   Columns: 3
-  CellSize: {x: 153.33333, y: 32.5}
+  CellSize: {x: -3.3333333, y: 0}
   Spacing: {x: 5, y: 0}
   FitX: 1
   FitY: 1
@@ -594,7 +594,7 @@ MonoBehaviour:
   fitType: 2
   Rows: 2
   Columns: 1
-  CellSize: {x: 153.33333, y: 16.25}
+  CellSize: {x: -3.3333333, y: 0}
   Spacing: {x: 0, y: 0}
   FitX: 1
   FitY: 1
@@ -845,7 +845,7 @@ MonoBehaviour:
   fitType: 0
   Rows: 1
   Columns: 1
-  CellSize: {x: 90, y: 16.25}
+  CellSize: {x: -4, y: 0}
   Spacing: {x: 0, y: 0}
   FitX: 1
   FitY: 1
@@ -1044,7 +1044,7 @@ MonoBehaviour:
   fitType: 0
   Rows: 1
   Columns: 1
-  CellSize: {x: 153.33333, y: 16.25}
+  CellSize: {x: -3.3333333, y: 0}
   Spacing: {x: 0, y: 0}
   FitX: 1
   FitY: 1
@@ -1371,7 +1371,7 @@ MonoBehaviour:
   fitType: 3
   Rows: 1
   Columns: 5
-  CellSize: {x: 90, y: 32.5}
+  CellSize: {x: -4, y: 0}
   Spacing: {x: 5, y: 0}
   FitX: 1
   FitY: 1
@@ -1813,7 +1813,7 @@ MonoBehaviour:
   fitType: 2
   Rows: 2
   Columns: 1
-  CellSize: {x: 90, y: 16.25}
+  CellSize: {x: -4, y: 0}
   Spacing: {x: 0, y: 0}
   FitX: 1
   FitY: 1
@@ -2110,7 +2110,7 @@ MonoBehaviour:
   fitType: 0
   Rows: 1
   Columns: 1
-  CellSize: {x: 153.33333, y: 16.25}
+  CellSize: {x: -3.3333333, y: 0}
   Spacing: {x: 0, y: 0}
   FitX: 1
   FitY: 1
@@ -2813,7 +2813,7 @@ MonoBehaviour:
   fitType: 2
   Rows: 2
   Columns: 1
-  CellSize: {x: 90, y: 16.25}
+  CellSize: {x: -4, y: 0}
   Spacing: {x: 0, y: 0}
   FitX: 1
   FitY: 1
@@ -3375,7 +3375,7 @@ MonoBehaviour:
   fitType: 0
   Rows: 1
   Columns: 1
-  CellSize: {x: 90, y: 16.25}
+  CellSize: {x: -4, y: 0}
   Spacing: {x: 0, y: 0}
   FitX: 1
   FitY: 1
@@ -3597,7 +3597,7 @@ MonoBehaviour:
   fitType: 2
   Rows: 2
   Columns: 1
-  CellSize: {x: 153.33333, y: 16.25}
+  CellSize: {x: -3.3333333, y: 0}
   Spacing: {x: 0, y: 0}
   FitX: 1
   FitY: 1
@@ -3798,7 +3798,7 @@ MonoBehaviour:
   fitType: 2
   Rows: 2
   Columns: 1
-  CellSize: {x: 90, y: 16.25}
+  CellSize: {x: -4, y: 0}
   Spacing: {x: 0, y: 0}
   FitX: 1
   FitY: 1
@@ -3999,7 +3999,7 @@ MonoBehaviour:
   fitType: 2
   Rows: 2
   Columns: 1
-  CellSize: {x: 90, y: 16.25}
+  CellSize: {x: -4, y: 0}
   Spacing: {x: 0, y: 0}
   FitX: 1
   FitY: 1
@@ -4102,7 +4102,7 @@ MonoBehaviour:
   fitType: 0
   Rows: 1
   Columns: 1
-  CellSize: {x: 90, y: 16.25}
+  CellSize: {x: -4, y: 0}
   Spacing: {x: 0, y: 0}
   FitX: 1
   FitY: 1
@@ -4324,7 +4324,7 @@ MonoBehaviour:
   fitType: 2
   Rows: 2
   Columns: 1
-  CellSize: {x: 90, y: 16.25}
+  CellSize: {x: -4, y: 0}
   Spacing: {x: 0, y: 0}
   FitX: 1
   FitY: 1
@@ -4733,7 +4733,7 @@ MonoBehaviour:
   fitType: 0
   Rows: 1
   Columns: 1
-  CellSize: {x: 90, y: 16.25}
+  CellSize: {x: -4, y: 0}
   Spacing: {x: 0, y: 0}
   FitX: 1
   FitY: 1
@@ -4857,7 +4857,7 @@ MonoBehaviour:
   fitType: 0
   Rows: 1
   Columns: 1
-  CellSize: {x: 90, y: 16.25}
+  CellSize: {x: -4, y: 0}
   Spacing: {x: 0, y: 0}
   FitX: 1
   FitY: 1
@@ -5310,7 +5310,7 @@ MonoBehaviour:
   fitType: 2
   Rows: 2
   Columns: 1
-  CellSize: {x: 153.33333, y: 16.25}
+  CellSize: {x: -3.3333333, y: 0}
   Spacing: {x: 0, y: 0}
   FitX: 1
   FitY: 1
