@@ -7,7 +7,7 @@ public class Chase : MovementState
 
 	public Chase(Movement _npcMovement) : base(_npcMovement)
 	{
-
+		Debug.Log("Created Chase");
 	}
 
 	public override void FindTarget()

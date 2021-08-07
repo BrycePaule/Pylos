@@ -9,6 +9,7 @@ public class Aggro : NPCComponentBase
 	public AggroList AggroList = new AggroList();
 
 	private Movement npcMovement;
+	private float AggroUpdateTimer;
 
 	protected override void Awake() 
 	{
@@ -23,13 +24,39 @@ public class Aggro : NPCComponentBase
 
 	private void FixedUpdate()
 	{
-		if (AggroList.Count > 0)
+		AggroUpdateTimer += Time.deltaTime;
+
+		// if (AggroList.Count > 0)
+		// {
+		// 	if (!IsAggro)
+		// 		StartAggro();
+		// }
+		// else
+		// {
+		// 	StopAggro();
+		// }
+
+		if (IsAggro)
 		{
-			StartAggro();
+			if (AggroList.Count > 0)
+			{
+				if (AggroUpdateTimer >= npcBase.NPCStatAsset.AggroUpdateDelay)
+				{
+					UpdateTarget();
+					AggroUpdateTimer = 0f;
+				}
+			}
+			else
+			{
+				StopAggro();
+			}
 		}
 		else
 		{
-			StopAggro();
+			if (AggroList.Count > 0)
+			{
+				StartAggro();
+			}
 		}
 	}
 
@@ -56,17 +83,20 @@ public class Aggro : NPCComponentBase
 	public void StartAggro()
 	{
 		IsAggro = true;
-		npcMovement = (Movement) npcBase.GetNPCComponent(NPCComponentType.Movement);
-		npcMovement.TargetLoc = ((Movement) AggroList.Highest.GetNPCComponent(NPCComponentType.Movement)).TileLoc;
+		UpdateTarget();
 		npcMovement.SetMovementState(new Chase(npcMovement));
+	}
+
+	public void UpdateTarget()
+	{
+		npcMovement.TargetLoc = ((Movement) AggroList.Highest.GetNPCComponent(NPCComponentType.Movement)).TileLoc;
 	}
 
 	public void StopAggro()
 	{
 		if (IsAggro)
-		{
 			npcMovement.SetMovementState(new Meander(npcMovement));
-		}
+
 		IsAggro = false;
 	}
 

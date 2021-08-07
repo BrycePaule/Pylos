@@ -26,4 +26,5 @@ MonoBehaviour:
   Damage: 3
   AttackSpeed: 2
   AttackRange: 1
+  AggroUpdateDelay: 0.25
   DetectionRange: 15

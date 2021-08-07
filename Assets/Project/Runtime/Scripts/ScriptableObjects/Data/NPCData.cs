@@ -28,6 +28,9 @@ public class NPCData : ScriptableObject
 	public float AttackSpeed;
 	public int AttackRange;
 
+	[Header("Aggro")]
+	public float AggroUpdateDelay;
+
 	[Header("Detection Radius")]
 	public int DetectionRange;
 }
