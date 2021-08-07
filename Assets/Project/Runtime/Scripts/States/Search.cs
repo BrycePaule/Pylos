@@ -7,7 +7,6 @@ public class Search : MovementState
 	public Search(Movement _npcMovement) : base(_npcMovement)
 	{
 		_npcMovement.ResetSearchTimer();
-		Debug.Log("Created Search");
 	}
 
 	public override void FindTarget()

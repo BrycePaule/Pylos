@@ -25,14 +25,14 @@ public class Pathfinder : ScriptableObject
 		nodeGrid = new Node[mapSize, mapSize];
 	}
 
-	public List<Node> FindPath(Vector2Int startLoc, Vector2Int targetLoc, int searchRadius, List<TileTravelType> validTravelTypes, bool acceptNearest = false)
+	public List<Node> FindPath(Vector2Int start, Vector2Int target, int searchRadius, List<TileTravelType> validTravelTypes, bool acceptNearest = false)
 	{
-		RebuildLocalGrid(startLoc, searchRadius, validTravelTypes);
-		if (nodeGrid[targetLoc.x, targetLoc.y] == null)
-			nodeGrid[targetLoc.x, targetLoc.y] = new Node(targetLoc, MapBoard.Instance.GetTile(targetLoc).TravelTypes);
+		RebuildLocalGrid(start, searchRadius, validTravelTypes);
+		if (nodeGrid[target.x, target.y] == null)
+			nodeGrid[target.x, target.y] = new Node(target, MapBoard.Instance.GetTile(target).TravelTypes);
 
-		Node startNode = nodeGrid[startLoc.x, startLoc.y];
-		Node targetNode = nodeGrid[targetLoc.x, targetLoc.y];
+		Node startNode = nodeGrid[start.x, start.y];
+		Node targetNode = nodeGrid[target.x, target.y];
 
 		List<Node> uncheckedNodes = new List<Node>();
 		List<Node> checkedNodes = new List<Node>();
@@ -57,7 +57,7 @@ public class Pathfinder : ScriptableObject
 				return RetracePath(startNode, targetNode);
 			}
 
-			foreach (Node neighbour in GetNeighbours(currentNode, searchRadius, startLoc))
+			foreach (Node neighbour in GetNeighbours(currentNode, searchRadius, start))
 			{
 				if (!NodeContainsValidTravelType(neighbour, validTravelTypes) || checkedNodes.Contains(neighbour)) { continue; }
 
@@ -76,7 +76,7 @@ public class Pathfinder : ScriptableObject
 		if (acceptNearest)
 		{
 			Node nearTarget = null;
-			foreach (Node neighbour in GetNeighbours(targetNode, searchRadius, startLoc))
+			foreach (Node neighbour in GetNeighbours(targetNode, searchRadius, start))
 			{
 				if (nearTarget == null) 
 				{ 

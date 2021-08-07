@@ -4,8 +4,8 @@ using UnityEditor;
 // [CustomPropertyDrawer(typeof(Item))]
 public class ItemDrawer : PropertyDrawer 
 {
-	int fieldWidth = 40;
-	int labelWidth = 40;
+	// int fieldWidth = 40;
+	// int labelWidth = 40;
 	int lineSpace = 3;
 
 	public override void OnGUI(Rect position, SerializedProperty property, GUIContent label) 

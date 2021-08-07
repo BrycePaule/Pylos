@@ -16,4 +16,10 @@ public class RuntimeUtility : MonoBehaviour
 		Time.timeScale -= .1f;
 		Debug.Log("Current timescale: " + Time.timeScale);
 	}
+
+	public void SetTimescale(float timescale)
+	{
+		Time.timeScale = timescale;
+		Debug.Log("Current timescale: " + Time.timeScale);
+	}
 }
