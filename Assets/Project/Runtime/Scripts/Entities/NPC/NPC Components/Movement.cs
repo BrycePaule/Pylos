@@ -75,9 +75,12 @@ public class Movement : NPCComponentBase
 			// move on path
 			if (Path.Count > 0)
 			{
-				movementState.Move();
+				if (!movementState.Arrived())
+				{
+					movementState.Move();
+					moveTimer = 0;
+				}
 				npcPathDrawer.UpdatePath(Path);
-				moveTimer = 0;
 			}
 		}
 		else
