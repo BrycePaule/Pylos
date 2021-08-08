@@ -36,7 +36,8 @@ public class MapGenerator : MonoBehaviour
 	public List<Sprite> DirtSpotSprites;
 
 	[Header("Tiles")]
-	public GroundTile GroundTileData;
+	public Tile DefaultTile;
+	public GroundTile DefaultGroundTile;
 
 	[Header("Generation")]
 	public Texture2D NoiseTexture;
@@ -83,19 +84,19 @@ public class MapGenerator : MonoBehaviour
 				Vector3Int pos = new Vector3Int(x, y, 1);
 				float terrainHeight = terrainMap[x, y];
 
-				GroundTile groundTile = Instantiate(GroundTileData);
+				GroundTile groundTile = Instantiate(DefaultGroundTile);
 
 				// water
 				if (terrainHeight <= SettingsInjecter.MapSettings.WaterMaxHeight)
 				{
-					groundTile = SetTileData(groundTile, terrainGenerator.GetTerrainColour(ColourPalette, terrainMap[x, y], biomeMap[x, y]), terrainHeight, walkable: false, swimmable: true);
+					SetTileData(groundTile, terrainGenerator.GetTerrainColour(ColourPalette, terrainMap[x, y], biomeMap[x, y]), terrainHeight, walkable: false, swimmable: true);
 					Tilemap.SetTile(pos, groundTile.Tile);
 				}
 				
 				// sand
 				else if (terrainHeight > SettingsInjecter.MapSettings.WaterMaxHeight && terrainHeight <= SettingsInjecter.MapSettings.SandMaxHeight )
 				{
-					groundTile = SetTileData(groundTile, terrainGenerator.GetTerrainColour(ColourPalette, terrainMap[x, y], biomeMap[x, y]), terrainHeight);
+					SetTileData(groundTile, terrainGenerator.GetTerrainColour(ColourPalette, terrainMap[x, y], biomeMap[x, y]), terrainHeight);
 					Tilemap.SetTile(pos, groundTile.Tile);
 
 					if (RandomChance.Roll(SettingsInjecter.MapSettings.SandSpotSpawnPercent))
@@ -107,7 +108,7 @@ public class MapGenerator : MonoBehaviour
 				// dirt
 				else if (terrainHeight > SettingsInjecter.MapSettings.SandMaxHeight && terrainHeight <=  SettingsInjecter.MapSettings.DirtMaxHeight)
 				{
-					groundTile = SetTileData(groundTile, terrainGenerator.GetTerrainColour(ColourPalette, terrainMap[x, y], biomeMap[x, y]), terrainHeight);
+					SetTileData(groundTile, terrainGenerator.GetTerrainColour(ColourPalette, terrainMap[x, y], biomeMap[x, y]), terrainHeight);
 					Tilemap.SetTile(pos, groundTile.Tile);
 
 					if (RandomChance.Roll(SettingsInjecter.MapSettings.DirtSpotSpawnPercent))
@@ -119,7 +120,7 @@ public class MapGenerator : MonoBehaviour
 				// grass
 				else if (terrainHeight > SettingsInjecter.MapSettings.DirtMaxHeight && terrainHeight <= SettingsInjecter.MapSettings.GrassMaxHeight)
 				{
-					groundTile = SetTileData(groundTile, terrainGenerator.GetTerrainColour(ColourPalette, terrainMap[x, y], biomeMap[x, y]), terrainHeight);
+					SetTileData(groundTile, terrainGenerator.GetTerrainColour(ColourPalette, terrainMap[x, y], biomeMap[x, y]), terrainHeight);
 					Tilemap.SetTile(pos, groundTile.Tile);
 
 					if (RandomChance.Roll(SettingsInjecter.MapSettings.TreeSpawnPercent))
@@ -139,7 +140,7 @@ public class MapGenerator : MonoBehaviour
 				// stone
 				else if (terrainHeight > SettingsInjecter.MapSettings.GrassMaxHeight)
 				{
-					groundTile = SetTileData(groundTile, terrainGenerator.GetTerrainColour(ColourPalette, terrainMap[x, y], biomeMap[x, y]), terrainHeight);
+					SetTileData(groundTile, terrainGenerator.GetTerrainColour(ColourPalette, terrainMap[x, y], biomeMap[x, y]), terrainHeight);
 					Tilemap.SetTile(pos, groundTile.Tile);
 
 					if (RandomChance.Roll(SettingsInjecter.MapSettings.StoneSpawnPercent))
@@ -155,15 +156,13 @@ public class MapGenerator : MonoBehaviour
 		}
 	}
 
-	private GroundTile SetTileData(GroundTile tileData, Color baseColour, float height, bool walkable = true, bool swimmable = false)
+	private void SetTileData(GroundTile tileData, Color baseColour, float height, bool walkable = true, bool swimmable = false)
 	{
-		tileData.GroundType = GetGroundTypeByHeight(height);
+		tileData.Tile = Instantiate(DefaultTile);
 		tileData.Tile.color = Colors.AlterColour(baseColour, satChange: TileSaturationChangeStrength);
 		
 		if (walkable) { tileData.TravelTypes.Add(TileTravelType.Walkable); } 
 		if (swimmable) { tileData.TravelTypes.Add(TileTravelType.Swimmable); } 
-
-		return tileData;
 	}
 
 	private GameObject InstantiateObject(GameObject prefab, Vector3 pos, string name, GroundTile tileData, GameObject container, List<Sprite> sprites,  bool flipX = true, bool flipY = true)
@@ -184,18 +183,4 @@ public class MapGenerator : MonoBehaviour
 		return obj;
 	}
 
-	// UTILS
-	private GroundType GetGroundTypeByHeight(float height)
-	{
-		if (height <= SettingsInjecter.MapSettings.WaterMaxHeight)
-			return GroundType.Water;
-		else if (height > SettingsInjecter.MapSettings.WaterMaxHeight && height <= SettingsInjecter.MapSettings.SandMaxHeight)
-			return GroundType.Sand;
-		else if (height > SettingsInjecter.MapSettings.SandMaxHeight && height <=  SettingsInjecter.MapSettings.DirtMaxHeight)
-			return GroundType.Dirt;
-		else if (height > SettingsInjecter.MapSettings.DirtMaxHeight && height <= SettingsInjecter.MapSettings.GrassMaxHeight)
-			return GroundType.Grass;
-		else
-			return GroundType.Stone;
-	}
 }
