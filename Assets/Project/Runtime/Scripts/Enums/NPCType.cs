@@ -6,6 +6,6 @@ public enum NPCType
 {
 	Rabbit = 0,
 	Wolf = 1,
-	Goblin = 2,
+	Satyr = 2,
 	Hero = 3,
 }

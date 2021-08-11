@@ -9,6 +9,6 @@ public enum Faction
     Wild = 2,
 	Critter = 3,
     Ocean = 4,
-	Goblin = 5,
+	Satyr = 5,
 	Pylos = 6,
 }

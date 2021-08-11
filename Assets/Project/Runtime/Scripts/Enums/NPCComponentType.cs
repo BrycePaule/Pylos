@@ -11,4 +11,8 @@ public enum NPCComponentType
 	Combat = 4,
 	Aggro = 5,
 	PathDrawer = 6,
+
+	Needs = 10,
+	Hunger = 11,
+	Energy = 12,
 }
