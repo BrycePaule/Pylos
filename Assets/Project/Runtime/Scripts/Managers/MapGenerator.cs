@@ -90,6 +90,7 @@ public class MapGenerator : MonoBehaviour
 				if (terrainHeight <= SettingsInjecter.MapSettings.WaterMaxHeight)
 				{
 					SetTileData(groundTile, terrainGenerator.GetTerrainColour(ColourPalette, terrainMap[x, y], biomeMap[x, y]), terrainHeight, walkable: false, swimmable: true);
+					// SetTileData(groundTile, ColourPalette.Water, terrainHeight, walkable: false, swimmable: true);
 					Tilemap.SetTile(pos, groundTile.Tile);
 				}
 				
@@ -97,6 +98,7 @@ public class MapGenerator : MonoBehaviour
 				else if (terrainHeight > SettingsInjecter.MapSettings.WaterMaxHeight && terrainHeight <= SettingsInjecter.MapSettings.SandMaxHeight )
 				{
 					SetTileData(groundTile, terrainGenerator.GetTerrainColour(ColourPalette, terrainMap[x, y], biomeMap[x, y]), terrainHeight);
+					// SetTileData(groundTile, ColourPalette.Sand, terrainHeight);
 					Tilemap.SetTile(pos, groundTile.Tile);
 
 					if (RandomChance.Roll(SettingsInjecter.MapSettings.SandSpotSpawnPercent))
@@ -109,6 +111,7 @@ public class MapGenerator : MonoBehaviour
 				else if (terrainHeight > SettingsInjecter.MapSettings.SandMaxHeight && terrainHeight <=  SettingsInjecter.MapSettings.DirtMaxHeight)
 				{
 					SetTileData(groundTile, terrainGenerator.GetTerrainColour(ColourPalette, terrainMap[x, y], biomeMap[x, y]), terrainHeight);
+					// SetTileData(groundTile, ColourPalette.Dirt, terrainHeight);
 					Tilemap.SetTile(pos, groundTile.Tile);
 
 					if (RandomChance.Roll(SettingsInjecter.MapSettings.DirtSpotSpawnPercent))
@@ -121,6 +124,7 @@ public class MapGenerator : MonoBehaviour
 				else if (terrainHeight > SettingsInjecter.MapSettings.DirtMaxHeight && terrainHeight <= SettingsInjecter.MapSettings.GrassMaxHeight)
 				{
 					SetTileData(groundTile, terrainGenerator.GetTerrainColour(ColourPalette, terrainMap[x, y], biomeMap[x, y]), terrainHeight);
+					// SetTileData(groundTile, ColourPalette.Grass, terrainHeight);
 					Tilemap.SetTile(pos, groundTile.Tile);
 
 					if (RandomChance.Roll(SettingsInjecter.MapSettings.TreeSpawnPercent))
@@ -141,6 +145,7 @@ public class MapGenerator : MonoBehaviour
 				else if (terrainHeight > SettingsInjecter.MapSettings.GrassMaxHeight)
 				{
 					SetTileData(groundTile, terrainGenerator.GetTerrainColour(ColourPalette, terrainMap[x, y], biomeMap[x, y]), terrainHeight);
+					// SetTileData(groundTile, ColourPalette.Stone, terrainHeight);
 					Tilemap.SetTile(pos, groundTile.Tile);
 
 					if (RandomChance.Roll(SettingsInjecter.MapSettings.StoneSpawnPercent))
@@ -159,6 +164,7 @@ public class MapGenerator : MonoBehaviour
 	private void SetTileData(GroundTile tileData, Color baseColour, float height, bool walkable = true, bool swimmable = false)
 	{
 		tileData.Tile = Instantiate(DefaultTile);
+		// tileData.Tile.color = baseColour;
 		tileData.Tile.color = Colors.AlterColour(baseColour, satChange: TileSaturationChangeStrength);
 		
 		if (walkable) { tileData.TravelTypes.Add(TileTravelType.Walkable); } 

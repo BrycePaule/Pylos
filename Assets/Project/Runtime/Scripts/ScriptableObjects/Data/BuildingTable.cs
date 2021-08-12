@@ -5,7 +5,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "New Building Table", menuName = "Data Packs/Building/Building Table")]
 public class BuildingTable : ScriptableObject
 {
-	public List<Building> Buildings = new List<Building>();
+	public List<BuildingAsset> Buildings = new List<BuildingAsset>();
 
 	private static BuildingTable _instance;
 
@@ -14,16 +14,16 @@ public class BuildingTable : ScriptableObject
 		get
 		{
 			if (!_instance)
-				_instance = FindObjectOfType<BuildingTable>();
-			if (!_instance)
-				_instance = CreateInstance<BuildingTable>();
+				_instance = Resources.FindObjectsOfTypeAll<BuildingTable>()[0];
+			// if (!_instance)
+			// 	_instance = CreateInstance<BuildingTable>();
 			return _instance;
 		}
 	}
 
-	public Building GetById(int id)
+	public BuildingAsset GetById(int id)
 	{
-		foreach (Building entry in Buildings)
+		foreach (BuildingAsset entry in Buildings)
 		{
 			if (entry.ID == id) { return entry; } 
 		}
@@ -31,9 +31,9 @@ public class BuildingTable : ScriptableObject
 		return null;
 	}
 
-	public Building GetByName(string name)
+	public BuildingAsset GetByName(string name)
 	{
-		foreach (Building building in Buildings)
+		foreach (BuildingAsset building in Buildings)
 		{
 			if (building.Name == name) { return building; } 
 		}

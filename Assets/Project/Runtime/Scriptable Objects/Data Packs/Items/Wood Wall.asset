@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ID: 103
   Name: Wood Wall
+  Prefab: {fileID: 1484255559944822666, guid: ea00b024f1ee94c4c969297bbb4bebd7, type: 3}
   Sprite: {fileID: 21300000, guid: 1cb5d90751ff7b14791700b25ab54924, type: 3}
   Icon: {fileID: 21300000, guid: 4f975517e20b0ca4c86fc12f7dbd339b, type: 3}
   Recipe:

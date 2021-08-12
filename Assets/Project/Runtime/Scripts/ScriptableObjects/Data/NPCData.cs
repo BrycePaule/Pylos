@@ -33,4 +33,7 @@ public class NPCData : ScriptableObject
 
 	[Header("Detection Radius")]
 	public int DetectionRange;
+
+	[Header("Loot")]
+	public DropTable DropTable;
 }

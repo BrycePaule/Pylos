@@ -12,6 +12,7 @@ public class RuntimeUtilityEditor : Editor
 	{
 		RuntimeUtility runUtil = (RuntimeUtility) target;
 
+		GUILayout.Label("Timescale");
 		if (GUILayout.Button("Increment (+0.1)"))
 			runUtil.IncrementTimescale();
 
@@ -20,9 +21,15 @@ public class RuntimeUtilityEditor : Editor
 
 		EditorGUILayout.Space(10);
 		
-		timeScale = EditorGUILayout.IntField("Time Scale", timeScale);
+		timeScale = EditorGUILayout.IntField("Set to:", timeScale);
 		if (GUILayout.Button("Set Timescale"))
 			runUtil.SetTimescale(timeScale);
+
+		GUILayout.Space(20);
+
+		GUILayout.Label("TESTING");
+		if (GUILayout.Button("Test Button"))
+			runUtil.OnTestButton();
 	}
 }
 

@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEditor;
 
-[CustomPropertyDrawer(typeof(ItemCount))]
+// [CustomPropertyDrawer(typeof(ItemCount))]
 public class ItemCountDrawer : PropertyDrawer 
 {
 	int fieldWidth = 40;

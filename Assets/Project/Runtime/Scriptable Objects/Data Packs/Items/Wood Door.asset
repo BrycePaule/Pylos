@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ID: 104
   Name: Wood Door
+  Prefab: {fileID: 1484255559944822666, guid: ea00b024f1ee94c4c969297bbb4bebd7, type: 3}
   Sprite: {fileID: 21300000, guid: 96414f9767f58284caa71ad9b9cc1f35, type: 3}
   Icon: {fileID: 21300000, guid: 6ee225d3de69b904ba2f487155129a72, type: 3}
   Recipe:

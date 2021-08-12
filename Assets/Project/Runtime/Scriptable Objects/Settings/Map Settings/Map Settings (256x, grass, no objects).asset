@@ -12,20 +12,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 628c0c44d351f794e89b1f428421377b, type: 3}
   m_Name: Map Settings (256x, grass, no objects)
   m_EditorClassIdentifier: 
-  RandomiseSeed: 0
+  RandomiseSeed: 1
   UseTextureFromFile: 0
   TextureName: 
-  Seed: 0
+  Seed: 0.44053584
   MapSize: 256
-  Scale: 1
+  Scale: 7.3
   OffsetX: 0
   OffsetY: 0
-  BiomeSteps: 0
-  BiomeColourDiff: 0
+  BiomeSteps: 3
+  BiomeColourDiff: 0.04
   TerrainNoiseSettings:
-  - Frequency: 1
-    Amplitude: 1
-  BiomeNoiseSettings: []
+  - Frequency: 0.79
+    Amplitude: 0.73
+  - Frequency: 2.71
+    Amplitude: 0.3
+  - Frequency: 1.53
+    Amplitude: 0.4
+  BiomeNoiseSettings:
+  - Frequency: 1.48
+    Amplitude: 1.47
   WaterMaxHeight: 0
   SandMaxHeight: 0
   DirtMaxHeight: 0

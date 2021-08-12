@@ -10,7 +10,7 @@ public class BuildGhost : MonoBehaviour
 
 	private MapBoard MapBoard;
 	private SpriteRenderer sr;
-	private Building currentGhost;
+	private BuildingAsset currentGhost;
 
 	private void Awake()
 	{
@@ -26,7 +26,7 @@ public class BuildGhost : MonoBehaviour
 		transform.position = new Vector3(worldPoint.x, worldPoint.y, 1);
 	}
 
-	public void UpdateCurrentGhost(Building building)
+	public void UpdateCurrentGhost(BuildingAsset building)
 	{
 		if (currentGhost == building) { return; }
 

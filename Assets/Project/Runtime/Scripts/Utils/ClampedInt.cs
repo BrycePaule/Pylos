@@ -2,7 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ClampedInt : MonoBehaviour
+[SerializeField]
+public class ClampedInt
 {
 	private int value;
 
