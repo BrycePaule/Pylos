@@ -28,4 +28,4 @@ MonoBehaviour:
   AttackRange: 1
   AggroUpdateDelay: 0.25
   DetectionRange: 10
-  DropTable: {fileID: 11400000, guid: 89920c4035fd61d4489df61f5758a62d, type: 2}
+  DropTable: {fileID: 11400000, guid: bfe9db8410750624a8740f4e5110228c, type: 2}

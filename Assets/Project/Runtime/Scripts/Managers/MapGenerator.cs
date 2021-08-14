@@ -24,9 +24,8 @@ public class MapGenerator : MonoBehaviour
 	[Range(0, 1f)] public float TileVibranceChangeStrength;
 
 	[Header("Prefabs")]
-	public GameObject TreePrefab;
-	public GameObject StonePrefab;
-	public GameObject ClutterPrefab;
+	public GameObject TerrainBase;
+	public GameObject TerrainBaseExhaustablePrefab;
 
 	[Header("Sprites")]
 	public List<Sprite> TreeSprites;
@@ -103,7 +102,7 @@ public class MapGenerator : MonoBehaviour
 
 					if (RandomChance.Roll(SettingsInjecter.MapSettings.SandSpotSpawnPercent))
 					{
-						InstantiateObject(ClutterPrefab, pos, "Sand", groundTile, SandSpotContainer, SandSpotSprites);
+						InstantiateObject(TerrainBase, pos, "Sand", groundTile, SandSpotContainer, SandSpotSprites);
 					}
 				}
 
@@ -116,7 +115,7 @@ public class MapGenerator : MonoBehaviour
 
 					if (RandomChance.Roll(SettingsInjecter.MapSettings.DirtSpotSpawnPercent))
 					{
-						InstantiateObject(ClutterPrefab, pos, "Dirt", groundTile, DirtSpotContainer, DirtSpotSprites);
+						InstantiateObject(TerrainBase, pos, "Dirt", groundTile, DirtSpotContainer, DirtSpotSprites);
 					}
 				}
 
@@ -129,7 +128,7 @@ public class MapGenerator : MonoBehaviour
 
 					if (RandomChance.Roll(SettingsInjecter.MapSettings.TreeSpawnPercent))
 					{
-						GameObject tree = InstantiateObject(TreePrefab, pos, "Tree", groundTile, TreeContainer, TreeSprites, flipY: false);
+						GameObject tree = InstantiateObject(TerrainBaseExhaustablePrefab, pos, "Tree", groundTile, TreeContainer, TreeSprites, flipY: false);
 
 						groundTile.TravelTypes.Add(TileTravelType.Impassable);
 						tree.GetComponent<Container>().TileLoc = new Vector2Int(pos.x, pos.y);
@@ -137,7 +136,7 @@ public class MapGenerator : MonoBehaviour
 					}
 					else if (RandomChance.Roll(SettingsInjecter.MapSettings.ShrubSpawnPercent))
 					{
-						InstantiateObject(ClutterPrefab, pos, "Shrub", groundTile, ShrubContainer, ShrubSprites);
+						InstantiateObject(TerrainBase, pos, "Shrub", groundTile, ShrubContainer, ShrubSprites);
 					}
 				}
 
@@ -150,7 +149,7 @@ public class MapGenerator : MonoBehaviour
 
 					if (RandomChance.Roll(SettingsInjecter.MapSettings.StoneSpawnPercent))
 					{
-						GameObject stone = InstantiateObject(StonePrefab, pos, "Stone", groundTile, StoneContainer, StoneSprites, flipY: false);
+						GameObject stone = InstantiateObject(TerrainBaseExhaustablePrefab, pos, "Stone", groundTile, StoneContainer, StoneSprites, flipY: false);
 
 						stone.GetComponent<Container>().TileLoc = new Vector2Int(pos.x, pos.y);
 						stone.GetComponent<Container>().Put(2, Random.Range(10, 15));

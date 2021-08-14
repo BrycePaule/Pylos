@@ -32,5 +32,3 @@ public class RuntimeUtilityEditor : Editor
 			runUtil.OnTestButton();
 	}
 }
-
-
