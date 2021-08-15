@@ -128,7 +128,7 @@ public class MapGenerator : MonoBehaviour
 
 					if (RandomChance.Roll(SettingsInjecter.MapSettings.TreeSpawnPercent))
 					{
-						GameObject tree = InstantiateObject(TerrainBaseExhaustablePrefab, pos, "Tree", groundTile, TreeContainer, TreeSprites, flipY: false);
+						GameObject tree = InstantiateObject(TerrainBaseExhaustablePrefab, pos, "Tree", groundTile, TreeContainer, TreeSprites, flipX: false, flipY: false);
 
 						groundTile.TravelTypes.Add(TileTravelType.Impassable);
 						tree.GetComponent<Container>().TileLoc = new Vector2Int(pos.x, pos.y);

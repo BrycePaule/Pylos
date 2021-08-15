@@ -57,7 +57,10 @@ public abstract class MovementState
 			attempts++;
 			path = Pathfinder.Instance.FindPath(npcMovement.TileLoc, npcMovement.TargetLoc, searchDistance * attempts, npcMovement.npcBase.NPCStatAsset.TravelTypes, acceptNearest: false);
 
-			if (attempts >= maxAttempts) { return new List<Node>(); }
+			if (attempts >= maxAttempts) {
+				Debug.LogException(new System.Exception($"{npcMovement.npcBase.name} failed to find path"), npcMovement.npcBase);
+				return new List<Node>(); 
+			}
 		}
 
 		return path;

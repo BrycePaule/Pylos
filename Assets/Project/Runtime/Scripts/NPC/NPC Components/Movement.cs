@@ -82,6 +82,10 @@ public class Movement : NPCComponentBase
 				}
 				npcPathDrawer.UpdatePath(Path);
 			}
+			else
+			{
+				moveTimer = 0;
+			}
 		}
 		else
 		{
