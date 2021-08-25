@@ -109,7 +109,7 @@ public class NPCGenerator : MonoBehaviour
 		}
 	}
 
-	private void InitialiseNPC(GameObject npcObj, NPCType npcType, NPCData dataAsset)
+	private void InitialiseNPC(GameObject npcObj, NPCType npcType, NPCData statAsset)
 	{
 		NPCBase npcBase = npcObj.GetComponentInChildren<NPCBase>();
 
@@ -119,11 +119,11 @@ public class NPCGenerator : MonoBehaviour
 
 		npcObj.name = npcType.ToString();
 
-		Vector2Int loc = MapBoard.Instance.SelectRandomLocation(dataAsset.TravelTypes);
+		Vector2Int loc = MapBoard.Instance.SelectRandomLocation(statAsset.TravelTypes);
 		npcObj.transform.position = TileConversion.TileToWorld3D(loc);
 
-		npcBase.Faction = dataAsset.Faction;
-		npcBase.NPCStatAsset = dataAsset;
+		npcBase.Faction = statAsset.Faction;
+		npcBase.NPCStatAsset = statAsset;
 
 		npcMovement.TileLoc = loc;
 		// MapBoard.Instance.GetTile(loc).TravelTypes.Add(TileTravelType.Impassable);

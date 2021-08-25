@@ -43,6 +43,8 @@ public class MapBoard : Blackboard
 	
 	public bool IsPathable(Vector2Int loc,  List<TileTravelType> travelTypes)
 	{
+		// Debug.Log(TileTravelType.Impassable);
+		// Debug.Log($"{loc} | {string.Join(", ", travelTypes)}");
 		if (!IsWithinBounds(loc)) { return false; }
 		if (GetTile(loc).TravelTypes.Contains(TileTravelType.Impassable)) { return false; }
 

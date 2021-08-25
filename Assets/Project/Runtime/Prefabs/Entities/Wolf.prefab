@@ -54,7 +54,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5831a365102e77946a55333e19c65394, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  NPCType: 0
+  NPCType: 1
   Faction: 2
   NPCStatAsset: {fileID: 11400000, guid: 00193ffd478870848903c8d6fcd6900e, type: 2}
 --- !u!212 &8493416389090671193

@@ -93,7 +93,7 @@ public class MapGenerator : MonoBehaviour
 					Tilemap.SetTile(pos, groundTile.Tile);
 				}
 				
-				// sand
+				// sanda
 				else if (terrainHeight > SettingsInjecter.MapSettings.WaterMaxHeight && terrainHeight <= SettingsInjecter.MapSettings.SandMaxHeight )
 				{
 					SetTileData(groundTile, terrainGenerator.GetTerrainColour(ColourPalette, terrainMap[x, y], biomeMap[x, y]), terrainHeight);
